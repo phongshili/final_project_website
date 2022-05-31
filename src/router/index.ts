@@ -1,24 +1,63 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
-
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import Login from '../views/Login.vue'
+import JobPostIndex from "../views/post_jobs/index.vue"
+import EmpIndex from "../views/employers/index.vue"
+import JobseekersIndex from "../views/jobseekers/index.vue"
+import JobSeekersManagement from "../views/jobseekers/jobseekers.vue"
+import JobPositionsIndex from "../views/jobpositions/index.vue"
+import PaymentsHistoryIndex from "../views/payments/index.vue"
+import Dashboard from "../views/dashboard/index.vue"
+import JobPostManagement from "../views/post_jobs/postjob_management.vue"
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Login',
+    component: Login
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
+  },
+  {
+    path: '/jobposts',
+    name: 'JobPostIndex',
+    component: JobPostIndex
+  },
+  {
+    path: '/jobpostmanagement',
+    name: 'JobPostManagement',
+    component: JobPostManagement
+  },
+  {
+    path: '/employers',
+    name: 'EmpIndex',
+    component: EmpIndex
+  },
+  {
+    path: '/jobseekers',
+    name: 'JobseekersIndex',
+    component: JobseekersIndex
+  },
+  {
+    path: '/jobseekersmanagement',
+    name: 'JobSeekersManagement',
+    component: JobSeekersManagement
+  },
+  {
+    path: '/jobpositions',
+    name: 'JobPositionsIndex',
+    component: JobPositionsIndex
+  },
+  {
+    path: '/paymentshistories',
+    name: 'PaymentsHistoryIndex',
+    component: PaymentsHistoryIndex
+  },
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 

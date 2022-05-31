@@ -1,30 +1,43 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
-</template>
+  <div id="app">
+    <div class="content">
+      <div class="navBar" v-if="auth">
+        <navBar />
+      </div>
+      <sideBar v-if="auth" />
+      <div class="content-area">
+        <router-view />
+      </div>
 
+    </div>
+  </div>
+</template>
+<script >
+import sideBar from "./components/sidebar.vue";
+import navBar from "./components/navbar.vue";
+import {useAuthStore} from "./store"
+import {ref} from 'vue'
+export default {
+  name: "app",
+  components: {
+    sideBar,
+    navBar,
+  },
+  setup(){
+    const store = useAuthStore()
+    let auth = ref(store.isAuth)
+    return {auth}
+  }
+
+};
+</script>
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  color: $primary-color;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+.content {
+  .navBar {
+    height: 52px;
   }
 }
 </style>
