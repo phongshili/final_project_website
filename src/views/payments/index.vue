@@ -5,7 +5,6 @@
     </div>
     <div class="filter is-small-tb">
       <div class="filter-menu">
-        <filterButton :items="items"></filterButton>
          <div class="input-group">
           <input class="input is-small" type="text" placeholder="Small input" />
           <i class="fa-solid fa-magnifying-glass"></i>

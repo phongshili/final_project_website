@@ -48,9 +48,37 @@ export const useAuthStore = defineStore({
     }
   }
 })
+export const mockStatus = defineStore({
+  id: 'mockStatus',
+  state: () => ({
+    setMockStatus: localStorage.getItem('mockStatus') || 'admin',
+  }),
+  getters: {
+    getmockStatus: (state) => state.setMockStatus,
+    isMockStatus: (state) => state.setMockStatus !== null,
+  },
+  actions: {
+    async mockStatusAdmin() {
+        const mockAdmin = 'admin'
+        localStorage.setItem('mockStatus', mockAdmin);
+        console.log(this.getmockStatus)
+        location.reload()
+   
+    },
+    async mockStatusEmp() {
+      const mockEmp = 'employer'
+      localStorage.setItem('mockStatus', mockEmp);
+      console.log(this.getmockStatus)
+      location.reload()
+
+ 
+  },
+  }
+})
 
 export default {
   useLanguageSwitcher,
-  useAuthStore
+  useAuthStore,
+  mockStatus
 
 }

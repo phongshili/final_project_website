@@ -7,8 +7,13 @@ $font: "Noto Sans Lao",
 body{
   height: 100%;
   font-family: $font;
+  // fix sweet alert padding
+  padding-right: 0px !important;
 
 }
+// ::-webkit-scrollbar {
+//   display: none;
+// }
 html {
     // font setting
     p{
@@ -83,10 +88,13 @@ html {
 
       // form
       .spacer {
-        width: 15px;
+        width: 15px !important;
         visibility: hidden;
         &.s {
           width: 5px;
+        }
+        &.left{
+          padding-left: 15px !important;
         }
       }
       .form-container {

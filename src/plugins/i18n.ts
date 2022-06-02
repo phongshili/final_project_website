@@ -30,6 +30,7 @@ const messages = {
         ToolsText: "Tools",
         AmountText: "Amount",
         PaymentDateText: "Payment Date",
+        ApplicationText : "Appliaction",
         //end of table menu
 
         // button text
@@ -116,6 +117,7 @@ const messages = {
         ToolsText: "ເຄື່ອງມື",
         AmountText: "ຈຳນວນ",
         PaymentDateText: "ວັນທີທີ່ຊຳລະ",
+        ApplicationText : "ຈຳນວນທີ່ສະໝັກ",
 
         //end of table menu
 

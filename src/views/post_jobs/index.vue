@@ -24,8 +24,8 @@
             <th class="tb-medium">{{ $t("PositionText") }}</th>
             <th class="tb-medium">{{ $t("LocationText") }}</th>
             <th class="tb-medium tb-right">{{ $t("CompanyNameText") }}</th>
-            <th class="tb-medium">{{ $t("TelText") }}</th>
             <th class="tb-medium">{{ $t("EmailText") }}</th>
+            <th class="tb-small">{{ $t("ApplicationText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
             <th class="tb-small tb-center">{{ $t("PostDateText") }}</th>
             <th class="tb-small tb-center">{{ $t("ToolsText") }}</th>
@@ -47,11 +47,11 @@
             <td class="tb-right">
               <span> {{ postJob.companyName }}</span>
             </td>
-            <td class="tb-medium">
-              <span>{{ postJob.tel }}</span>
-            </td>
                   <td class="tb-medium">
               <span>{{ postJob.email }}</span>
+            </td>
+                 <td class="tb-small tb-center">
+              <span>2</span>
             </td>
             <td class="tb-small">
               <span>{{ postJob.status }}</span>
