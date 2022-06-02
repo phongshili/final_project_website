@@ -8,6 +8,8 @@ import JobPositionsIndex from "../views/jobpositions/index.vue"
 import PaymentsHistoryIndex from "../views/payments/index.vue"
 import Dashboard from "../views/dashboard/index.vue"
 import JobPostManagement from "../views/post_jobs/postjob_management.vue"
+import EmployerManagement from "../views/employers/employer_management.vue"
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -33,6 +35,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/employers',
     name: 'EmpIndex',
     component: EmpIndex
+  },
+  {
+    path: '/employermanagement',
+    name: 'EmployerManagement',
+    component: EmployerManagement
   },
   {
     path: '/jobseekers',

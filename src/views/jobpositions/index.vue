@@ -12,8 +12,8 @@
         </div>
       </div>
       <div class="btn-menu">
-        <button class="button is-success">POST JOB</button>
-        <button class="button is-link">EXPORT</button>
+        <button class="button is-success">{{$t("AddPositionText")}}</button>
+        <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
     <div class="table-box is-small-tb">

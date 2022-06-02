@@ -12,8 +12,8 @@
         </div>
       </div>
       <div class="btn-menu">
-        <button class="button is-success" @click="$router.push({ name: 'JobPostManagement' })" >POST JOB</button>
-        <button class="button is-link">EXPORT</button>
+        <button class="button is-success" @click="$router.push({ name: 'JobPostManagement' })" >{{$t('PostJobText')}}</button>
+        <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
     <div class="table-box">
@@ -33,7 +33,7 @@
         </thead>
         <tbody>
           <tr
-          
+            @click="$router.push({ name: 'JobPostManagement' })"
            v-for="(postJob, index) in postJobs" :key="index">
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>

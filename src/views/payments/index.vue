@@ -12,11 +12,10 @@
         </div>
       </div>
       <div class="btn-menu">
-        <button class="button is-success">POST JOB</button>
-        <button class="button is-link">EXPORT</button>
+        <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
-    <div class="table-box is-small-tb">
+    <div class="table-box is-small-tb" v-if="!id" >
       <table>
         <thead>
           <tr>
@@ -73,6 +72,63 @@
         </tbody>
       </table>
     </div>
+    <div class="table-box is-small-tb" v-if="id">
+      <table>
+        <thead>
+          <tr>
+            <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
+            <th class="tb-medium">{{ $t("CompanyNameText") }}</th>
+              <th class="tb-small">{{ $t("AmountText") }}</th>
+              <th class="tb-small">{{ $t("StatusText") }}</th>
+              <th class="tb-small">{{ $t("PaymentDateText") }}</th>
+            <th class="tb-small tb-center">{{ $t("ToolsText") }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tb-ss tb-center"><span>2</span></td>
+            <td class="tb-small"><span>company1</span></td>
+            <td class="tb-small"><span>company1</span></td>
+            <td class="tb-small"><span>Status</span></td>
+            <td class="tb-small"><span>2022-03-15</span></td>
+            <td class="tb-small">
+              <div class="tools">
+                <i class="fa-solid fa-pen-to-square edit-tool"></i
+                ><i class="fa-solid fa-xmark delete-tool"></i>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="tb-ss tb-center"><span>2</span></td>
+            <td class="tb-small"><span>company1</span></td>
+            <td class="tb-small"><span>company1</span></td>
+            <td class="tb-small"><span>Status</span></td>
+            <td class="tb-small"><span>2022-03-15</span></td>
+           
+            <td class="tb-small">
+              <div class="tools">
+                <i class="fa-solid fa-pen-to-square edit-tool"></i
+                ><i class="fa-solid fa-xmark delete-tool"></i>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="tb-ss tb-center"><span>3</span></td>
+            <td class="tb-small"><span>company1</span></td>
+            <td class="tb-small"><span>company1</span></td>
+            <td class="tb-small"><span>Status</span></td>
+            <td class="tb-small"><span>2022-03-15</span></td>
+        
+            <td class="tb-small">
+              <div class="tools">
+                <i class="fa-solid fa-pen-to-square edit-tool"></i
+                ><i class="fa-solid fa-xmark delete-tool"></i>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 <script>
@@ -82,6 +138,7 @@ export default {
     filterButton,
   },
     data: () => ({
+      id:false,
     items:[{
       id:1,
       value:"Approve"

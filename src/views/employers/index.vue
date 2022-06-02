@@ -12,8 +12,8 @@
         </div>
       </div>
       <div class="btn-menu">
-        <button class="button is-success">POST JOB</button>
-        <button class="button is-link">EXPORT</button>
+        <button class="button is-success"  @click="$router.push({ name: 'EmployerManagement' })">{{$t("AddEmployerText")}}</button>
+        <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
     <div class="table-box">
@@ -30,7 +30,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr @click="$router.push({ name: 'EmployerManagement' })">
             <td class="tb-ss tb-center"><span>1</span></td>
             <td class="tb-medium"><span>company1</span></td>
             <td class="tb-medium">

@@ -35,8 +35,11 @@ const messages = {
         // button text
         LoginButtonText: "LOGIN",
         AddJobSeekerText: "ADD JOBSEEKER",
+        AddEmployerText: "ADD EMPLOYER",
         ExportText: "EXPORT",
         ChooseFilteText: "CHOOSE FILE",
+        PostJobText:"POST JOB",
+        AddPositionText:"ADD POSITION",
         //end button text
 
         //form text
@@ -44,13 +47,18 @@ const messages = {
         LastNameText: "Last Name",
         PosonalIDNoText: "Posonal ID Number",
         ContactPhoneText: "Contact Phone",
+        ContactNameText: "Contact Name",
+        
         BirthDateText: "Birth Date",
         SkillsText: "Skills",
         ExperienceText: "Experience",
         CurrentProvinceText: "Current Location(Province)",
+        ProvinceText: "Work Location(Province)",
         CurrentDistrictText: "Current Location(District)",
+        DistrictText: "Work Location(District)",
+
         EducationText: "Educations",
-        IntroducText: "Introduce",
+        IntroduceText: "Introduce",
         PasswordText: "Password",
         ConfirmPasswordText: "Confirm Password",
         LanguageText: "Language",
@@ -63,9 +71,16 @@ const messages = {
         SalaryText: "Salary",
         ProfileImageText: "Profile Image",
         PersonalIDCardImageText: "Personal ID Card Image",
+        PersonalIDNumberText: "Personal ID Number",
+
         KipText: "Kip",
         FilePathText:"File Path",
         DetailText: "Detail",
+        LogoText: "Logo Image",
+        CoverText: "Cover Image",
+        ERC_Text: "Enterprise Registration Certificate",
+        PointText: "Point",
+
         //end form text
 
     },
@@ -107,6 +122,9 @@ const messages = {
         // button text
         LoginButtonText: "ເຂົ້າສູ່ລະບົບ",
         AddJobSeekerText: "ເພີ່ມຜູ້ສະໝັກວຽກ",
+        AddEmployerText: "ເພີ່ມຜູ້ວ່າຈ້າງ",
+        PostJobText:"ປະກາດວຽກ",
+        AddPositionText:"ເພີ່ມຕຳແໜ່ງວຽກ",
         ExportText: "ພີມ",
         ChooseFilteText: "ເລືອກຮູບພາບ",
 
@@ -117,13 +135,17 @@ const messages = {
         LastNameText: "ນາມສະກຸນ",
         PosonalIDNoText: "ເລກບັດປະຈຳຕົວ",
         ContactPhoneText: "ເບີຕິດຕໍ່",
+        ContactNameText: "ຊື່ຜູ້ຕິດຕໍ່",
+
         BirthDateText: "ວັນ/ເດືອນ/ປິ ເກີດ",
         SkillsText: "ທັກສະ",
         ExperienceText: "ປະສົບການ",
         CurrentProvinceText: "ແຂວງຢູ່ປະຈຸບັນ",
+        ProvinceText: "ສະຖານທີ່ເຮັດວຽກແຂວງ",
         CurrentDistrictText: "ເມືອງຢູ່ປະຈູບັນ",
+        DistrictText: "ສະຖານທີ່ເຮັດວຽກເມືອງ",
         EducationText: "ປະຫວັດການສຶກສາ",
-        IntroducText: "ແນະນຳຕົວເອງໂດຍຫຍໍ່",
+        IntroduceText: "ແນະນຳຕົວເອງໂດຍຫຍໍ່",
         PasswordText: "ລະຫັດຜ່ານ",
         ConfirmPasswordText: "ຢືນຢັນລະຫັດຜ່ານ",
         LanguageText: "ຄວາມສາມາດດ້ານພາສາ",
@@ -136,9 +158,15 @@ const messages = {
         SalaryText: "ເງິນເດືອນ",
         ProfileImageText: "ຮູບພາບ",
         PersonalIDCardImageText: "ຮູບພາບບັດປະຈຳຕົວ",
+        PersonalIDNumberText: "ເລກບັດປະຈຳຕົວ",
+
         KipText: "ກີບ",
         FilePathText:"ລິ້ງຮູບພາບ",
         DetailText: "ລາຍລະອຽດ",
+        LogoText: "ໂລໂກ່",
+        CoverText: "ພາບບໍລິສັດ",
+        ERC_Text: "ເລກວີສະຫະກິດ",
+        PointText: "ພ້ອຍ",
         //end form text
 
 
