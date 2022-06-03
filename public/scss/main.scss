@@ -91,10 +91,21 @@ html {
         width: 15px !important;
         visibility: hidden;
         &.s {
-          width: 5px;
+          width: 5px !important;
         }
+        &.m {
+          width: 30px !important;
+        }
+    
         &.left{
           padding-left: 15px !important;
+        }
+      }
+      .spacerH {
+        height: 10px !important;
+        visibility: hidden;
+        &.max{
+          height: 25px !important;
         }
       }
       .form-container {
@@ -122,6 +133,14 @@ html {
         .input-group {
           width: 100%;
           padding-bottom: 15px;
+          &.is-check-box{
+            display: flex;
+                    }
+          .text-input{
+            font-size: $subtitle;
+            font-weight: 500;
+            color:$primary-color;
+          }
           .img-container {
             .profile {
               box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
@@ -145,7 +164,7 @@ html {
           }
           input {
             border-color: $sub-border-color;
-               min-width: 331px !important;
+               min-width: 331px;
             width: 100%;
           }
           input:focus {
@@ -174,6 +193,9 @@ html {
             border-radius: 5px;
             padding: 7px 11px;
             resize: vertical;
+            &.medium{
+              height: 200px;
+            }
           }
           textarea:focus-visible {
             outline: 1px solid $sub-color;
@@ -236,18 +258,16 @@ html {
         font-family: $font;
     }
 
+    .apply-btn{
+      background: $apply-btn-color;
+      color: $active-font-color;
+    }
+    .apply-btn:hover{
+      color: $active-font-color;
+    }
+    .apply-btn:focus{
+      color: $active-font-color;
 
-    //table 
-    .tb-large{
-        width: 25%;
     }
-    .tb-medium{
-        width:15%;
-    }
-    .tb-small{
-        width: 10%;
-    }
-    .tb-ss{
-        width: 5%;
-    }
+
 }

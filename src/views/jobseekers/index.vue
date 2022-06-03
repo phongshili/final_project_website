@@ -31,7 +31,7 @@
             <th class="tb-medium tb-right">{{ $t("TelText") }}</th>
             <th class="tb-large">{{ $t("EmailText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
-            <th class="tb-small tb-center">{{ $t("ToolsText") }}</th>
+            <th class="tb-small tb-center">{{ $t("OptionsText") }}</th>
           </tr>
         </thead>
         <tbody>
@@ -50,8 +50,8 @@
             </td>
             <td class="tb-small">
               <div class="tools">
-                <!-- <i class="fa-solid fa-pen-to-square edit-tool"></i
-                > -->
+                <i class="fa-solid fa-pen-to-square edit-tool"></i
+                >
                 <i class="fa-solid fa-xmark delete-tool"></i>
               </div>
             </td>
@@ -69,8 +69,8 @@
             </td>
             <td class="tb-small">
               <div class="tools">
-                <!-- <i class="fa-solid fa-pen-to-square edit-tool"></i
-                > -->
+                <i class="fa-solid fa-pen-to-square edit-tool"></i
+                >
                 <i class="fa-solid fa-xmark delete-tool"></i>
               </div>
             </td>
@@ -88,8 +88,8 @@
             </td>
             <td class="tb-small">
               <div class="tools">
-                <!-- <i class="fa-solid fa-pen-to-square edit-tool"></i
-                > -->
+                <i class="fa-solid fa-pen-to-square edit-tool"></i
+                >
                 <i class="fa-solid fa-xmark delete-tool"></i>
               </div>
             </td>

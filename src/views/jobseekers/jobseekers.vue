@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="input-form">
- <div class="input-group">
+        <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("FirstNameText") }}
             <p class="required">*</p></label
@@ -55,7 +55,7 @@
         </div>
 
         <div class="spacer"></div>
- <div class="input-group">
+        <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("LastNameText") }}
             <p class="required">*</p></label
@@ -68,7 +68,7 @@
         </div>
       </div>
       <div class="input-form">
- <!-- gender dropdown --> 
+        <!-- gender dropdown -->
         <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("GenderText") }}
@@ -112,7 +112,7 @@
         </div>
       </div>
       <div class="input-form">
-                <div class="input-group">
+        <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("ContactPhoneText") }}
             <p class="required">*</p></label
@@ -136,7 +136,7 @@
           />
         </div>
       </div>
-       <div class="input-form">
+      <div class="input-form">
         <!-- province dropdown -->
         <div class="input-group">
           <label for="user" class="text-input"
@@ -198,8 +198,8 @@
         </div>
         <!--end district dropdown -->
       </div>
-                  <div class="input-form">
-                <div class="input-group">
+      <div class="input-form">
+        <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("PersonalIDNumberText") }}
             <p class="required">*</p></label
@@ -224,7 +224,7 @@
         </div>
       </div>
       <div class="input-form">
-                <div class="input-group">
+        <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("EducationText") }}
             <p class="required">*</p></label
@@ -249,7 +249,7 @@
         </div>
       </div>
       <div class="input-form">
-                <div class="input-group">
+        <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("Skills") }}
             <p class="required">*</p></label
@@ -274,7 +274,7 @@
         </div>
       </div>
 
-           <div class="input-form">
+      <div class="input-form">
         <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("PasswordText") }}
@@ -300,41 +300,37 @@
         </div>
       </div>
 
-
       <div class="btn-menu">
         <button class="button is-success" @click="add">SAVE</button>
         <div class="spacer"></div>
         <button class="button is-link">BACK</button>
       </div>
     </div>
-   
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import Datepicker from 'vue3-datepicker'
+import Datepicker from "vue3-datepicker";
 
 export default {
-   components: {
-    Datepicker
+  components: {
+    Datepicker,
   },
   setup() {
     const firstName = ref();
-    const startDate = ref(new Date())
-    const endDate = ref(new Date())
+    const startDate = ref(new Date());
+    const endDate = ref(new Date());
     endDate.value.setMonth(startDate.value.getMonth() + 1);
     function add() {
-      
       console.log(firstName.value);
-      console.log('end date' +endDate.value);
-        console.log('start date' +startDate.value);
+      console.log("end date" + endDate.value);
+      console.log("start date" + startDate.value);
     }
-    return { firstName, add,startDate,endDate };
+    return { firstName, add, startDate, endDate };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 </style>

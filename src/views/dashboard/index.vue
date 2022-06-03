@@ -6,28 +6,49 @@
     <div class="form-container">
       <div class="detail-form-display">
         <div class="box-detail">
-          <div class="box-title">Posts</div>
-          <div class="box-count">60</div>
+          <div class="box-body">
+            <div class="box-title">Posts</div>
+            <div class="box-count">60</div>
+          </div>
+        </div>
+        <div class="spacer left" v-if="isStauts === 'admin'"></div>
+        <div class="box-detail" v-if="isStauts === 'admin'">
+          <div class="box-body">
+            <div class="box-title">Employers</div>
+            <div class="box-count">60</div>
+          </div>
+        </div>
+        <div class="spacer left" v-if="isStauts === 'admin'"></div>
+        <div class="box-detail" v-if="isStauts === 'admin'">
+          <div class="box-body">
+            <div class="box-title">Job Seekers</div>
+            <div class="box-count">60</div>
+          </div>
         </div>
         <div class="spacer left"></div>
         <div class="box-detail">
-          <div class="box-title">Employers</div>
-          <div class="box-count">60</div>
+          <div class="box-body">
+            <div class="box-title">Applications</div>
+            <div class="box-count">60</div>
+          </div>
         </div>
         <div class="spacer left"></div>
         <div class="box-detail">
-          <div class="box-title">Job Seekers</div>
-          <div class="box-count">60</div>
+          <div class="box-body">
+            <div class="box-title">Total Used Points</div>
+            <div class="box-count">60</div>
+          </div>
         </div>
-        <div class="spacer left"></div>
-        <div class="box-detail">
-          <div class="box-title">Applications</div>
-          <div class="box-count">60</div>
-        </div>
-        <div class="spacer left"></div>
-        <div class="box-detail">
-          <div class="box-title">Total Used Points</div>
-          <div class="box-count">60</div>
+        <div class="spacer left" v-if="isStauts === 'employer'"></div>
+        <div class="box-detail" v-if="isStauts === 'employer'" @click="sendReq">
+          <div class="box-body">
+            <div class="box-title">Top-up</div>
+            <!-- <div class="spacerH"></div>
+
+            <input class="input is-primary" type="number" />
+            <div class="spacerH"></div>
+            <button class="button is-link">SEND REQUEST</button> -->
+          </div>
         </div>
       </div>
 
@@ -35,8 +56,8 @@
         <div class="chart-container">
           <BarChart :chartData="reportListData" />
         </div>
-        <div class="spacer left"></div>
-        <div class="payment-container">
+        <div class="spacer left" v-if="isStauts === 'admin'"></div>
+        <div class="payment-container" v-if="isStauts === 'admin'">>
           <div class="payment">
             <div class="box-title">Payment request</div>
             <div
@@ -74,6 +95,7 @@ import {
 } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
+import { ref } from "vue";
 export default {
   components: { DoughnutChart, BarChart, RadarChart, PieChart, LineChart },
   setup() {
@@ -92,7 +114,7 @@ export default {
         },
       ],
     };
-
+    
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn-success",
@@ -109,35 +131,61 @@ export default {
           confirmButtonText: "Accept!",
           cancelButtonText: "Reject!",
           // reverseButtons: true,
-
           imageUrl: "https://unsplash.it/400/200",
           imageWidth: 400,
           imageHeight: 200,
-          
         })
         .then((result) => {
           if (result.isConfirmed) {
-            swalWithBootstrapButtons.fire(
-              "Successed!",
-              "Payment has been approve",
-              "success"
-            );
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Payment has been approve",
+              showConfirmButton: false,
+              timer: 1000,
+            });
           } else if (
             /* Read more about handling dismissals below */
             result.dismiss === Swal.DismissReason.cancel
           ) {
-            swalWithBootstrapButtons.fire(
-              {
-                icon:"warning",
-                input: "text",
-                title : "Somethings went wrong? :("
-              }
-            );
+            swalWithBootstrapButtons.fire({
+              icon: "warning",
+              input: "text",
+              title: "Somethings went wrong? :(",
+            });
           }
         });
     }
+    async function sendReq() {
+      swalWithBootstrapButtons
+        .fire({
+          title: "Top-Up",
+          showCancelButton: true,
+          confirmButtonText: "Send Request!",
+          cancelButtonColor: '#d33',
+          input: "text",
 
-    return { reportListData, acceptReq };
+          // reverseButtons: true,
+          imageUrl: "https://unsplash.it/400/200",
+          imageWidth: 400,
+          imageHeight: 200,
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Send Request Successed!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          } 
+         
+        });
+    }
+    const isStauts = ref(localStorage.getItem("mockStatus"));
+
+    return { reportListData, acceptReq, isStauts, sendReq };
   },
   // data: () => ({
   //   token:
@@ -156,7 +204,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .form-display {
   width: 100%;
   display: flex;
@@ -179,20 +226,18 @@ export default {
       padding: 15px;
       justify-content: space-between;
       border-bottom: 1px solid #dedede;
-      &.body:hover{
+      &.body:hover {
         background: $table-hover;
         cursor: pointer;
       }
-     
     }
     .payment:last-child {
       border: none;
     }
     .payment:first-child {
-      font-size: 20px;
+      font-size: $subtitle;
       font-weight: 600;
       border-bottom: 1px solid $sub-border-color;
-
     }
     .view-all:hover {
       color: $sub-color;
@@ -205,12 +250,22 @@ export default {
   margin-bottom: 15px;
   display: flex;
   .box-detail {
-    text-align: center;
     width: 100%;
     padding: 10px;
+    min-height: 150px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
       rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    .box-body {
+      .box-title {
+        font-size: $subtitle;
+        font-weight: 600;
+      }
+    }
   }
   .box-detail:hover {
     outline: 1px solid $sub-color;

@@ -1,53 +1,80 @@
 .table-box {
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
-      rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-    border-radius: 5px;
-    min-width: 855px;
-    overflow: hidden;
-    &.is-small-tb{
-        width: 70%;
-    }
-    table {
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  border-radius: 5px;
+  min-width: 855px;
+  overflow: hidden;
 
-      width: 100%;
-      thead,
-      tbody {
-        white-space: nowrap;
-        tr {
-          th {
-            border: none;
-            border-bottom: 1px solid $sub-border-color;
-          }
-          td {
-            .tools {
-              text-align: center;
-              .edit-tool {
-                color: blue;
-                cursor: pointer;
-                margin-right: 7px;
-              }
-              .delete-tool {
-                color: red;
-                cursor: pointer;
-                margin-left: 7px;
-              }
+  &.is-small-tb {
+    width: 70%;
+  }
+
+  table {
+    width: 100%;
+    //table 
+    .tb-large {
+      width: 25%;
+    }
+
+    .tb-medium {
+      width: 15%;
+    }
+
+    .tb-small {
+      width: 10%;
+    }
+
+    .tb-ss {
+      width: 5%;
+    }
+
+    thead,
+    tbody {
+      white-space: nowrap;
+
+      tr {
+        th {
+          border: none;
+          border-bottom: 1px solid $sub-border-color;
+        }
+
+        td {
+          .tools {
+            display:flex;
+            text-align: center;
+            justify-content: center;
+
+            .edit-tool {
+              color: blue;
+              cursor: pointer;
+              margin-right: 7px;
             }
-          }
-         
-          th,
-          td {
-            &.tb-center {
-              text-align: center;
-            }
-            &.tb-right {
-              text-align: right;
+
+            .delete-tool {
+              color: red;
+              cursor: pointer;
+              margin-left: 7px;
             }
           }
         }
+
+        th,
+        td {
+          &.tb-center {
+            text-align: center;
+          }
+
+          &.tb-right {
+            text-align: right;
+          }
+        }
       }
-      tbody  tr:hover {
-        background: $table-hover;
-        cursor: default;
     }
+
+    tbody tr:hover {
+      background: $table-hover;
+      cursor: default;
     }
   }
+
+}

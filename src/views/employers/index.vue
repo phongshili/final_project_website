@@ -26,7 +26,7 @@
             <th class="tb-medium tb-right">{{ $t("TelText") }}</th>
             <th class="tb-large">{{ $t("EmailText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
-            <th class="tb-small tb-center">{{ $t("ToolsText") }}</th>
+            <th class="tb-small tb-center">{{ $t("OptionsText") }}</th>
           </tr>
         </thead>
         <tbody>

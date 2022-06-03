@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="table-box">
-      <table >
+      <table v-if="isStatus === 'admin'" >
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
@@ -28,7 +28,7 @@
             <th class="tb-small">{{ $t("ApplicationText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
             <th class="tb-small tb-center">{{ $t("PostDateText") }}</th>
-            <th class="tb-small tb-center">{{ $t("ToolsText") }}</th>
+            <th class="tb-small tb-center">{{ $t("OptionsText") }}</th>
           </tr>
         </thead>
         <tbody>
@@ -68,6 +68,58 @@
           </tr>
         </tbody>
       </table>
+      <table v-if="isStatus === 'employer'" >
+        <thead>
+          <tr>
+            <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
+            <th class="tb-medium">{{ $t("PositionText") }}</th>
+            <th class="tb-medium">{{ $t("LocationText") }}</th>
+            <th class="tb-medium tb-right">{{ $t("TelText") }}</th>
+            <th class="tb-medium">{{ $t("EmailText") }}</th>
+            <th class="tb-small">{{ $t("ApplicationText") }}</th>
+            <th class="tb-small">{{ $t("StatusText") }}</th>
+            <th class="tb-small tb-center">{{ $t("PostDateText") }}</th>
+            <th class="tb-large tb-center">{{ $t("OptionsText") }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            @click="$router.push({ name: '' })"
+           v-for="(postJob, index) in postJobs" :key="index">
+            <td class="tb-ss tb-center">
+              <span>{{ index + 1 }}</span>
+            </td>
+            <td class="tb-medium">
+              <span>{{ postJob.positionName }}</span>
+            </td>
+            <td class="tb-medium">
+              <span>{{ postJob.provinceName }}</span>
+            </td>
+            <td class="tb-right">
+              <span> {{ postJob.tel }}</span>
+            </td>
+                  <td class="tb-medium">
+              <span>{{ postJob.email }}</span>
+            </td>
+                 <td class="tb-small tb-center">
+              <span>6</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ postJob.status }}</span>
+            </td>
+            <td class="tb-small">
+              <span> {{ postJob.startDate }}</span>
+            </td>
+            <td class="tb-large">
+              <div class="tools">
+                <button class="button apply-btn" @click="$router.push({ name: 'Application' })" >APPLYMENT</button>
+                    <div class="spacer s"></div>
+                <button class="button is-link" >EDIT</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -80,7 +132,7 @@ export default {
   },
   data: () => ({
     postJobs: {},
-    postJobsTotal: 0,
+    isStatus : localStorage.getItem('mockStatus'),
     items:[{
       id:1,
       value:"Approve"
@@ -96,6 +148,7 @@ export default {
   }),
   created() {
     this.fetchPostJob();
+    console.log(this.isStatus)
   },
   methods: {
     async fetchPostJob() {

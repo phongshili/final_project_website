@@ -9,6 +9,7 @@
           <div class="name">Website Admin</div>
           <div class="role" v-if="isStauts === 'admin'" >Admin</div>
           <div class="role" v-if="isStauts === 'employer'" >Employer</div>
+          <div class="role" v-if="isStauts === 'employer'" >Current Points : 60</div>
 
           <!-- comment code  -->
            <div class="role" @click="status.mockStatusEmp"  v-if="isStauts === 'admin'" >Change to Employer</div>
@@ -85,7 +86,7 @@
          <div class="items"  v-if="isStauts === 'employer'">
           <router-link to="/contactUs" >
             <div class="item">
-              <i class="fa-solid fa-headset"></i><span>{{ $t("ConstactUseText") }}</span>
+              <i class="fa-solid fa-headset"></i><span>{{ $t("ContactUsText") }}</span>
             </div>
           </router-link>
         </div>

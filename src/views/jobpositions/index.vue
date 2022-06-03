@@ -24,7 +24,7 @@
             <th class="tb-medium">{{ $t("PositionText") }}</th>
               <th class="tb-small">{{ $t("TotalPositionPosted") }}</th>
     
-            <th class="tb-small tb-center">{{ $t("ToolsText") }}</th>
+            <th class="tb-small tb-center">{{ $t("OptionsText") }}</th>
           </tr>
         </thead>
         <tbody>

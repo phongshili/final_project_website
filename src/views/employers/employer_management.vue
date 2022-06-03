@@ -172,7 +172,7 @@
         <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("PointText") }}
-            <p class="required">*</p></label
+         </label
           >
           <input
             class="input is-primary"
@@ -181,11 +181,52 @@
           />
         </div>
       </div>
+            <div class="input-form">
+        <div class="input-group">
+          <label for="user" class="text-input"
+            >{{ $t("FacebookText") }}
+         </label
+          >
+          <input
+            class="input is-primary"
+            type="text"
+            :placeholder="$t('FacebookText')"
+          />
+        </div>
+        <div class="spacer"></div>
+        <div class="input-group">
+          <label for="user" class="text-input"
+            >{{ $t("FacebookLinkText") }}
+          </label
+          >
+          <input
+            class="input is-primary"
+            type="text"
+            :placeholder="$t('FacebookLinkText')"
+          />
+        </div>
+      </div>
+                <div class="input-group">
+          <label for="user" class="text-input"
+            >{{ $t("AboutUsText") }}
+            <p class="required">*</p></label
+          >
+           <textarea
+           class="medium"
+              name=""
+              id=""
+              cols="30"
+              rows="2"
+              v-model="firstName"
+              :placeholder="$t('AboutUsText')"
+            ></textarea>
+        </div>
       <div class="input-form">
         <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("PasswordText") }}
-            <p class="required">*</p></label
+             <p class="required">*</p>
+          </label
           >
           <input
             class="input is-primary"

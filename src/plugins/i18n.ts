@@ -10,6 +10,8 @@ const messages = {
         PaymentsHistoryText: "Payments History",
         OfferedInText: "Offered In :",
         LogOutText: "Log Out",
+        ContactUsText: "Contact Us",
+        ResumeText: "Resume",
         // End of Menu Item Name
 
         LoginTitleText: 'Log Into JobManagement',
@@ -27,7 +29,7 @@ const messages = {
         StatusText: "Status",
         PostDateText: "Post Date",
         TotalPositionPosted: 'Total Uesed',
-        ToolsText: "Tools",
+        OptionsText: "Options",
         AmountText: "Amount",
         PaymentDateText: "Payment Date",
         ApplicationText : "Appliaction",
@@ -66,6 +68,7 @@ const messages = {
         GenderText: "Gender",
         MaleText: "Male",
         FemaleText: "Female",
+        OtherText : "Other",
         WorkTimeText: "Work Time",
         FullTimeText:"Full Time",
         PartTimeText:"Part Time",
@@ -81,6 +84,7 @@ const messages = {
         CoverText: "Cover Image",
         ERC_Text: "Enterprise Registration Certificate",
         PointText: "Point",
+        AboutUsText: "About Us",
 
         //end form text
 
@@ -96,6 +100,8 @@ const messages = {
         PaymentsHistoryText: "ປະຫວັດການຊຳລະ",
         OfferedInText: "ນຳສະເໜີໃນ :",
         LogOutText: "ອອກຈາກລະບົບ",
+        ContactUsText: "ຕິດຕໍ່ພວກເຮົາ",
+        ResumeText: "ຊີວະປະຫວັດ",
 
         // End of Menu Item Name
 
@@ -114,7 +120,7 @@ const messages = {
         StatusText: "ສະຖານະ",
         PostDateText: "ວັນທີ່ປະກາດ",
         TotalPositionPosted: 'ນຳໃຊ້',
-        ToolsText: "ເຄື່ອງມື",
+        OptionsText: "ເຄື່ອງມື",
         AmountText: "ຈຳນວນ",
         PaymentDateText: "ວັນທີທີ່ຊຳລະ",
         ApplicationText : "ຈຳນວນທີ່ສະໝັກ",
@@ -154,6 +160,7 @@ const messages = {
         GenderText: "ເພດ",
         MaleText: "ຊາຍ",
         FemaleText: "ຍິງ",
+        OtherText: "ອື່ນໆ",
         WorkTimeText: "ເວລາເຮັເວຽກ",
         FullTimeText:"ເຮັດວຽກເຕັມເວລາ",
         PartTimeText:"ເຮັດວຽກເຄິ່ງມື້",
@@ -169,6 +176,8 @@ const messages = {
         CoverText: "ພາບບໍລິສັດ",
         ERC_Text: "ເລກວີສະຫະກິດ",
         PointText: "ພ້ອຍ",
+        AboutUsText: "ກຽວກັບພວກເຮົາ",
+
         //end form text
 
 
