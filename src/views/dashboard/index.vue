@@ -103,7 +103,30 @@ export default {
       labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
       datasets: [
         {
-          data: [39, 30, 50, 30, 60],
+              label: "weekly",
+          data: [2, 4, 10, 7, 10],
+          backgroundColor: [
+            "#77CEFF",
+            "#0079AF",
+            "#123E6B",
+            "#97B0C4",
+            "#A5C8ED",
+          ],
+        },
+        {
+          label: "Monthly",
+          data: [20, 10, 40, 30, 60],
+          backgroundColor: [
+            "#77CEFF",
+            "#0079AF",
+            "#123E6B",
+            "#97B0C4",
+            "#A5C8ED",
+          ],
+        },
+        {
+          label: "Year",
+          data: [39, 30, 50, 50, 70],
           backgroundColor: [
             "#77CEFF",
             "#0079AF",
