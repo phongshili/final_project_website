@@ -55,6 +55,8 @@
             <div class="spacerH"></div>
 
             <div class="data-detail">
+              <p>{{ $t("FullNameText") }} : Phongshili Aliyavong</p>
+              <div class="spacerH"></div>
               <p>{{ $t("BirthDateText") }} : 11/2/199</p>
               <div class="spacerH"></div>
               <p>{{ $t("TelText") }} : 96769300</p>

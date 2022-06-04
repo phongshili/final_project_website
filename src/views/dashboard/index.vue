@@ -104,7 +104,7 @@ export default {
       datasets: [
         {
               label: "weekly",
-          data: [2, 4, 10, 7, 10],
+          data: [2, 4, 10, 7],
           backgroundColor: [
             "#77CEFF",
             "#0079AF",
