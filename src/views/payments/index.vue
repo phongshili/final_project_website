@@ -12,7 +12,7 @@
         <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
-    <div class="table-box is-small-tb" v-if="isStauts === 'admin'">
+    <div class="table-box is-small-tb" v-if="$userInfo.type === 'admin'">
       <table>
         <thead>
           <tr>
@@ -53,7 +53,7 @@
         </tbody>
       </table>
     </div>
-    <div class="table-box is-small-tb" v-if="isStauts === 'employer'">
+    <div class="table-box is-small-tb" v-if="$userInfo.type === 'employer'">
       <table>
         <thead>
           <tr>
@@ -96,7 +96,7 @@ export default {
     filterButton,
   },
   setup() {
-    const isStauts = ref(localStorage.getItem("mockStatus"));
+   
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn-success",
@@ -150,7 +150,7 @@ export default {
         showConfirmButton: false,
       });
     }
-    return { isStauts, showReceipt, acceptReq };
+    return { showReceipt, acceptReq };
   },
 };
 </script>

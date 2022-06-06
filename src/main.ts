@@ -14,9 +14,13 @@ const pinia = createPinia()
 const app = createApp(App)
 app.use(pinia)
 const useLanguageSwitcher = store.useLanguageSwitcher()
+const userTypeStore = store.useAuthStore()
+
 app.config.globalProperties.$axios = axios;
 app.config.globalProperties.$api = 'http://127.0.0.1:4000'
 app.config.globalProperties.$languages = useLanguageSwitcher.$state.setLanguage;
+app.config.globalProperties.$userInfo = JSON.parse(userTypeStore.getUserType);
+
 
 //multiple languages
 const i18n = createI18n({

@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="table-box">
-      <table v-if="isStatus === 'admin'" >
+      <table v-if="$userInfo.type === 'admin'" >
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
@@ -68,7 +68,7 @@
           </tr>
         </tbody>
       </table>
-      <table v-if="isStatus === 'employer'" >
+      <table v-if="$userInfo.type === 'employer'" >
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
@@ -132,7 +132,6 @@ export default {
   },
   data: () => ({
     postJobs: {},
-    isStatus : localStorage.getItem('mockStatus'),
     items:[{
       id:1,
       value:"Approve"
@@ -148,7 +147,7 @@ export default {
   }),
   created() {
     this.fetchPostJob();
-    console.log(this.isStatus)
+    console.log(this.postJobs);
   },
   methods: {
     async fetchPostJob() {

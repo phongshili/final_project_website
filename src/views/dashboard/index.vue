@@ -11,15 +11,15 @@
             <div class="box-count">60</div>
           </div>
         </div>
-        <div class="spacer left" v-if="isStauts === 'admin'"></div>
-        <div class="box-detail" v-if="isStauts === 'admin'">
+        <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
+        <div class="box-detail" v-if="$userInfo.type === 'admin'">
           <div class="box-body">
             <div class="box-title">Employers</div>
             <div class="box-count">60</div>
           </div>
         </div>
-        <div class="spacer left" v-if="isStauts === 'admin'"></div>
-        <div class="box-detail" v-if="isStauts === 'admin'">
+        <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
+        <div class="box-detail" v-if="$userInfo.type === 'admin'">
           <div class="box-body">
             <div class="box-title">Job Seekers</div>
             <div class="box-count">60</div>
@@ -39,8 +39,8 @@
             <div class="box-count">60</div>
           </div>
         </div>
-        <div class="spacer left" v-if="isStauts === 'employer'"></div>
-        <div class="box-detail" v-if="isStauts === 'employer'" @click="sendReq">
+        <div class="spacer left" v-if="$userInfo.type === 'employer'"></div>
+        <div class="box-detail" v-if="$userInfo.type === 'employer'" @click="sendReq">
           <div class="box-body">
             <div class="box-title">Top-up</div>
             <!-- <div class="spacerH"></div>
@@ -56,8 +56,8 @@
         <div class="chart-container">
           <BarChart :chartData="reportListData" />
         </div>
-        <div class="spacer left" v-if="isStauts === 'admin'"></div>
-        <div class="payment-container" v-if="isStauts === 'admin'">>
+        <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
+        <div class="payment-container" v-if="$userInfo.type === 'admin'">
           <div class="payment">
             <div class="box-title">Payment request</div>
             <div
@@ -96,9 +96,11 @@ import {
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 import { ref } from "vue";
+import {useAuthStore} from '../../store'
 export default {
   components: { DoughnutChart, BarChart, RadarChart, PieChart, LineChart },
   setup() {
+ 
     const reportListData = {
       labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
       datasets: [
@@ -206,23 +208,9 @@ export default {
          
         });
     }
-    const isStauts = ref(localStorage.getItem("mockStatus"));
 
-    return { reportListData, acceptReq, isStauts, sendReq };
+    return { reportListData, acceptReq, sendReq};
   },
-  // data: () => ({
-  //   token:
-  //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBbm91c2FjayIsInN1YiI6IjYyMmM0ZjY5ZDA0ZmFmM2Q4NDMwZDJiYyIsImlhdCI6MTY1NDE2NzI1NDU1MywiZXhwIjoxNjU0MjUzNjU0NTUzfQ.7I7NzLR95IhEAdjKzQjtvEwnmYlRRCacrOJOnmb3tlM",
-  // }),
-  // created() {
-  //   console.log(this.token);
-  // },
-  // methods: {
-  //   async gen() {
-  //     const decoded = await jwt_decode(this.token);
-  //     console.log(decoded);
-  //   },
-  // },
 };
 </script>
 

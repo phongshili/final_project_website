@@ -72,9 +72,9 @@
         </div>
         <!--end position dropdown -->
 
-        <div class="spacer"  v-if="isStauts === 'admin'"></div>
+        <div class="spacer"  v-if="$userInfo.type === 'admin'"></div>
         <!-- company dropdown -->
-        <div class="input-group"  v-if="isStauts === 'admin'">
+        <div class="input-group"  v-if="$userInfo.type === 'admin'">
           <label for="user" class="text-input"
             >{{ $t("CompanyNameText") }}
             <p class="required">*</p></label
@@ -103,9 +103,9 @@
         </div>
         <!--end company dropdown -->
       </div>
-        <div class="spacer" v-if="isStauts === 'admin'"></div>
+        <div class="spacer" v-if="$userInfo.type === 'admin'"></div>
 
-      <div class="input-form" v-if="isStauts === 'admin'">
+      <div class="input-form" v-if="$userInfo.type === 'admin'">
         <!-- province dropdown -->
         <div class="input-group">
           <label for="user" class="text-input"
@@ -136,9 +136,9 @@
         </div>
         <!--end province dropdown -->
 
-        <div class="spacer" v-if="isStauts === 'admin'"></div>
+        <div class="spacer" v-if="$userInfo.type === 'admin'"></div>
         <!-- district dropdown -->
-        <div class="input-group" v-if="isStauts === 'admin'">
+        <div class="input-group" v-if="$userInfo.type === 'admin'">
           <label for="user" class="text-input"
             >{{ $t("DistrictText") }}
             <p class="required">*</p></label
@@ -328,8 +328,7 @@ export default {
       console.log("start date" + startDate.value);
     }
 
-    const isStauts = ref(localStorage.getItem("mockStatus"));
-    return { firstName, add, startDate, endDate ,isStauts};
+    return { firstName, add, startDate, endDate ,};
   },
 };
 </script>

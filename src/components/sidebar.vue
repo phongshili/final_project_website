@@ -6,14 +6,8 @@
           <img src="../assets/profile.jpg" alt="" />
         </div>
         <div class="detail">
-          <div class="name">Website Admin</div>
-          <div class="role" v-if="isStauts === 'admin'" >Admin</div>
-          <div class="role" v-if="isStauts === 'employer'" >Employer</div>
-          <div class="role" v-if="isStauts === 'employer'" >Current Points : 60</div>
-
-          <!-- comment code  -->
-           <div class="role" @click="status.mockStatusEmp"  v-if="isStauts === 'admin'" >Change to Employer</div>
-          <div class="role" @click="status.mockStatusAdmin" v-if="isStauts === 'employer'"  >Change to Admin</div>
+          <div class="name">{{$userInfo.name}}</div>
+          <div class="role" v-if="$userInfo.type === 'employer'" >Current Points : 60</div>
          
         </div>
       </div>
@@ -45,7 +39,7 @@
           </router-link>
         </div> -->
 
-        <div class="items"  v-if="isStauts === 'admin'">
+        <div class="items"  v-if="$userInfo.type === 'admin'">
           <router-link to="/employers">
             <div class="item">
               <i class="fa-solid fa-user-pen"></i
@@ -55,7 +49,7 @@
           </router-link>
         </div>
 
-        <div class="items"  v-if="isStauts === 'admin'">
+        <div class="items"  v-if="$userInfo.type === 'admin'">
           <router-link to="/jobseekers">
             <div class="item">
               <i class="fa-solid fa-user-tag"></i
@@ -65,7 +59,7 @@
           </router-link>
         </div>
 
-        <div class="items"  v-if="isStauts === 'admin'">
+        <div class="items"  v-if="$userInfo.type === 'admin'">
           <router-link to="/jobpositions">
             <div class="item">
               <i class="fa-solid fa-briefcase"></i
@@ -83,7 +77,7 @@
             <span class="count">4</span>
           </router-link>
         </div>
-         <div class="items"  v-if="isStauts === 'employer'">
+         <div class="items"  v-if="$userInfo.type === 'employer'">
           <router-link to="/contactUs" >
             <div class="item">
               <i class="fa-solid fa-headset"></i><span>{{ $t("ContactUsText") }}</span>
@@ -112,17 +106,14 @@
 
 <script>
 import { useLanguageSwitcher } from "../store";
-import { mockStatus } from "../store";
 import {ref} from 'vue'
 
 
 export default {
   setup() {
     const store = useLanguageSwitcher();
-    const status = mockStatus();
-    const isStauts = ref(localStorage.getItem('mockStatus'))
    
-    return { store ,status,isStauts};
+    return { store };
   },
 };
 </script>

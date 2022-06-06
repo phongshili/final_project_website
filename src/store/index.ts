@@ -21,9 +21,11 @@ export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
     accessToken: localStorage.getItem('accessToken') || null,
+    userType: localStorage.getItem('userType') || ''
   }),
   getters: {
     getToken: (state) => state.accessToken,
+    getUserType: (state) => state.userType,
     isAuth: (state) => state.accessToken !== null,
   },
   actions: {
@@ -36,49 +38,34 @@ export const useAuthStore = defineStore({
           }
         )
         const token = await res.data.accessToken;
+        const headers = { 
+          "Content-Type": "application/json",
+          "Authorization": token,
+        };
+        const resUserType = await axios.get(
+          `http://127.0.0.1:4000/admin-api/admin-find-id/`,
+          {
+            headers
+          },)
+        const userType = JSON.stringify(resUserType.data.findAdminId);
+        localStorage.setItem('userType', userType);
         localStorage.setItem('accessToken', token);
-        router.push({ name: "JobPostIndex" });
+        router.push({ name: "Dashboard" });
       } catch (error) {
         console.log(error)
       }
     },
     async logOut() {
      localStorage.removeItem("accessToken");
+     localStorage.removeItem("userType");
+
       router.push({ name: "Login" });
     }
-  }
-})
-export const mockStatus = defineStore({
-  id: 'mockStatus',
-  state: () => ({
-    setMockStatus: localStorage.getItem('mockStatus') || 'admin',
-  }),
-  getters: {
-    getmockStatus: (state) => state.setMockStatus,
-    isMockStatus: (state) => state.setMockStatus !== null,
-  },
-  actions: {
-    async mockStatusAdmin() {
-        const mockAdmin = 'admin'
-        localStorage.setItem('mockStatus', mockAdmin);
-        console.log(this.getmockStatus)
-        location.reload()
-   
-    },
-    async mockStatusEmp() {
-      const mockEmp = 'employer'
-      localStorage.setItem('mockStatus', mockEmp);
-      console.log(this.getmockStatus)
-      location.reload()
-
- 
-  },
   }
 })
 
 export default {
   useLanguageSwitcher,
   useAuthStore,
-  mockStatus
 
 }
