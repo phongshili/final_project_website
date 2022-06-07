@@ -21,7 +21,7 @@ export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
     accessToken: localStorage.getItem('accessToken') || null,
-    userType: localStorage.getItem('userType') || ''
+    userType: localStorage.getItem('userType') || "null"
   }),
   getters: {
     getToken: (state) => state.accessToken,
@@ -31,26 +31,38 @@ export const useAuthStore = defineStore({
   actions: {
     async authLogin(email: String, password: String) {
       try {
+        let userRole;
         const res = await axios.post(
           `http://127.0.0.1:4000/auth/admin-api/admin-login`,
           {
-            email: email, password: password
+            email, password
           }
         )
         const token = await res.data.accessToken;
+        const type = await res.data.type;
         const headers = { 
           "Content-Type": "application/json",
           "Authorization": token,
         };
-        const resUserType = await axios.get(
-          `http://127.0.0.1:4000/admin-api/admin-find-id/`,
-          {
-            headers
-          },)
-        const userType = JSON.stringify(resUserType.data.findAdminId);
+        if(type ==="admin"){
+          const resUserTypeAdmin = await axios.get(
+            `http://127.0.0.1:4000/admin-api/admin-find-id/`,
+            {
+              headers
+            },)
+            userRole = resUserTypeAdmin.data.findAdminId 
+        }else if(type ==="employee"){
+          const resUserTypeEmp = await axios.get(
+            `http://127.0.0.1:4000/emp-api/employee-find-id`,{
+              headers
+            }
+         )
+         userRole = resUserTypeEmp.data.findEmpId
+        }
+        const userType = JSON.stringify(userRole);
         localStorage.setItem('userType', userType);
         localStorage.setItem('accessToken', token);
-        router.push({ name: "Dashboard" });
+        location.reload();
       } catch (error) {
         console.log(error)
       }
@@ -58,8 +70,9 @@ export const useAuthStore = defineStore({
     async logOut() {
      localStorage.removeItem("accessToken");
      localStorage.removeItem("userType");
-
       router.push({ name: "Login" });
+      location.reload();
+
     }
   }
 })

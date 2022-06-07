@@ -53,7 +53,7 @@
         </tbody>
       </table>
     </div>
-    <div class="table-box is-small-tb" v-if="$userInfo.type === 'employer'">
+    <div class="table-box is-small-tb" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'">
       <table>
         <thead>
           <tr>

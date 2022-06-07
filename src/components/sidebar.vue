@@ -6,8 +6,9 @@
           <img src="../assets/profile.jpg" alt="" />
         </div>
         <div class="detail">
-          <div class="name">{{$userInfo.name}}</div>
-          <div class="role" v-if="$userInfo.type === 'employer'" >Current Points : 60</div>
+          <div class="name"  v-if="$userInfo.type === 'admin'">{{$userInfo.name}}</div>
+          <div class="name" v-else >{{$userInfo.companyName}}</div>
+          <div class="role" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >Current Points : 60</div>
          
         </div>
       </div>
@@ -147,7 +148,6 @@ export default {
     line-height: 24px;
     .sidebar-header {
       padding: 12px 10px;
-      align-items: center;
       .profile {
         display: flex;
         justify-content: center;

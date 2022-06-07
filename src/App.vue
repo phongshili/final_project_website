@@ -25,7 +25,7 @@ export default {
   },
   setup(){
     const store = useAuthStore()
-    let auth = ref(store.isAuth)
+    let auth = ref(store.accessToken)
     return {auth}
   }
 

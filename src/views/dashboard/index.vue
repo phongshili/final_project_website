@@ -39,8 +39,8 @@
             <div class="box-count">60</div>
           </div>
         </div>
-        <div class="spacer left" v-if="$userInfo.type === 'employer'"></div>
-        <div class="box-detail" v-if="$userInfo.type === 'employer'" @click="sendReq">
+        <div class="spacer left" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"></div>
+        <div class="box-detail" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" @click="sendReq">
           <div class="box-body">
             <div class="box-title">Top-up</div>
             <!-- <div class="spacerH"></div>

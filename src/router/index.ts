@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { useAuthStore } from '../store';
 import Login from '../views/Login.vue'
 import JobPostIndex from "../views/post_jobs/index.vue"
 import EmpIndex from "../views/employers/index.vue"
@@ -12,67 +13,117 @@ import EmployerManagement from "../views/employers/employer_management.vue"
 import Application from "../views/post_jobs/application.vue"
 import Resume from "../views/post_jobs/resume.vue"
 
-const routes: Array<RouteRecordRaw> = [
+const routes = [
   {
     path: '/',
     name: 'Login',
-    component: Login
+
+    component: Login,
+    
+    meta: {
+      requiresVisitor: true,
+    },
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard
+
+    component: Dashboard,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/jobposts',
     name: 'JobPostIndex',
-    component: JobPostIndex
+
+    component: JobPostIndex,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/jobpostmanagement',
     name: 'JobPostManagement',
-    component: JobPostManagement
+
+    component: JobPostManagement,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/employers',
     name: 'EmpIndex',
-    component: EmpIndex
+
+    component: EmpIndex,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/employermanagement',
     name: 'EmployerManagement',
-    component: EmployerManagement
+
+    component: EmployerManagement,
+    meta: {
+      requiresAuth: true,
+    },
   },
 
   {
     path: '/jobseekers',
     name: 'JobseekersIndex',
-    component: JobseekersIndex
+
+    component: JobseekersIndex,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/jobseekersmanagement',
     name: 'JobSeekersManagement',
-    component: JobSeekersManagement
+
+    component: JobSeekersManagement,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/jobpositions',
     name: 'JobPositionsIndex',
-    component: JobPositionsIndex
+
+    component: JobPositionsIndex,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/application',
     name: 'Application',
-    component: Application
+
+    component: Application,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/resume',
     name: 'Resume',
-    component: Resume
+
+    component: Resume,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/paymentshistories',
     name: 'PaymentsHistoryIndex',
-    component: PaymentsHistoryIndex
+
+    component: PaymentsHistoryIndex,
+    meta: {
+      requiresAuth: true,
+    },
+
   },
 ]
 
@@ -80,5 +131,28 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+// if login or is auth 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if ( useAuthStore().isAuth) {
+      next();
+      return;
+    }
+    next("/");
+  }
+  next();
+});
+// if not login or not auth
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresVisitor)) {
+    if (!useAuthStore().isAuth) {
+      next();
+      return;
+    }
+    next("/dashboard");
+  }
+  next();
+});
+
 
 export default router

@@ -71,7 +71,6 @@ export default {
   data: () => ({
     postJobs: {},
     postJobsTotal: 0,
-    isStatus : localStorage.getItem('mockStatus'),
     items:[{
       id:1,
       value:"Approve"
@@ -87,7 +86,6 @@ export default {
   }),
   created() {
     this.fetchPostJob();
-    console.log(this.isStatus)
   },
   methods: {
     async fetchPostJob() {

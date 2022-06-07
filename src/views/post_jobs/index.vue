@@ -68,7 +68,7 @@
           </tr>
         </tbody>
       </table>
-      <table v-if="$userInfo.type === 'employer'" >
+      <table v-if="$userInfo.type === 'employee'" >
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
@@ -147,7 +147,6 @@ export default {
   }),
   created() {
     this.fetchPostJob();
-    console.log(this.postJobs);
   },
   methods: {
     async fetchPostJob() {
