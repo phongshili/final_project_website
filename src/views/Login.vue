@@ -29,11 +29,27 @@
           :placeholder="$t('Passwordplaceholder')"
         />
       </div>
+
       <div class="action-group">
         <p class="text-right">{{ $t("ForgetPassword") }}</p>
         <button @click="login" class="button">
           {{ $t("LoginButtonText") }}
         </button>
+      </div>
+      <div class="switcher">
+        <!-- if getDefaultLanguage is en show "la" button -->
+        <label
+          class="languageSwitcher"
+          v-if="storeSwitcher.$state.setLanguage == 'en'"
+        >
+          {{ $t("OfferedInText") }}
+          <p @click="storeSwitcher.languageSwitch('la')">ລາວ</p>
+        </label>
+        <!-- if getDefaultLanguage is en show "en" button -->
+        <label class="languageSwitcher" v-else>
+          {{ $t("OfferedInText") }}
+          <p @click="storeSwitcher.languageSwitch('en')">English (US)</p>
+        </label>
       </div>
     </div>
     <!-- form login end -->
@@ -42,18 +58,18 @@
 
 <script >
 import { ref } from "vue-demi";
-import { useAuthStore } from "../store";
-
+import { useAuthStore, useLanguageSwitcher } from "../store";
 
 export default {
   setup() {
     let email = ref();
     let password = ref();
     const store = useAuthStore();
+    const storeSwitcher = useLanguageSwitcher();
     const login = async () => {
       await store.authLogin(email.value, password.value);
     };
-    return { email, password, login };
+    return { email, password, login, storeSwitcher };
   },
 };
 </script>
@@ -85,7 +101,7 @@ export default {
     }
     .action-group {
       p {
-        margin-bottom: $margin-bottom;
+        padding-bottom: $margin-bottom;
       }
       .button {
         width: 100%;
@@ -96,6 +112,23 @@ export default {
         background: $hover-color;
       }
     }
+    .switcher {
+    padding-top: 10px;
+    .languageSwitcher {
+      display: flex;
+      padding-left: 10px;
+      p {
+        padding-left: 5px;
+        color: $active-color;
+      }
+    }
+
+    .languageSwitcher :hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
+  }
+  
 }
 </style>

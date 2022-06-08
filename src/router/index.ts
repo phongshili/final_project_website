@@ -12,14 +12,18 @@ import JobPostManagement from "../views/post_jobs/postjob_management.vue"
 import EmployerManagement from "../views/employers/employer_management.vue"
 import Application from "../views/post_jobs/application.vue"
 import Resume from "../views/post_jobs/resume.vue"
+import Page_404 from '../views/page_not_found.vue'
 
 const routes = [
   {
+    path: "/:pathMatch(.*)*",
+    name: 'Page_NotFound',
+    component:Page_404,
+  },
+  {
     path: '/',
     name: 'Login',
-
     component: Login,
-    
     meta: {
       requiresVisitor: true,
     },
@@ -128,7 +132,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes
 })
 // if login or is auth 
