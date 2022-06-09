@@ -12,6 +12,9 @@ const messages = {
         LogOutText: "Log Out",
         ContactUsText: "Contact Us",
         ResumeText: "Resume",
+        ProfileText: "Profile",
+        ChangePasswordText: "Change Password",
+        GeneralAccountSettingsText: "General Account Settings",
         // End of Menu Item Name
 
         LoginTitleText: 'Log Into JobManagement',
@@ -43,6 +46,7 @@ const messages = {
         ChooseFilteText: "CHOOSE FILE",
         PostJobText:"POST JOB",
         AddPositionText:"ADD POSITION",
+        BackText: "Back",
         //end button text
 
         //form text
@@ -85,6 +89,8 @@ const messages = {
         ERC_Text: "Enterprise Registration Certificate",
         PointText: "Point",
         AboutUsText: "About Us",
+        FacebookText: "Facebook",
+        FacebookLinkText: "Facebook Link"
 
         //end form text
 
@@ -102,6 +108,9 @@ const messages = {
         LogOutText: "ອອກຈາກລະບົບ",
         ContactUsText: "ຕິດຕໍ່ພວກເຮົາ",
         ResumeText: "ຊີວະປະຫວັດ",
+        ProfileText: "ໂປຟາຍ",
+        ChangePasswordText: "ປ່ຽນລະຫັດຜ່ານ",
+
 
         // End of Menu Item Name
 
@@ -135,6 +144,7 @@ const messages = {
         AddPositionText:"ເພີ່ມຕຳແໜ່ງວຽກ",
         ExportText: "ພີມ",
         ChooseFilteText: "ເລືອກຮູບພາບ",
+        BackText: "ກັບຄືນ",
 
         //end button text
 
@@ -177,6 +187,9 @@ const messages = {
         ERC_Text: "ເລກວີສະຫະກິດ",
         PointText: "ພ້ອຍ",
         AboutUsText: "ກຽວກັບພວກເຮົາ",
+        FacebookText: "Facebook",
+        FacebookLinkText: "Facebook ລີ່ງ"
+
 
         //end form text
 

@@ -68,7 +68,7 @@
           </tr>
         </tbody>
       </table>
-      <table v-if="$userInfo.type === 'employee'" >
+      <table v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>

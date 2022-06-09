@@ -15,16 +15,17 @@
         <div class="profile">
           <img src="../assets/profile.jpg" alt="" />
           <div class="name" v-if="$userInfo.type === 'admin'">
-            {{ $userInfo.name }}
+            {{ $userInfo.name + ' ' + $userInfo.lastname }}
+            
           </div>
           <div class="name" v-else>{{ $userInfo.companyName }}</div>
         </div>
         <div class="line"></div>
-        <div class="dropdown-item" @click="store.logOut">
+        <div class="dropdown-item" @click="$router.push({ name: 'Profile' })" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >
           <i class="fa-solid fa-address-card"></i>
           <p>{{ $t("ProfileText") }}</p>
         </div>
-        <div class="dropdown-item" @click="store.logOut">
+        <div class="dropdown-item" >
           <i class="fa-solid fa-lock"></i>
           <p>{{ $t("ChangePasswordText") }}</p>
         </div>
@@ -128,7 +129,7 @@ export default defineComponent({
       border-radius: 5px;
       background: #fff;
       width: 250px;
-      height: 235px;
+      height: auto;
       z-index: 999;
       position: absolute;
       padding: 5px;

@@ -80,6 +80,7 @@ export const useAuthStore = defineStore({
   }
 })
 
+
 export default {
   useLanguageSwitcher,
   useAuthStore,

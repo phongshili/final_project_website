@@ -16,12 +16,14 @@
 import sideBar from "./components/sidebar.vue";
 import navBar from "./components/navbar.vue";
 import {useAuthStore} from "./store"
-import {ref} from 'vue'
+import {ref} from 'vue';
+import loading from "./components/loading.vue"
 export default {
   name: "app",
   components: {
     sideBar,
     navBar,
+    loading
   },
   setup(){
     const store = useAuthStore()

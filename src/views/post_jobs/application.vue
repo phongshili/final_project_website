@@ -5,7 +5,9 @@
     </div>
     <div class="filter">
       <div class="filter-menu">
-         <button class="button is-danger">{{ $t("BackText") }}</button>
+         <button @click="$router.go(-1)" class="button is-danger">{{ $t("BackText") }}</button>
+         <div class="spacer"></div>
+        <filterButton :items="items"></filterButton>
          
       </div>
       <div class="btn-menu">
@@ -73,16 +75,13 @@ export default {
     postJobsTotal: 0,
     items:[{
       id:1,
-      value:"Approve"
+      value:"Pending"
     },
     {
       id:2,
-      value:"Pendding"
+      value:"Approve"
     },
-    {
-      id:1,
-      value:"Reject"
-    }]
+    ]
   }),
   created() {
     this.fetchPostJob();

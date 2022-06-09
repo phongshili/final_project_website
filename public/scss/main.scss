@@ -9,7 +9,11 @@ body{
   font-family: $font;
   // fix sweet alert padding
   padding-right: 0px !important;
-
+    //disable select text
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  //end
 }
 // ::-webkit-scrollbar {
 //   display: none;

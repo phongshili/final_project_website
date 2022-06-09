@@ -13,6 +13,7 @@ import EmployerManagement from "../views/employers/employer_management.vue"
 import Application from "../views/post_jobs/application.vue"
 import Resume from "../views/post_jobs/resume.vue"
 import Page_404 from '../views/page_not_found.vue'
+import Profile from "../views/employers/profile.vue"
 
 const routes = [
   {
@@ -124,6 +125,15 @@ const routes = [
     name: 'PaymentsHistoryIndex',
 
     component: PaymentsHistoryIndex,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+
+    component: Profile,
     meta: {
       requiresAuth: true,
     },
