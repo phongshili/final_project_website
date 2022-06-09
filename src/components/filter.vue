@@ -1,5 +1,4 @@
 <template>
-  <div class="test">
     <div
       class="dropdown"
       @click="isDropDown"
@@ -31,9 +30,6 @@
           </a>
         </div>
       </div>
-
-
-    </div>
   </div>
 </template>
 <script>

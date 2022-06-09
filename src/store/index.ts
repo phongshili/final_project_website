@@ -8,6 +8,9 @@ export const useLanguageSwitcher = defineStore({
   state: () => ({
     setLanguage: localStorage.getItem('language') || 'la',
   }),
+  getters:{
+    getLanguage: (state) => state.setLanguage,
+  },
   actions: {
     async languageSwitch(val: string) {
       const language = val

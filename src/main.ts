@@ -20,7 +20,6 @@ app.config.globalProperties.$axios = axios;
 app.config.globalProperties.$api = 'http://127.0.0.1:4000'
 app.config.globalProperties.$languages = useLanguageSwitcher.$state.setLanguage;
 app.config.globalProperties.$userInfo = JSON.parse(userTypeStore.getUserType);
-// app.config.globalProperties.$userInfo = userTypeStore.getUserType;
 
 
 

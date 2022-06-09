@@ -78,27 +78,12 @@
             <span class="count">4</span>
           </router-link>
         </div>
-         <div class="items"  v-if="$userInfo.type === 'employer'">
+         <div class="items"  v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee'">
           <router-link to="/contactUs" >
             <div class="item">
               <i class="fa-solid fa-headset"></i><span>{{ $t("ContactUsText") }}</span>
             </div>
           </router-link>
-        </div>
-        <div class="switcher">
-          <!-- if getDefaultLanguage is en show "la" button -->
-          <label
-            class="languageSwitcher"
-            v-if="store.$state.setLanguage == 'en'"
-          >
-            {{ $t("OfferedInText") }}
-            <p @click="store.languageSwitch('la')">ລາວ</p>
-          </label>
-          <!-- if getDefaultLanguage is en show "en" button -->
-          <label class="languageSwitcher" v-else>
-            {{ $t("OfferedInText") }}
-            <p @click="store.languageSwitch('en')">English (US)</p>
-          </label>
         </div>
       </div>
     </div>
@@ -106,16 +91,7 @@
 </template>
 
 <script>
-import { useLanguageSwitcher } from "../store";
-import {ref} from 'vue'
-
-
 export default {
-  setup() {
-    const store = useLanguageSwitcher();
-   
-    return { store };
-  },
 };
 </script>
 
@@ -129,6 +105,11 @@ export default {
 }
 
 .sideBar_container {
+    //disable select text
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  //end
   position: fixed;
   height: 100%;
   width: 340px;
@@ -213,23 +194,6 @@ export default {
           background: $primary-color;
           color: $active-font-color;
           border-radius: 8px;
-        }
-      }
-      .switcher {
-        position: absolute;
-        bottom: 8px;
-        .languageSwitcher {
-          display: flex;
-          padding-left: 10px;
-          p {
-            padding-left: 5px;
-            color: $active-color;
-          }
-        }
-
-        .languageSwitcher :hover {
-          cursor: pointer;
-          text-decoration: underline;
         }
       }
     }
