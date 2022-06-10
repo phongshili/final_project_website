@@ -11,7 +11,7 @@
           aria-controls="dropdown-menu3"
         >
           <div class="filterText">
-            <span><i class="fa-solid fa-filter"></i><label>{{items[0].value}}</label></span>
+            <span><i class="fa-solid fa-filter"></i><label>Filter By</label></span>
             <span class="icon is-small">
               <i class="fas fa-angle-down" aria-hidden="true"></i>
             </span>

@@ -7,8 +7,8 @@
       />
       <p>Job Management</p>
     </div>
-    <div class="dropdown-container">
-      <div class="option" @click="is_Dropdown">
+    <div class="dropdown-container" @click="is_Dropdown">
+      <div class="option" >
         <i class="fa-solid fa-gear"></i>
       </div>
       <div class="option-list" :class="{ 'is-Active': isActive }">
