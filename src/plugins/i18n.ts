@@ -21,6 +21,7 @@ const messages = {
         Emailplaceholder: "Email",
         Passwordplaceholder: "Password",
         ForgetPassword: "Forget Password?",
+        SignUpText: "Sign Up",
 
         //table menu
         NoText: "No.",
@@ -47,6 +48,7 @@ const messages = {
         PostJobText:"POST JOB",
         AddPositionText:"ADD POSITION",
         BackText: "Back",
+        CreateNewAccountText:"CREATE NEW ACCOUNT",
         //end button text
 
         //form text
@@ -118,6 +120,8 @@ const messages = {
         Emailplaceholder: "ອີເມວ",
         Passwordplaceholder: "ລະຫັດຜ່ານ",
         ForgetPassword: "ລືມລະຫັດຜ່ານ?",
+        SignUpText: "ສ້າງບັນຊີ",
+
 
         //table menu
         NoText: "ລຳດັບ",
@@ -145,7 +149,7 @@ const messages = {
         ExportText: "ພີມ",
         ChooseFilteText: "ເລືອກຮູບພາບ",
         BackText: "ກັບຄືນ",
-
+        CreateNewAccountText:"ສ້າງບັນຊີ",
         //end button text
 
         //form text

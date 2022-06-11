@@ -35,7 +35,13 @@
         <button @click="login" class="button">
           {{ $t("LoginButtonText") }}
         </button>
+        <div class="line"></div>
+
+        <button class="button btnSignIn" @click="$router.push({name: 'SignIn'})">
+          {{ $t("CreateNewAccountText") }}
+        </button>
       </div>
+
       <div class="switcher">
         <!-- if getDefaultLanguage is en show "la" button -->
         <label
@@ -87,6 +93,12 @@ export default {
     border: $border-size solid $border-color;
     padding: 60px;
     border-radius: $border-radius;
+    .line {
+      background: $shadow-color;
+      height: 2px;
+            margin: 20px 0px;
+
+    }
     .logo {
       display: flex;
       align-items: center;
@@ -107,28 +119,34 @@ export default {
         width: 100%;
         color: $active-font-color;
         background: $primary-color;
+        &.btnSignIn {
+        background: #36ab32;
+      }
       }
       .button:hover {
         background: $hover-color;
       }
-    }
-    .switcher {
-    padding-top: 10px;
-    .languageSwitcher {
-      display: flex;
-      padding-left: 10px;
-      p {
-        padding-left: 5px;
-        color: $active-color;
+  
+      .btnSignIn:hover {
+        background: #36ab6d;
       }
     }
+    .switcher {
+      padding-top: 10px;
+      .languageSwitcher {
+        display: flex;
+        padding-left: 10px;
+        p {
+          padding-left: 5px;
+          color: $active-color;
+        }
+      }
 
-    .languageSwitcher :hover {
-      cursor: pointer;
-      text-decoration: underline;
+      .languageSwitcher :hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
     }
   }
-  }
-  
 }
 </style>

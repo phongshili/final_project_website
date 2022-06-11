@@ -14,6 +14,7 @@ import Application from "../views/post_jobs/application.vue"
 import Resume from "../views/post_jobs/resume.vue"
 import Page_404 from '../views/page_not_found.vue'
 import Profile from "../views/employers/profile.vue"
+import SignIn from "../views/register.vue"
 
 const routes = [
   {
@@ -25,6 +26,14 @@ const routes = [
     path: '/',
     name: 'Login',
     component: Login,
+    meta: {
+      requiresVisitor: true,
+    },
+  },
+  {
+    path: '/register',
+    name: 'SignIn',
+    component: SignIn,
     meta: {
       requiresVisitor: true,
     },
