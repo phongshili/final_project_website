@@ -69,18 +69,20 @@
 
 <script >
 import { ref } from "vue-demi";
-import { useAuthStore, useLanguageSwitcher } from "../store";
-
+import { useAuthStore, useLanguageSwitcher } from "../../store";
+import { useRouter, useRoute } from 'vue-router'
 export default {
   setup() {
+    const router = useRouter()
+    const route = useRoute()
     let email = ref();
     let password = ref();
     const store = useAuthStore();
     const storeSwitcher = useLanguageSwitcher();
-    const login = async () => {
-      await store.authLogin(email.value, password.value);
+    const signIn = async () => {
+      router.push({name:'Verify'})
     };
-    return { email, password, login, storeSwitcher };
+    return { email, password, signIn, storeSwitcher };
   },
 };
 </script>

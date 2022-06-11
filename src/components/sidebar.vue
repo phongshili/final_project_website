@@ -8,7 +8,7 @@
         <div class="detail">
           <div class="name"  v-if="$userInfo.type === 'admin'">{{$userInfo.name}}</div>
           <div class="name" v-else >{{$userInfo.companyName}}</div>
-          <div class="line"></div>
+          <div class="line" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"></div>
           <div class="role" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >Current Points : {{$userInfo.point}}</div>
           <div class="role" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >Status : {{ $userInfo.status}}</div>
         </div>

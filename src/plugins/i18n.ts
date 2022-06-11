@@ -22,6 +22,9 @@ const messages = {
         Passwordplaceholder: "Password",
         ForgetPassword: "Forget Password?",
         SignUpText: "Sign Up",
+        VerifyOtpText:"Verify OTP",
+        OtpCodeText:"Code",
+
 
         //table menu
         NoText: "No.",
@@ -49,6 +52,7 @@ const messages = {
         AddPositionText:"ADD POSITION",
         BackText: "Back",
         CreateNewAccountText:"CREATE NEW ACCOUNT",
+        SubmitText: "SUBMIT",
         //end button text
 
         //form text
@@ -124,6 +128,8 @@ const messages = {
         Passwordplaceholder: "ລະຫັດຜ່ານ",
         ForgetPassword: "ລືມລະຫັດຜ່ານ?",
         SignUpText: "ສ້າງບັນຊີ",
+        VerifyOtpText:"ຢືນຢັນໂຄດ OTP",
+        OtpCodeText:'ເລກລະຫັດ OTP',
 
 
         //table menu
@@ -153,6 +159,7 @@ const messages = {
         ChooseFilteText: "ເລືອກຮູບພາບ",
         BackText: "ກັບຄືນ",
         CreateNewAccountText:"ສ້າງບັນຊີ",
+        SubmitText:'ຕົກລົງ',
         //end button text
 
         //form text

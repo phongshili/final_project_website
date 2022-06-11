@@ -147,7 +147,7 @@ export default {
       },
       buttonsStyling: true,
     });
-    async function acceptReq() {
+    const acceptReq=()=> {
       swalWithBootstrapButtons
         .fire({
           title: "Payment",
@@ -181,7 +181,7 @@ export default {
           }
         });
     }
-    async function sendReq() {
+    const sendReq=() => {
       swalWithBootstrapButtons
         .fire({
           title: "Top-Up",
@@ -191,7 +191,7 @@ export default {
           input: "text",
 
           // reverseButtons: true,
-          imageUrl: "https://unsplash.it/400/200",
+          imageUrl: "http://127.0.0.1:4000/resize-images/0b114727-89f4-4d9e-88d8-31fbad96eee8.jpeg",
           imageWidth: 400,
           imageHeight: 200,
         })
