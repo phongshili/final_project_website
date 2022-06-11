@@ -8,8 +8,9 @@
         <div class="detail">
           <div class="name"  v-if="$userInfo.type === 'admin'">{{$userInfo.name}}</div>
           <div class="name" v-else >{{$userInfo.companyName}}</div>
-          <div class="role" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >Current Points : 60</div>
-         
+          <div class="line"></div>
+          <div class="role" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >Current Points : {{$userInfo.point}}</div>
+          <div class="role" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >Status : {{ $userInfo.status}}</div>
         </div>
       </div>
       <div class="line"></div>
@@ -128,7 +129,7 @@ export default {
     padding: 0px 20px;
     line-height: 24px;
     .sidebar-header {
-      padding: 12px 10px;
+      // padding: 12px 10px;
       .profile {
         display: flex;
         justify-content: center;
@@ -145,13 +146,13 @@ export default {
         }
         .role {
           display: flex;
-          justify-content: center;
+          // justify-content: center;
         }
       }
     }
     .line {
       background: $shadow-color;
-      height: 2px;
+      height: 1px;
       margin: 16px 0px;
     }
     .sidebar-body {

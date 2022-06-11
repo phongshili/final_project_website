@@ -25,7 +25,7 @@
           <i class="fa-solid fa-address-card"></i>
           <p>{{ $t("ProfileText") }}</p>
         </div>
-        <div class="dropdown-item" >
+        <div class="dropdown-item" @click="$router.push({ name: 'ChangePassword' })" >
           <i class="fa-solid fa-lock"></i>
           <p>{{ $t("ChangePasswordText") }}</p>
         </div>

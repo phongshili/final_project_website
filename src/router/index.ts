@@ -15,6 +15,7 @@ import Resume from "../views/post_jobs/resume.vue"
 import Page_404 from '../views/page_not_found.vue'
 import Profile from "../views/employers/profile.vue"
 import SignIn from "../views/register.vue"
+import ChangePassword from "../views/employers/change_password.vue"
 
 const routes = [
   {
@@ -79,6 +80,15 @@ const routes = [
     name: 'EmployerManagement',
 
     component: EmployerManagement,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/changepassword',
+    name: 'ChangePassword',
+
+    component: ChangePassword,
     meta: {
       requiresAuth: true,
     },

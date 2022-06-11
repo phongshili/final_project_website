@@ -92,7 +92,10 @@ const messages = {
         PointText: "Point",
         AboutUsText: "About Us",
         FacebookText: "Facebook",
-        FacebookLinkText: "Facebook Link"
+        FacebookLinkText: "Facebook Link",
+
+        OldPasswordText: "Old Password",
+        NewPasswordText: "New Password",
 
         //end form text
 
@@ -192,7 +195,10 @@ const messages = {
         PointText: "ພ້ອຍ",
         AboutUsText: "ກຽວກັບພວກເຮົາ",
         FacebookText: "Facebook",
-        FacebookLinkText: "Facebook ລີ່ງ"
+        FacebookLinkText: "Facebook ລີ່ງ",
+
+        OldPasswordText: "ລະຫັດຜ່ານເກົ່າ",
+        NewPasswordText: "ລະຫັດຜ່ານໃໝ່",
 
 
         //end form text
