@@ -5,8 +5,7 @@
     </div>
     <div class="filter is-small-tb">
       <div class="filter-menu">
-                <filterButton :items="items"></filterButton>
-
+        <filterButton :items="items"></filterButton>
       </div>
       <div class="btn-menu">
         <button class="button is-link">{{ $t("ExportText") }}</button>
@@ -24,36 +23,34 @@
           </tr>
         </thead>
         <tbody>
-          <tr @click="acceptReq">
-            <td class="tb-ss tb-center"><span>1</span></td>
-            <td class="tb-small"><span>company1</span></td>
-            <td class="tb-small"><span>company1</span></td>
-            <td class="tb-small"><span>Status</span></td>
-            <td class="tb-small"><span>2022-03-15</span></td>
-           
-          </tr>
-          <tr @click="acceptReq">
-            <td class="tb-ss tb-center"><span>2</span></td>
-            <td class="tb-small"><span>company1</span></td>
-            <td class="tb-small"><span>company1</span></td>
-            <td class="tb-small"><span>Status</span></td>
-            <td class="tb-small"><span>2022-03-15</span></td>
-
-           
-          </tr>
-          <tr @click="acceptReq">
-            <td class="tb-ss tb-center"><span>3</span></td>
-            <td class="tb-small"><span>company1</span></td>
-            <td class="tb-small"><span>company1</span></td>
-            <td class="tb-small"><span>Status</span></td>
-            <td class="tb-small"><span>2022-03-15</span></td>
-
-            
+          <tr
+            @click="acceptReq"
+            v-for="(payment, index) in payments"
+            :key="index"
+          >
+            <td class="tb-ss tb-center">
+              <span>{{ index + 1 }}</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ payment.employeeName }}</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ payment.point }}</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ payment.status }}</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ payment.date }}</span>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="table-box is-small-tb" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'">
+    <div
+      class="table-box is-small-tb"
+      v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"
+    >
       <table>
         <thead>
           <tr>
@@ -64,23 +61,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr @click="showReceipt">
-            <td class="tb-ss tb-center"><span>2</span></td>
-            <td class="tb-small"><span>10</span></td>
-            <td class="tb-small"><span>rejected</span></td>
-            <td class="tb-small"><span>2022-03-15</span></td>
-          </tr>
-          <tr @click="showReceipt">
-            <td class="tb-ss tb-center"><span>2</span></td>
-            <td class="tb-small"><span>40</span></td>
-            <td class="tb-small"><span>Approve</span></td>
-            <td class="tb-small"><span>2022-03-15</span></td>
-          </tr>
-          <tr @click="showReceipt">
-            <td class="tb-ss tb-center"><span>3</span></td>
-            <td class="tb-small"><span>60</span></td>
-            <td class="tb-small"><span>Pendding</span></td>
-            <td class="tb-small"><span>2022-03-15</span></td>
+          <tr
+            @click="acceptReq"
+            v-for="(payment, index) in payments"
+            :key="index"
+          >
+            <td class="tb-ss tb-center">
+              <span>{{ index + 1 }}</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ payment.point }}</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ payment.status }}</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ payment.createdAt }}</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -89,14 +86,67 @@
 </template>
 <script>
 import filterButton from "../../components/filter.vue";
-import { ref,reactive,toRefs,computed } from "vue";
+import { ref, reactive, toRefs, computed } from "vue";
+import axios from "axios";
+import { useI18n } from "vue-i18n";
 import Swal from "sweetalert2";
+import store from "../../store";
+
 export default {
   components: {
     filterButton,
   },
   setup() {
-    
+    const { t } = useI18n();
+    const auth = store.useAuthStore();
+    const userTypeStore = store.useAuthStore();
+    const userType = JSON.parse(userTypeStore.getUserType);
+    let token = auth.getToken;
+    const dataSet = reactive({
+      items: [
+        {
+          id: 1,
+          value: "pending",
+          name: t("PendingText"),
+        },
+        {
+          id: 2,
+          value: "confirmed",
+          name: t("ApproveText"),
+        },
+        {
+          id: 3,
+          value: "cancel",
+          name: t("RejectText"),
+        },
+      ],
+      payments: [{}],
+    });
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    // need to refactor this code to hook
+    const fetchPaymentAdmin = async () => {
+      const res = await axios.get(
+        "http://127.0.0.1:4000/admin-api/payment-get"
+      );
+
+      dataSet.payments = res.data.mapPayment; // 👈 get just results
+    };
+    // need to refactor this code to hook
+    const fetchPaymentEmp = async () => {
+      const res = await axios.get("http://127.0.0.1:4000/emp-api/payment-get", {
+        headers,
+      });
+
+      dataSet.payments = res.data.mapPayment; // 👈 get just results
+    };
+
+    if (userType.type === "admin") fetchPaymentAdmin();
+    if (userType.type === "employee" || userType.type === "employer")
+      fetchPaymentEmp();
+
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn-success",
@@ -150,8 +200,8 @@ export default {
         showConfirmButton: false,
       });
     }
-    
-    return { showReceipt, acceptReq };
+
+    return { showReceipt, acceptReq, ...toRefs(dataSet) };
   },
 };
 </script>

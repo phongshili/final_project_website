@@ -32,12 +32,22 @@ const messages = {
         TotalJobSeekr:"Total Jobseekrs",
         CurrentPointText:"Current Points",
 
+        //status
+        OnlineText: "Online",
+        OfflineText: "Offline",
+        ExpiredText: "Expired",
+        PendingText:'Pending',
+        ApproveText:'Approve',
+        RejectText:'Reject',
+
 
 
         //table menu
         NoText: "No.",
         PositionText: "Position",
         LocationText: "Location",
+        DistrictMenuText: "District",
+
         CompanyNameText: "Company",
         TelText: "Telephone",
         EmailText: "Email",
@@ -48,6 +58,8 @@ const messages = {
         AmountText: "Amount",
         PaymentDateText: "Payment Date",
         ApplicationText : "Appliaction",
+        FullNameText: 'Full Name',
+
         //end of table menu
 
         // button text
@@ -156,14 +168,19 @@ const messages = {
         TotalJobSeekr:"ຈຳນວນຜູ້ສະໝັກວຽກທັງໝົດ",
         CurrentPointText:"ຈຳນວນພ້ອຍທີ່ຍັງເຫຼືອ",
     
-
-
-
+          //status
+          OnlineText: "ປະກາດ",
+          OfflineText: "ຢຸດປະກາດ",
+          ExpiredText: "ໝົດກຳນົດ",
+          PendingText:'ລໍຖ້າ',
+          ApproveText:'ອະນຸມັດ',
+          RejectText:'ປະຕິເສດ',
 
         //table menu
         NoText: "ລຳດັບ",
         PositionText: "ຕຳແໜ່ງ",
         LocationText: "ແຂວງ",
+        
         CompanyNameText: "ຊື່ບໍລິສັດ",
         TelText: "ເບີໂທ",
         EmailText: "ອີເມວ",
@@ -174,6 +191,11 @@ const messages = {
         AmountText: "ຈຳນວນ",
         PaymentDateText: "ວັນທີທີ່ຊຳລະ",
         ApplicationText : "ຈຳນວນທີ່ສະໝັກ",
+        FullNameText: 'ຊື່ ແລະ ນາມສະກຸນ',
+        DistrictMenuText: "ເມືອງ",
+        SearchText : 'ຄົ້ນຫາ',
+        AddPositionInputText: 'ເພີ່ມຕຳແໜ່ງວຽກ',
+
 
         //end of table menu
 

@@ -26,7 +26,7 @@
             v-for="item in items"
             :key="item.id"
           >
-            {{ item.value }}
+            {{ item.name }}
           </a>
         </div>
       </div>

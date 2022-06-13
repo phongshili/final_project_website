@@ -7,7 +7,7 @@
       <div class="filter-menu">
         <filterButton :items="items"></filterButton>
         <div class="input-group">
-          <input class="input is-small" type="text" placeholder="Small input" />
+          <input class="input is-small" type="text" :placeholder="$t('SearchText')" />
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
       </div>
@@ -26,8 +26,8 @@
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
-            <th class="tb-medium">{{ $t("CompanyNameText") }}</th>
-            <th class="tb-medium">{{ $t("LocationText") }}</th>
+            <th class="tb-medium">{{ $t("FullNameText") }}</th>
+            <th class="tb-medium">{{ $t("DistrictMenuText") }}</th>
             <th class="tb-medium tb-right">{{ $t("TelText") }}</th>
             <th class="tb-large">{{ $t("EmailText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
@@ -37,16 +37,17 @@
         <tbody>
           <tr 
             @click="$router.push({ name: 'JobSeekersManagement' })"
+            v-for="(seeker,index) in seekers" :key="index"
             >
-            <td class="tb-ss tb-center"><span>1</span></td>
-            <td class="tb-medium"><span>company1</span></td>
+            <td class="tb-ss tb-center"><span>{{index +1}}</span></td>
+            <td class="tb-medium"><span>{{seeker.name}} {{seeker.lastname}}</span></td>
             <td class="tb-medium">
-              <span>ນະຄອນຫລວງວຽງຈັນ</span>
+              <span>{{seeker.districtName}}</span>
             </td>
-            <td class="tb-right"><span>32365236</span></td>
-            <td class="tb-large"><span>emp1@gmail.com</span></td>
+            <td class="tb-right"><span>{{seeker.tel}}</span></td>
+            <td class="tb-large"><span>{{seeker.email}}</span></td>
             <td class="tb-small">
-              <span>approve</span>
+              <span>{{seeker.status}}</span>
             </td>
             <td class="tb-small">
               <div class="tools">
@@ -56,44 +57,7 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <td class="tb-ss tb-center"><span>2</span></td>
-            <td class="tb-medium"><span>company1</span></td>
-            <td class="tb-medium">
-              <span>ນະຄອນຫລວງວຽງຈັນ</span>
-            </td>
-            <td class="tb-right"><span>32365236</span></td>
-            <td class="tb-large"><span>emp1@gmail.com</span></td>
-            <td class="tb-small">
-              <span>approve</span>
-            </td>
-            <td class="tb-small">
-              <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"></i
-                >
-                <i class="fa-solid fa-xmark delete-tool"></i>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="tb-ss tb-center"><span>3</span></td>
-            <td class="tb-medium"><span>company1</span></td>
-            <td class="tb-medium">
-              <span>ນະຄອນຫລວງວຽງຈັນ</span>
-            </td>
-            <td class="tb-right"><span>32365236</span></td>
-            <td class="tb-large"><span>emp1@gmail.com</span></td>
-            <td class="tb-small">
-              <span>approve</span>
-            </td>
-            <td class="tb-small">
-              <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"></i
-                >
-                <i class="fa-solid fa-xmark delete-tool"></i>
-              </div>
-            </td>
-          </tr>
+
         </tbody>
       </table>
     </div>
@@ -101,30 +65,47 @@
 </template>
 <script>
 import filterButton from "../../components/filter.vue";
+import { ref, reactive, toRefs } from "vue";
+import axios from "axios";
+import { useI18n } from 'vue-i18n'
 export default {
-  components: {
-    filterButton,
+  components: { filterButton },
+  setup() {
+    const {t} = useI18n()
+    const dataSet = reactive({
+      items: [
+        {
+          id: 1,
+          value: "pending",
+          name: t('PendingText'),
+        },
+        {
+          id: 2,
+          value: "approve",
+          name: t('ApproveText'),
+        },
+        {
+          id: 3,
+          value: "reject",
+          name: t('RejectText'),
+        },
+      ],
+      seekers: [{}],
+
+    });
+    // need to refactor this code to hook
+    const fetchSeekers = async () => {
+      const res = await axios.get(
+        "http://127.0.0.1:4000/admin-api/seeker-get"
+      );
+
+      dataSet.seekers = res.data.mapSeeker; // 👈 get just results
+
+    };
+      fetchSeekers();
+
+    return {...toRefs(dataSet)};
   },
-  data: () => ({
-    items: [
-      {
-        id: 1,
-        value: "Approve",
-      },
-      {
-        id: 2,
-        value: "Pendding",
-      },
-      {
-        id: 1,
-        value: "Reject",
-      },
-          {
-        id: 1,
-        value: "Not Verify",
-      },
-    ],
-  }),
 };
 </script>
 

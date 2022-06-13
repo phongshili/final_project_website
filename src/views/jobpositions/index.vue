@@ -5,9 +5,8 @@
     </div>
     <div class="filter is-small-tb">
       <div class="filter-menu">
-        <filterButton :items="items"></filterButton>
           <div class="input-group">
-          <input class="input is-small" type="text" placeholder="Small input" />
+          <input class="input is-small" type="text" :placeholder="$t('AddPositionInputText')" />
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
       </div>
@@ -28,11 +27,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="tb-ss tb-center"><span>1</span></td>
-            <td class="tb-small"><span>company1</span></td>
-            <td class="tb-small"><span>company1</span></td>
-           
+          <tr v-for="(position,index) in positions" :key="index">
+            <td class="tb-ss tb-center"><span>{{index+1}}</span></td>
+            <td class="tb-small"><span>{{position.name}}</span></td>
+            <td class="tb-small"><span>{{position.__v}}</span></td>
             <td class="tb-small">
               <div class="tools">
                 <i class="fa-solid fa-pen-to-square edit-tool"></i
@@ -40,55 +38,37 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <td class="tb-ss tb-center"><span>2</span></td>
-            <td class="tb-small"><span>company1</span></td>
-            <td class="tb-small"><span>company1</span></td>
-           
-            <td class="tb-small">
-              <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"></i
-                ><i class="fa-solid fa-xmark delete-tool"></i>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="tb-ss tb-center"><span>3</span></td>
-            <td class="tb-small"><span>company1</span></td>
-            <td class="tb-small"><span>company1</span></td>
-        
-            <td class="tb-small">
-              <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"></i
-                ><i class="fa-solid fa-xmark delete-tool"></i>
-              </div>
-            </td>
-          </tr>
+
         </tbody>
       </table>
     </div>
   </div>
 </template>
 <script>
-import filterButton from "../../components/filter.vue"
+import filterButton from "../../components/filter.vue";
+import { ref, reactive, toRefs } from "vue";
+import axios from "axios";
 export default {
-    components: {
-    filterButton,
+  components: { filterButton },
+  setup() {
+    const dataSet = reactive({
+     
+      positions: [{}],
+
+    });
+    // need to refactor this code to hook
+    const fetchPositions = async () => {
+      const res = await axios.get(
+        "http://127.0.0.1:4000/admin-api/position-get"
+      );
+
+      dataSet.positions = res.data.getPosition; // 👈 get just results
+
+    };
+      fetchPositions();
+
+    return {...toRefs(dataSet)};
   },
-    data: () => ({
-    items:[{
-      id:1,
-      value:"IT"
-    },
-    {
-      id:2,
-      value:"Dev"
-    },
-    {
-      id:1,
-      value:"WebDev"
-    }]
-  }),
 };
 </script>
 

@@ -76,13 +76,10 @@
               {{$t('ViewAllText')}}
             </div>
           </div>
-          <div class="payment body" @click="acceptReq">
-            <div class="">Employer 1</div>
-            <div class="">90 Points</div>
-          </div>
-          <div class="payment body">
-            <div class="">Employer 2</div>
-            <div class="">120 Points</div>
+          <div class="payment body" @click="acceptReq" 
+          v-for="req in reqpoints" :key="req._id">
+            <div class="">{{req.employeeName}}</div>
+            <div class="">{{req.point}} Points</div>
           </div>
         </div>
       </div>
@@ -117,8 +114,14 @@ export default {
     let token = auth.getToken;
     const dataSet = reactive({
       countTotal: {},
+      reqpoints:[{}]
     });
-
+    
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    // need to refactor this code to hook
     const fetchCountTotalAdmin = async () => {
       const res = await axios.get(
         "http://127.0.0.1:4000/admin-api/admin-count-total"
@@ -126,10 +129,16 @@ export default {
 
       dataSet.countTotal = res.data; // 👈 get just results
     };
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: token,
+        // need to refactor this code to hook
+    const fetchPaymentAdmin = async () => {
+      const res = await axios.get(
+        "http://127.0.0.1:4000/admin-api/payment-get?status=pending"
+      );
+
+      dataSet.reqpoints = res.data.mapPayment; // 👈 get just results
     };
+    
+    // need to refactor this code to hook
     const fetchCountTotalEmp = async () => {
       const res = await axios.get(
         "http://127.0.0.1:4000/emp-api/employee-count-total",
@@ -137,13 +146,13 @@ export default {
           headers,
         }
       );
-
       dataSet.countTotal = res.data; // 👈 get just results
-
-      console.log(userType);
     };
 
-    if (userType.type === "admin") fetchCountTotalAdmin();
+    if (userType.type === "admin") {
+      fetchCountTotalAdmin()
+      fetchPaymentAdmin()
+    };
     if (userType.type === "employee" || userType.type === "employer")
       fetchCountTotalEmp();
 

@@ -34,30 +34,30 @@
         <tbody>
           <tr
             @click="$router.push({ name: 'JobPostManagement' })"
-           v-for="(postJob, index) in postJobs" :key="index">
+           v-for="(job, index) in jobposts" :key="index">
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
             <td class="tb-medium">
-              <span>{{ postJob.positionName }}</span>
+              <span>{{ job.positionName }}</span>
             </td>
             <td class="tb-medium">
-              <span>{{ postJob.provinceName }}</span>
+              <span>{{ job.provinceName }}</span>
             </td>
             <td class="tb-right">
-              <span> {{ postJob.companyName }}</span>
+              <span> {{ job.companyName }}</span>
             </td>
                   <td class="tb-medium">
-              <span>{{ postJob.email }}</span>
+              <span>{{ job.email }}</span>
             </td>
                  <td class="tb-small tb-center">
               <span>2</span>
             </td>
             <td class="tb-small">
-              <span>{{ postJob.status }}</span>
+              <span>{{ job.status }}</span>
             </td>
             <td class="tb-small">
-              <span> {{ postJob.startDate }}</span>
+              <span> {{ job.startDate }}</span>
             </td>
             <td class="tb-small">
               <div class="tools">
@@ -84,31 +84,30 @@
         </thead>
         <tbody>
           <tr
-            @click="$router.push({ name: '' })"
-           v-for="(postJob, index) in postJobs" :key="index">
+           v-for="(job, index) in jobposts" :key="index">
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
             <td class="tb-medium">
-              <span>{{ postJob.positionName }}</span>
+              <span>{{ job.positionName }}</span>
             </td>
             <td class="tb-medium">
-              <span>{{ postJob.provinceName }}</span>
+              <span>{{ job.provinceName }}</span>
             </td>
             <td class="tb-right">
-              <span> {{ postJob.tel }}</span>
+              <span> {{ job.tel }}</span>
             </td>
                   <td class="tb-medium">
-              <span>{{ postJob.email }}</span>
+              <span>{{ job.email }}</span>
             </td>
                  <td class="tb-small tb-center">
               <span>6</span>
             </td>
             <td class="tb-small">
-              <span>{{ postJob.status }}</span>
+              <span>{{ job.status }}</span>
             </td>
             <td class="tb-small">
-              <span> {{ postJob.startDate }}</span>
+              <span> {{ job.startDate }}</span>
             </td>
             <td class="tb-large">
               <div class="tools">
@@ -125,35 +124,72 @@
 </template>
 
 <script>
-import filterButton from "../../components/filter.vue"
+import filterButton from "../../components/filter.vue";
+import { ref,reactive,toRefs,computed } from "vue";
+import axios from "axios";
+import { useI18n } from 'vue-i18n'
+import Swal from "sweetalert2";
+import store from "../../store";
+
 export default {
-   components: {
-    filterButton,
-  },
-  data: () => ({
-    postJobs: {},
-    items:[{
-      id:1,
-      value:"Approve"
-    },
-    {
-      id:2,
-      value:"Pendding"
-    },
-    {
-      id:1,
-      value:"Reject"
-    }]
-  }),
-  created() {
-    this.fetchPostJob();
-  },
-  methods: {
-    async fetchPostJob() {
-      const res = await this.$axios.get(`${this.$api}/admin-api/postjob-get`);
-      this.postJobs = res.data.mapPostJob;
-      this.postJobsTotal = res.data.total;
-    },
+  components: { filterButton },
+  setup() {
+      const {t} = useI18n()
+    const auth = store.useAuthStore();
+    const userTypeStore = store.useAuthStore();
+    const userType = JSON.parse(userTypeStore.getUserType);
+    let token = auth.getToken;
+    const dataSet = reactive({
+      items: [
+        {
+          id: 1,
+          value: "online",
+          name: t('OnlineText'),
+        },
+        {
+          id: 2,
+          value: "office",
+          name: t('OfflineText'),
+        },
+        {
+          id: 3,
+          value: "expired",
+          name: t('ExpiredText'),
+        },
+      ],
+      jobposts: [{}],
+
+    });
+     const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+   // need to refactor this code to hook
+    const fetchJobPostAdmin = async () => {
+      const res = await axios.get(
+        "http://127.0.0.1:4000/admin-api/postjob-get"
+      );
+
+      dataSet.jobposts = res.data.mapPostJob; // 👈 get just results
+
+    };
+        // need to refactor this code to hook
+    const fetchJobPostEmp = async () => {
+      const res = await axios.get(
+        "http://127.0.0.1:4000/emp-api/postjob-get",{
+          headers
+        }
+      );
+
+      dataSet.jobposts = res.data.mapPostJob; // 👈 get just results
+
+    };
+
+       if (userType.type === "admin") fetchJobPostAdmin();;
+    if (userType.type === "employee" || userType.type === "employer")
+      fetchJobPostEmp();
+
+    return {...toRefs(dataSet)};
   },
 };
 </script>
