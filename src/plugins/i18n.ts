@@ -130,6 +130,9 @@ const messages = {
         NewPasswordText: "New Password",
 
         BasicInfoText:'Basic Info',
+        weeklyText:'Weekly',
+        monthlyText: "Monthly",
+        yearText:"Yearly"
 
         //end form text
 
@@ -265,6 +268,9 @@ const messages = {
         NewPasswordText: "ລະຫັດຜ່ານໃໝ່",
 
         BasicInfoText:'ຂໍ້ມວນພື້ນຖານ',
+        weeklyText:'ປະຈຳອາທິດ',
+        monthlyText: "ປະຈຳເດືອນ",
+        yearlyText:"ປະຈຳປິ"
         //end form text
 
 

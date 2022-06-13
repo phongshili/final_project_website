@@ -100,6 +100,7 @@ import {
 } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
+Chart.defaults.font.family = "Noto Sans Lao";
 import { ref, reactive, toRefs, computed } from "vue";
 import axios from "axios";
 import store from "../../store";
@@ -160,36 +161,26 @@ export default {
       labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
       datasets: [
         {
-          label: "weekly",
+          label: t('weeklyText'),
           data: [2, 4, 10, 7],
           backgroundColor: [
-            "#77CEFF",
-            "#0079AF",
-            "#123E6B",
-            "#97B0C4",
-            "#A5C8ED",
+            "#5ADBFF",
           ],
         },
         {
-          label: "Monthly",
+          label: t('monthlyText'),
           data: [20, 10, 40, 30, 60],
           backgroundColor: [
-            "#77CEFF",
-            "#0079AF",
-            "#123E6B",
-            "#97B0C4",
-            "#A5C8ED",
+            "#3C6997",
+    
           ],
         },
         {
-          label: "Year",
+          label: t('yearlyText'),
           data: [39, 30, 50, 50, 70],
           backgroundColor: [
-            "#77CEFF",
-            "#0079AF",
-            "#123E6B",
-            "#97B0C4",
-            "#A5C8ED",
+            "#094074",
+         
           ],
         },
       ],
