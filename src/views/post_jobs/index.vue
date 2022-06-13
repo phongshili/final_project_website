@@ -112,9 +112,9 @@
             </td>
             <td class="tb-large">
               <div class="tools">
-                <button class="button apply-btn" @click="$router.push({ name: 'Application' })" >APPLYMENT</button>
+                <button class="button apply-btn" @click="$router.push({ name: 'Application' })" >{{$t("ApplymentButtonText")}}</button>
                     <div class="spacer s"></div>
-                <button class="button is-link" >EDIT</button>
+                <button class="button is-link" >{{$t('EditButtonText')}}</button>
               </div>
             </td>
           </tr>

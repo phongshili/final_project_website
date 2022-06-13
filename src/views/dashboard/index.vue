@@ -7,28 +7,28 @@
       <div class="detail-form-display">
         <div class="box-detail">
           <div class="box-body">
-            <div class="box-title">Posts</div>
+            <div class="box-title">{{$t('TotalPostText')}}</div>
             <div class="box-count">{{ countTotal.totalPost }}</div>
           </div>
         </div>
         <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
         <div class="box-detail" v-if="$userInfo.type === 'admin'">
           <div class="box-body">
-            <div class="box-title">Employers</div>
+            <div class="box-title">{{$t('TotalEmployersText')}}</div>
             <div class="box-count">{{ countTotal.totalEmp }}</div>
           </div>
         </div>
         <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
         <div class="box-detail" v-if="$userInfo.type === 'admin'">
           <div class="box-body">
-            <div class="box-title">Job Seekers</div>
+            <div class="box-title">{{$t('TotalJobSeekr')}}</div>
             <div class="box-count">{{ countTotal.totalSeeker }}</div>
           </div>
         </div>
         <div class="spacer left"></div>
         <div class="box-detail">
           <div class="box-body">
-            <div class="box-title">Applications</div>
+            <div class="box-title">{{$t('TotalApplicationText')}}</div>
             <div class="box-count">
               {{ countTotal.totalJobApp || countTotal.totalApprove }}
             </div>
@@ -37,7 +37,7 @@
         <div class="spacer left"></div>
         <div class="box-detail">
           <div class="box-body">
-            <div class="box-title">Total Used Points</div>
+            <div class="box-title">{{$t('TotalUsedPointsText')}}</div>
             <div class="box-count">{{ countTotal.countPoint }}</div>
           </div>
         </div>
@@ -51,9 +51,9 @@
           @click="sendReq"
         >
           <div class="box-body">
-            <div class="box-title">Top-up</div>
+            <div class="box-title">{{$t('TopUpText')}}</div>
             <!-- <div class="spacerH"></div>
-
+          
             <input class="input is-primary" type="number" />
             <div class="spacerH"></div>
             <button class="button is-link">SEND REQUEST</button> -->
@@ -68,12 +68,12 @@
         <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
         <div class="payment-container" v-if="$userInfo.type === 'admin'">
           <div class="payment">
-            <div class="box-title">Payment request</div>
+            <div class="box-title">{{$t('PaymentReqText')}}</div>
             <div
               class="view-all"
               @click="$router.push({ name: 'PaymentsHistoryIndex' })"
             >
-              View All
+              {{$t('ViewAllText')}}
             </div>
           </div>
           <div class="payment body" @click="acceptReq">
@@ -92,8 +92,7 @@
   </div>
 </template>
 <script>
-import jwt_decode from "jwt-decode";
-import { defineComponent } from "vue";
+import { useI18n } from 'vue-i18n'
 import Swal from "sweetalert2";
 import {
   DoughnutChart,
@@ -110,6 +109,8 @@ import store from "../../store";
 export default {
   components: { DoughnutChart, BarChart, RadarChart, PieChart, LineChart },
   setup() {
+    const {t} = useI18n()
+    
     const auth = store.useAuthStore();
     const userTypeStore = store.useAuthStore();
     const userType = JSON.parse(userTypeStore.getUserType);
@@ -195,11 +196,11 @@ export default {
     const acceptReq = () => {
       swalWithBootstrapButtons
         .fire({
-          title: "Payment",
+          title: t('PaymentReqText'),
           text: "Top-Up 90 Points",
           showCancelButton: true,
-          confirmButtonText: "Accept!",
-          cancelButtonText: "Reject!",
+          confirmButtonText: t('AcceptButtonText'),
+          cancelButtonText: t('RejectButtonText'),
           // reverseButtons: true,
           imageUrl: "https://unsplash.it/400/200",
           imageWidth: 400,

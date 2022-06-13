@@ -24,6 +24,14 @@ const messages = {
         SignUpText: "Sign Up",
         VerifyOtpText:"Verify OTP",
         OtpCodeText:"Code",
+        TotalPostText:'Total Posts',
+        TotalEmployersText:'Total Employers',
+        TotalApplicationText: "Total Applications",
+        TotalUsedPointsText:"Total Used Points",
+        TopUpText:"Top-Up",
+        TotalJobSeekr:"Total Jobseekrs",
+        CurrentPointText:"Current Points",
+
 
 
         //table menu
@@ -53,6 +61,13 @@ const messages = {
         BackText: "Back",
         CreateNewAccountText:"CREATE NEW ACCOUNT",
         SubmitText: "SUBMIT",
+        ApplymentButtonText:'APPLYMENT',
+        EditButtonText:'EDIT',
+        PenddingButtonText:'PENDING',
+        ApproveButtonText:'APPROVE',
+        FailButtonText:'FAIL',
+        AcceptButtonText:'ACCEPT',
+        RejectButtonText:'REJECT',
         //end button text
 
         //form text
@@ -61,7 +76,8 @@ const messages = {
         PosonalIDNoText: "Posonal ID Number",
         ContactPhoneText: "Contact Phone",
         ContactNameText: "Contact Name",
-        
+        PaymentReqText : 'Payment request',
+        ViewAllText:'View All',
         BirthDateText: "Birth Date",
         SkillsText: "Skills",
         ExperienceText: "Experience",
@@ -101,6 +117,8 @@ const messages = {
         OldPasswordText: "Old Password",
         NewPasswordText: "New Password",
 
+        BasicInfoText:'Basic Info',
+
         //end form text
 
     },
@@ -130,6 +148,16 @@ const messages = {
         SignUpText: "ສ້າງບັນຊີ",
         VerifyOtpText:"ຢືນຢັນໂຄດ OTP",
         OtpCodeText:'ເລກລະຫັດ OTP',
+        TotalPostText:'ຈຳນວນວຽກທີ່ປະກາດທັງໝົດ',
+        TotalEmployersText:'ຈຳນວນຜູ້ປະກອບການທັງໝົດ',
+        TotalApplicationText: "ຈຳນວນການສະໝັກວຽກທັງໝົດ",
+        TotalUsedPointsText:"ຈຳນວນພ້ອຍທັງໝົດທີ່ຖືກໃຊ້",
+        TopUpText:"ເຕີມພ້ອຍ",
+        TotalJobSeekr:"ຈຳນວນຜູ້ສະໝັກວຽກທັງໝົດ",
+        CurrentPointText:"ຈຳນວນພ້ອຍທີ່ຍັງເຫຼືອ",
+    
+
+
 
 
         //table menu
@@ -160,6 +188,13 @@ const messages = {
         BackText: "ກັບຄືນ",
         CreateNewAccountText:"ສ້າງບັນຊີ",
         SubmitText:'ຕົກລົງ',
+        ApplymentButtonText:'ກວດຂໍ້ມູນຜູ້ສະໝັກວຽກ',
+        EditButtonText:'ແກ້ໄຂ',
+        PenddingButtonText:'ລໍຖ້າ',
+        ApproveButtonText:'ຜ່ານ',
+        FailButtonText:'ບໍ່ຜ່ານ',
+        AcceptButtonText:'ອະນຸມັດ',
+        RejectButtonText:'ປະຕິເສດ',
         //end button text
 
         //form text
@@ -168,7 +203,8 @@ const messages = {
         PosonalIDNoText: "ເລກບັດປະຈຳຕົວ",
         ContactPhoneText: "ເບີຕິດຕໍ່",
         ContactNameText: "ຊື່ຜູ້ຕິດຕໍ່",
-
+        PaymentReqText : 'ຄຳຮ້ອງຂໍເພີ່ມພ້ອຍ',
+        ViewAllText:'ເບິ່ງທັງໝົດ',
         BirthDateText: "ວັນ/ເດືອນ/ປິ ເກີດ",
         SkillsText: "ທັກສະ",
         ExperienceText: "ປະສົບການ",
@@ -192,7 +228,6 @@ const messages = {
         ProfileImageText: "ຮູບພາບ",
         PersonalIDCardImageText: "ຮູບພາບບັດປະຈຳຕົວ",
         PersonalIDNumberText: "ເລກບັດປະຈຳຕົວ",
-
         KipText: "ກີບ",
         FilePathText:"ລິ້ງຮູບພາບ",
         DetailText: "ລາຍລະອຽດ",
@@ -207,7 +242,7 @@ const messages = {
         OldPasswordText: "ລະຫັດຜ່ານເກົ່າ",
         NewPasswordText: "ລະຫັດຜ່ານໃໝ່",
 
-
+        BasicInfoText:'ຂໍ້ມວນພື້ນຖານ',
         //end form text
 
 

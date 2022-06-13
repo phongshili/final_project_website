@@ -17,7 +17,7 @@
           <div class="spacer"></div>
           <div class="input-group isCard">
             <label for="user" class="text-input"
-              >{{ $t("PersonalIDImageText") }}
+              >{{ $t("PersonalIDCardImageText") }}
             </label>
             <div class="img-container">
               <img
@@ -121,13 +121,13 @@
       </div>
       <div class="spacerH max"></div>
       <div class="btn-menu">
-        <button class="button is-link" >PENDING</button>
+        <button class="button is-link" >{{$t('PenddingButtonText')}}</button>
         <div class="spacer"></div>
-        <button class="button is-success">APPROVE</button>
+        <button class="button is-success">{{$t('ApproveButtonText')}}</button>
          <div class="spacer"></div>
-        <button class="button is-warning">FAIL</button>
+        <button class="button is-warning">{{$t('FailButtonText')}}</button>
          <div class="spacer"></div>
-        <button class="button is-danger is-left">BACK</button>
+        <button class="button is-danger is-left">{{$t('BackText')}}</button>
       </div>
     </div>
   </div>
