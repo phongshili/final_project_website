@@ -7,28 +7,28 @@
       <div class="detail-form-display">
         <div class="box-detail">
           <div class="box-body">
-            <div class="box-title">{{$t('TotalPostText')}}</div>
+            <div class="box-title">{{ $t("TotalPostText") }}</div>
             <div class="box-count">{{ countTotal.totalPost }}</div>
           </div>
         </div>
         <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
         <div class="box-detail" v-if="$userInfo.type === 'admin'">
           <div class="box-body">
-            <div class="box-title">{{$t('TotalEmployersText')}}</div>
+            <div class="box-title">{{ $t("TotalEmployersText") }}</div>
             <div class="box-count">{{ countTotal.totalEmp }}</div>
           </div>
         </div>
         <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
         <div class="box-detail" v-if="$userInfo.type === 'admin'">
           <div class="box-body">
-            <div class="box-title">{{$t('TotalJobSeekr')}}</div>
+            <div class="box-title">{{ $t("TotalJobSeekr") }}</div>
             <div class="box-count">{{ countTotal.totalSeeker }}</div>
           </div>
         </div>
         <div class="spacer left"></div>
         <div class="box-detail">
           <div class="box-body">
-            <div class="box-title">{{$t('TotalApplicationText')}}</div>
+            <div class="box-title">{{ $t("TotalApplicationText") }}</div>
             <div class="box-count">
               {{ countTotal.totalJobApp || countTotal.totalApprove }}
             </div>
@@ -37,7 +37,7 @@
         <div class="spacer left"></div>
         <div class="box-detail">
           <div class="box-body">
-            <div class="box-title">{{$t('TotalUsedPointsText')}}</div>
+            <div class="box-title">{{ $t("TotalUsedPointsText") }}</div>
             <div class="box-count">{{ countTotal.countPoint }}</div>
           </div>
         </div>
@@ -51,7 +51,7 @@
           @click="sendReq"
         >
           <div class="box-body">
-            <div class="box-title">{{$t('TopUpText')}}</div>
+            <div class="box-title">{{ $t("TopUpText") }}</div>
             <!-- <div class="spacerH"></div>
           
             <input class="input is-primary" type="number" />
@@ -63,23 +63,27 @@
 
       <div class="form-display">
         <div class="chart-container">
-          <BarChart :chartData="reportListData" />
+          <BarChart :chartData="weekly" />
         </div>
         <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
         <div class="payment-container" v-if="$userInfo.type === 'admin'">
           <div class="payment">
-            <div class="box-title">{{$t('PaymentReqText')}}</div>
+            <div class="box-title">{{ $t("PaymentReqText") }}</div>
             <div
               class="view-all"
               @click="$router.push({ name: 'PaymentsHistoryIndex' })"
             >
-              {{$t('ViewAllText')}}
+              {{ $t("ViewAllText") }}
             </div>
           </div>
-          <div class="payment body" @click="acceptReq" 
-          v-for="req in reqpoints" :key="req._id">
-            <div class="">{{req.employeeName}}</div>
-            <div class="">{{req.point}} Points</div>
+          <div
+            class="payment body"
+            @click="acceptReq"
+            v-for="req in reqpoints"
+            :key="req._id"
+          >
+            <div class="">{{ req.employeeName }}</div>
+            <div class="">{{ req.point }} Points</div>
           </div>
         </div>
       </div>
@@ -89,7 +93,7 @@
   </div>
 </template>
 <script>
-import { useI18n } from 'vue-i18n'
+import { useI18n } from "vue-i18n";
 import Swal from "sweetalert2";
 import {
   DoughnutChart,
@@ -107,17 +111,17 @@ import store from "../../store";
 export default {
   components: { DoughnutChart, BarChart, RadarChart, PieChart, LineChart },
   setup() {
-    const {t} = useI18n()
-    
+    const { t } = useI18n();
+
     const auth = store.useAuthStore();
     const userTypeStore = store.useAuthStore();
     const userType = JSON.parse(userTypeStore.getUserType);
     let token = auth.getToken;
     const dataSet = reactive({
       countTotal: {},
-      reqpoints:[{}]
+      reqpoints: [{}],
     });
-    
+
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,
@@ -130,7 +134,7 @@ export default {
 
       dataSet.countTotal = res.data; // 👈 get just results
     };
-        // need to refactor this code to hook
+    // need to refactor this code to hook
     const fetchPaymentAdmin = async () => {
       const res = await axios.get(
         "http://127.0.0.1:4000/admin-api/payment-get?status=pending"
@@ -138,7 +142,7 @@ export default {
 
       dataSet.reqpoints = res.data.mapPayment; // 👈 get just results
     };
-    
+
     // need to refactor this code to hook
     const fetchCountTotalEmp = async () => {
       const res = await axios.get(
@@ -151,37 +155,80 @@ export default {
     };
 
     if (userType.type === "admin") {
-      fetchCountTotalAdmin()
-      fetchPaymentAdmin()
-    };
+      fetchCountTotalAdmin();
+      fetchPaymentAdmin();
+    }
     if (userType.type === "employee" || userType.type === "employer")
       fetchCountTotalEmp();
 
-    const reportListData = {
-      labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+    // const reportListData = {
+    //   labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+    //   datasets: [
+    //     {
+    //       label: t('weeklyText'),
+    //       data: [2, 4, 10, 7],
+    //       backgroundColor: [
+    //         "#5ADBFF",
+    //       ],
+    //     },
+    //     {
+    //       label: t('monthlyText'),
+    //       data: [23, 25, 20, 30, 20,15, 26, 30, 30, 22,10, 18, 19, 30, 35],
+    //       backgroundColor: [
+    //         "#3C6997",
+
+    //       ],
+    //     },
+    //     {
+    //       label: t('yearlyText'),
+    //       data: [353],
+    //       backgroundColor: [
+    //         "#094074",
+
+    //       ],
+    //     },
+    //   ],
+    // };
+    const weekly = {
+      labels: ["Week 1", "Week 2", "Week 3", "Week 4 "],
       datasets: [
         {
-          label: t('weeklyText'),
-          data: [2, 4, 10, 7],
-          backgroundColor: [
-            "#5ADBFF",
-          ],
+          label: t("weeklyText"),
+          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          backgroundColor: ["#5ADBFF"],
         },
+      ],
+    };
+    const monthly = {
+      labels: [
+        "January ",
+        "February",
+        "March",
+        "April ",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
+      datasets: [
         {
-          label: t('monthlyText'),
-          data: [20, 10, 40, 30, 60],
-          backgroundColor: [
-            "#3C6997",
-    
-          ],
+          label: t("monthlyText"),
+          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          backgroundColor: ["#3C6997"],
         },
+      ],
+    };
+    const yealy = {
+      labels: ["2020 ", "2021", "2022"],
+      datasets: [
         {
-          label: t('yearlyText'),
-          data: [39, 30, 50, 50, 70],
-          backgroundColor: [
-            "#094074",
-         
-          ],
+          label: t("yearlyText"),
+          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          backgroundColor: ["#094074"],
         },
       ],
     };
@@ -196,11 +243,11 @@ export default {
     const acceptReq = () => {
       swalWithBootstrapButtons
         .fire({
-          title: t('PaymentReqText'),
+          title: t("PaymentReqText"),
           text: "Top-Up 90 Points",
           showCancelButton: true,
-          confirmButtonText: t('AcceptButtonText'),
-          cancelButtonText: t('RejectButtonText'),
+          confirmButtonText: t("AcceptButtonText"),
+          cancelButtonText: t("RejectButtonText"),
           // reverseButtons: true,
           imageUrl: "https://unsplash.it/400/200",
           imageWidth: 400,
@@ -255,7 +302,7 @@ export default {
         });
     };
 
-    return { reportListData, acceptReq, sendReq, ...toRefs(dataSet) };
+    return { acceptReq, sendReq, ...toRefs(dataSet), monthly, yealy, weekly };
   },
 };
 </script>

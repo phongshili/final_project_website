@@ -10,6 +10,9 @@
   }
 
   table {
+    td{
+    vertical-align: baseline;
+    }
     width: 100%;
     //table 
     .tb-large {
@@ -23,7 +26,6 @@
     .tb-small {
       width: 10%;
     }
-
     .tb-ss {
       width: 5%;
     }

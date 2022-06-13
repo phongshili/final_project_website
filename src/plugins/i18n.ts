@@ -15,6 +15,8 @@ const messages = {
         ProfileText: "Profile",
         ChangePasswordText: "Change Password",
         GeneralAccountSettingsText: "General Account Settings",
+        ClearText:'Clear',
+
         // End of Menu Item Name
 
         LoginTitleText: 'Log Into JobManagement',
@@ -70,6 +72,7 @@ const messages = {
         ChooseFilteText: "CHOOSE FILE",
         PostJobText:"POST JOB",
         AddPositionText:"ADD POSITION",
+        UpdatePositionInputText:"UPDATE POSITION",
         BackText: "Back",
         CreateNewAccountText:"CREATE NEW ACCOUNT",
         SubmitText: "SUBMIT",
@@ -152,6 +155,8 @@ const messages = {
         ResumeText: "ຊີວະປະຫວັດ",
         ProfileText: "ໂປຟາຍ",
         ChangePasswordText: "ປ່ຽນລະຫັດຜ່ານ",
+        ClearText:'ລ້າງຂໍ້ມູນ',
+
 
 
         // End of Menu Item Name
@@ -198,6 +203,7 @@ const messages = {
         DistrictMenuText: "ເມືອງ",
         SearchText : 'ຄົ້ນຫາ',
         AddPositionInputText: 'ເພີ່ມຕຳແໜ່ງວຽກ',
+        UpdatePositionInputText:'ແກ້ໄຂ',
 
 
         //end of table menu

@@ -13,9 +13,10 @@
   <button @click="queryData('pending')">Pending</button>
   <button @click="queryData(queryText)">query</button>
   <div class="mt-10 p-4 flex flex-wrap justify-center">
+    {{filteredPokemon}}
     <div
       class="ml-4 text-2xl text-blue-400"
-      v-for="(pokemon, i) in pokemons"
+      v-for="(pokemon, i) in filteredPokemon"
       :key="i"
     >
     <p>{{ pokemon.employeeName}}</p>

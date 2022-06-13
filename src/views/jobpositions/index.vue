@@ -5,13 +5,32 @@
     </div>
     <div class="filter is-small-tb">
       <div class="filter-menu">
-          <div class="input-group">
-          <input class="input is-small" type="text" :placeholder="$t('AddPositionInputText')" />
+        <div class="input-group">
+          <input
+            class="input is-small"
+            type="text"
+            v-model="position"
+            :placeholder="$t('AddPositionInputText')"
+          />
+
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
       </div>
+
       <div class="btn-menu">
-        <button class="button is-success">{{$t("AddPositionText")}}</button>
+        <button
+          class="button is-success"
+          v-if="position_id"
+          @click="updatePosition(position_id)"
+        >
+          {{ $t("UpdatePositionInputText") }}
+        </button>
+        <button class="button is-danger" @click="clearInput" v-if="position_id">
+          {{ $t("ClearText") }}
+        </button>
+        <button class="button is-success" @click="addPosition" v-else>
+          {{ $t("AddPositionText") }}
+        </button>
         <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
@@ -21,40 +40,49 @@
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
             <th class="tb-medium">{{ $t("PositionText") }}</th>
-              <th class="tb-small">{{ $t("TotalPositionPosted") }}</th>
-    
+            <th class="tb-small">{{ $t("TotalPositionPosted") }}</th>
             <th class="tb-small tb-center">{{ $t("OptionsText") }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(position,index) in positions" :key="index">
-            <td class="tb-ss tb-center"><span>{{index+1}}</span></td>
-            <td class="tb-small"><span>{{position.name}}</span></td>
-            <td class="tb-small"><span>{{position.__v}}</span></td>
+          <tr v-for="(position, index) in filterPosition" :key="index">
+            <td class="tb-ss tb-center">
+              <span>{{ index + 1 }}</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ (position.name).toUpperCase() }}</span>
+            </td>
+            <td class="tb-small">
+              <span>{{ position.__v }}</span>
+            </td>
             <td class="tb-small">
               <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"></i
-                ><i class="fa-solid fa-xmark delete-tool"></i>
+                <i
+                  class="fa-solid fa-pen-to-square edit-tool"
+                  @click="newPosition(position._id, position.name)"
+                ></i
+                ><i
+                  class="fa-solid fa-xmark delete-tool"
+                  @click="deletePosition(position._id)"
+                ></i>
               </div>
             </td>
           </tr>
-
         </tbody>
       </table>
     </div>
   </div>
 </template>
 <script>
-import filterButton from "../../components/filter.vue";
-import { ref, reactive, toRefs } from "vue";
+import { reactive, toRefs, computed } from "vue";
 import axios from "axios";
 export default {
-  components: { filterButton },
   setup() {
     const dataSet = reactive({
-     
-      positions: [{}],
-
+      positions: [],
+      position_id: "",
+      position: "",
+      filterPosition: computed(()=> filtterData())
     });
     // need to refactor this code to hook
     const fetchPositions = async () => {
@@ -63,11 +91,61 @@ export default {
       );
 
       dataSet.positions = res.data.getPosition; // 👈 get just results
-
     };
-      fetchPositions();
+    fetchPositions();
 
-    return {...toRefs(dataSet)};
+    const newPosition = async (id, val) => {
+      dataSet.position_id = id;
+      dataSet.position = val;
+    };
+
+    const clearInput = async () => {
+      dataSet.position_id = null;
+      dataSet.position = null;
+    };
+    // need to refactor this code to hook
+    const addPosition = async () => {
+      await axios.post("http://127.0.0.1:4000/admin-api/position-add", {
+        name: dataSet.position.toLowerCase(),
+      });
+      await clearInput();
+      await fetchPositions();
+    };
+    // need to refactor this code to hook
+    const updatePosition = async (id) => {
+      await axios.put("http://127.0.0.1:4000/admin-api/position-update", {
+        id: id,
+        name: dataSet.position.toLowerCase(),
+      });
+      await clearInput();
+      await fetchPositions();
+    };
+    // need to refactor this code to hook
+    const deletePosition = async (id) => {
+      await axios.delete(
+        "http://127.0.0.1:4000/admin-api/position-delete/" + id
+      );
+            await fetchPositions();
+    };
+    
+    const filtterData = ()=>{
+     if(dataSet.position !== null){
+        return dataSet.positions.filter((el)=>{
+        return el.name.match(dataSet.position)
+      })
+     }else{
+       return dataSet.positions
+     }
+    }
+    return {
+      ...toRefs(dataSet),
+      newPosition,
+      fetchPositions,
+      clearInput,
+      addPosition,
+      updatePosition,
+      deletePosition,
+    };
   },
 };
 </script>
@@ -76,6 +154,5 @@ export default {
 ._container {
   margin-left: 340px;
   color: $font-color;
-
 }
 </style>
