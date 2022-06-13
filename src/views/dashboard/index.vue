@@ -8,39 +8,48 @@
         <div class="box-detail">
           <div class="box-body">
             <div class="box-title">Posts</div>
-            <div class="box-count">60</div>
+            <div class="box-count">{{ countTotal.totalPost }}</div>
           </div>
         </div>
         <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
         <div class="box-detail" v-if="$userInfo.type === 'admin'">
           <div class="box-body">
             <div class="box-title">Employers</div>
-            <div class="box-count">60</div>
+            <div class="box-count">{{ countTotal.totalEmp }}</div>
           </div>
         </div>
         <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
         <div class="box-detail" v-if="$userInfo.type === 'admin'">
           <div class="box-body">
             <div class="box-title">Job Seekers</div>
-            <div class="box-count">60</div>
+            <div class="box-count">{{ countTotal.totalSeeker }}</div>
           </div>
         </div>
         <div class="spacer left"></div>
         <div class="box-detail">
           <div class="box-body">
             <div class="box-title">Applications</div>
-            <div class="box-count">60</div>
+            <div class="box-count">
+              {{ countTotal.totalJobApp || countTotal.totalApprove }}
+            </div>
           </div>
         </div>
         <div class="spacer left"></div>
         <div class="box-detail">
           <div class="box-body">
             <div class="box-title">Total Used Points</div>
-            <div class="box-count">60</div>
+            <div class="box-count">{{ countTotal.countPoint }}</div>
           </div>
         </div>
-        <div class="spacer left" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"></div>
-        <div class="box-detail" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" @click="sendReq">
+        <div
+          class="spacer left"
+          v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"
+        ></div>
+        <div
+          class="box-detail"
+          v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"
+          @click="sendReq"
+        >
           <div class="box-body">
             <div class="box-title">Top-up</div>
             <!-- <div class="spacerH"></div>
@@ -95,17 +104,53 @@ import {
 } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
-import { ref } from "vue";
-import {useAuthStore} from '../../store'
+import { ref, reactive, toRefs, computed } from "vue";
+import axios from "axios";
+import store from "../../store";
 export default {
   components: { DoughnutChart, BarChart, RadarChart, PieChart, LineChart },
   setup() {
- 
+    const auth = store.useAuthStore();
+    const userTypeStore = store.useAuthStore();
+    const userType = JSON.parse(userTypeStore.getUserType);
+    let token = auth.getToken;
+    const dataSet = reactive({
+      countTotal: {},
+    });
+
+    const fetchCountTotalAdmin = async () => {
+      const res = await axios.get(
+        "http://127.0.0.1:4000/admin-api/admin-count-total"
+      );
+
+      dataSet.countTotal = res.data; // 👈 get just results
+    };
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    const fetchCountTotalEmp = async () => {
+      const res = await axios.get(
+        "http://127.0.0.1:4000/emp-api/employee-count-total",
+        {
+          headers,
+        }
+      );
+
+      dataSet.countTotal = res.data; // 👈 get just results
+
+      console.log(userType);
+    };
+
+    if (userType.type === "admin") fetchCountTotalAdmin();
+    if (userType.type === "employee" || userType.type === "employer")
+      fetchCountTotalEmp();
+
     const reportListData = {
       labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
       datasets: [
         {
-              label: "weekly",
+          label: "weekly",
           data: [2, 4, 10, 7],
           backgroundColor: [
             "#77CEFF",
@@ -139,7 +184,7 @@ export default {
         },
       ],
     };
-    
+
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn-success",
@@ -147,7 +192,7 @@ export default {
       },
       buttonsStyling: true,
     });
-    const acceptReq=()=> {
+    const acceptReq = () => {
       swalWithBootstrapButtons
         .fire({
           title: "Payment",
@@ -180,18 +225,19 @@ export default {
             });
           }
         });
-    }
-    const sendReq=() => {
+    };
+    const sendReq = () => {
       swalWithBootstrapButtons
         .fire({
           title: "Top-Up",
           showCancelButton: true,
           confirmButtonText: "Send Request!",
-          cancelButtonColor: '#d33',
+          cancelButtonColor: "#d33",
           input: "text",
 
           // reverseButtons: true,
-          imageUrl: "http://127.0.0.1:4000/resize-images/0b114727-89f4-4d9e-88d8-31fbad96eee8.jpeg",
+          imageUrl:
+            "http://127.0.0.1:4000/resize-images/0b114727-89f4-4d9e-88d8-31fbad96eee8.jpeg",
           imageWidth: 400,
           imageHeight: 200,
         })
@@ -204,12 +250,11 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-          } 
-         
+          }
         });
-    }
+    };
 
-    return { reportListData, acceptReq, sendReq};
+    return { reportListData, acceptReq, sendReq, ...toRefs(dataSet) };
   },
 };
 </script>

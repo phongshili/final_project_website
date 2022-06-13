@@ -89,14 +89,14 @@
 </template>
 <script>
 import filterButton from "../../components/filter.vue";
-import { ref } from "vue";
+import { ref,reactive,toRefs,computed } from "vue";
 import Swal from "sweetalert2";
 export default {
   components: {
     filterButton,
   },
   setup() {
-   
+    
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn-success",
@@ -150,6 +150,7 @@ export default {
         showConfirmButton: false,
       });
     }
+    
     return { showReceipt, acceptReq };
   },
 };

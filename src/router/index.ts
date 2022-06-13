@@ -17,6 +17,7 @@ import Profile from "../views/employers/profile.vue"
 import SignIn from "../views/employers/register.vue"
 import ChangePassword from "../views/employers/change_password.vue"
 import Verify from "../views/employers/verify_otp.vue"
+import ConstactUs from "../views/contact_us.vue"
 
 const routes = [
   {
@@ -162,6 +163,16 @@ const routes = [
     name: 'Profile',
 
     component: Profile,
+    meta: {
+      requiresAuth: true,
+    },
+
+  },
+  {
+    path: '/contactus',
+    name: 'ConstactUs',
+
+    component: ConstactUs,
     meta: {
       requiresAuth: true,
     },
