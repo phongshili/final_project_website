@@ -14,7 +14,7 @@
       <div class="btn-menu">
         <button
           class="button is-success"
-          @click="$router.push({ name: 'EmployerManagement' })"
+          @click="$router.push({ name: 'Profile' })"
         >
           {{ $t("AddEmployerText") }}
         </button>
@@ -35,7 +35,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr @click="$router.push({ name: 'EmployerManagement' })"
+          <tr @click="$router.push({ name: 'Profile' })"
           v-for="(emp, index) in employers" :key="index"
           >
             <td class="tb-ss tb-center"><span>{{index+1}}</span></td>
@@ -46,7 +46,7 @@
             <td class="tb-right"><span>{{emp.tel}}</span></td>
             <td class="tb-large"><span>{{emp.email}}</span></td>
             <td class="tb-small">
-              <span>{{emp.status}}</span>
+              <span style="text-transform: uppercase;">{{emp.status}}</span>
             </td>
             <td class="tb-small">
               <div class="tools">

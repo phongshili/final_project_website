@@ -49,7 +49,8 @@ const messages = {
         PositionText: "Position",
         LocationText: "Location",
         DistrictMenuText: "District",
-
+        SearchText : 'Search',
+        AddPositionInputText:'Search or Add Position',
         CompanyNameText: "Company",
         TelText: "Telephone",
         EmailText: "Email",
@@ -135,7 +136,7 @@ const messages = {
         BasicInfoText:'Basic Info',
         weeklyText:'Weekly',
         monthlyText: "Monthly",
-        yearText:"Yearly"
+        yearlyText:"Yearly"
 
         //end form text
 

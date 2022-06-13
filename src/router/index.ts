@@ -9,7 +9,6 @@ import JobPositionsIndex from "../views/jobpositions/index.vue"
 import PaymentsHistoryIndex from "../views/payments/index.vue"
 import Dashboard from "../views/dashboard/index.vue"
 import JobPostManagement from "../views/post_jobs/postjob_management.vue"
-import EmployerManagement from "../views/employers/employer_management.vue"
 import Application from "../views/post_jobs/application.vue"
 import Resume from "../views/post_jobs/resume.vue"
 import Page_404 from '../views/page_not_found.vue'
@@ -85,15 +84,7 @@ const routes = [
       requiresAuth: true,
     },
   },
-  {
-    path: '/employermanagement',
-    name: 'EmployerManagement',
 
-    component: EmployerManagement,
-    meta: {
-      requiresAuth: true,
-    },
-  },
   {
     path: '/changepassword',
     name: 'ChangePassword',

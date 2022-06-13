@@ -164,7 +164,18 @@
             :placeholder="$t('ERC_Text')"
           />
         </div>
-        <div class="spacer"></div>
+                <div class="spacer"></div>
+        <div v-if="$userInfo.type === 'admin'" class="input-group">
+          <label for="user" class="text-input"
+            >{{ $t("PointText") }}
+         </label
+          >
+          <input
+            class="input is-primary"
+            type="text"
+            :placeholder="$t('PointText')"
+          />
+        </div>
       </div>
       <div class="input-form">
         <div class="input-group">
@@ -202,6 +213,32 @@
           :placeholder="$t('AboutUsText')"
         ></textarea>
       </div>
+            <div class="input-form">
+        <div class="input-group">
+          <label for="user" class="text-input"
+            >{{ $t("PasswordText") }}
+             <p class="required">*</p>
+          </label
+          >
+          <input
+            class="input is-primary"
+            type="text"
+            :placeholder="$t('PasswordText')"
+          />
+        </div>
+        <div class="spacer"></div>
+        <div class="input-group">
+          <label for="user" class="text-input"
+            >{{ $t("ConfirmPasswordText") }}
+            <p class="required">*</p></label
+          >
+          <input
+            class="input is-primary"
+            type="text"
+            :placeholder="$t('ConfirmPasswordText')"
+          />
+        </div>
+      </div>
       <div class="btn-menu">
         <button class="button is-success">SAVE</button>
         <div class="spacer"></div>
@@ -212,7 +249,26 @@
 </template>
 
 <script>
-export default {};
+import { ref } from "vue";
+import Datepicker from "vue3-datepicker";
+
+export default {
+  components: {
+    Datepicker,
+  },
+  setup() {
+    const firstName = ref();
+    const startDate = ref(new Date());
+    const endDate = ref(new Date());
+    endDate.value.setMonth(startDate.value.getMonth() + 1);
+    function add() {
+      console.log(firstName.value);
+      console.log("end date" + endDate.value);
+      console.log("start date" + startDate.value);
+    }
+    return { firstName, add, startDate, endDate };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

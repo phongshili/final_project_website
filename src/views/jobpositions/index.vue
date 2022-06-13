@@ -50,7 +50,7 @@
               <span>{{ index + 1 }}</span>
             </td>
             <td class="tb-small">
-              <span>{{ (position.name).toUpperCase() }}</span>
+              <span style="text-transform: uppercase;">{{position.name}}</span>
             </td>
             <td class="tb-small">
               <span>{{ position.__v }}</span>
@@ -89,7 +89,6 @@ export default {
       const res = await axios.get(
         "http://127.0.0.1:4000/admin-api/position-get"
       );
-
       dataSet.positions = res.data.getPosition; // 👈 get just results
     };
     fetchPositions();

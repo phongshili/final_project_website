@@ -284,6 +284,21 @@
           />
         </div>
       </div>
+        <div class="input-group">
+        <label for="user" class="text-input"
+          >{{ $t("DetailText") }}
+          <p class="required">*</p></label
+        >
+        <textarea
+          class="medium"
+          name=""
+          id=""
+          cols="30"
+          rows="2"
+          v-model="firstName"
+          :placeholder="$t('DetailText')"
+        ></textarea>
+      </div>
       <div class="input-group">
         <label for="user" class="text-input"
           >{{ $t("AboutUsText") }}

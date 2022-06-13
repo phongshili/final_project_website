@@ -11,12 +11,12 @@
         <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
-    <div class="table-box is-small-tb" v-if="$userInfo.type === 'admin'">
+    <div class="table-box is-small-tb">
       <table>
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
-            <th class="tb-medium">{{ $t("CompanyNameText") }}</th>
+            <th  v-if="$userInfo.type === 'admin'" class="tb-medium">{{ $t("CompanyNameText") }}</th>
             <th class="tb-small">{{ $t("AmountText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
             <th class="tb-small">{{ $t("PaymentDateText") }}</th>
@@ -31,52 +31,17 @@
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
-            <td class="tb-small">
+            <td  v-if="$userInfo.type === 'admin'" class="tb-small">
               <span>{{ payment.employeeName }}</span>
             </td>
             <td class="tb-small">
               <span>{{ payment.point }}</span>
             </td>
             <td class="tb-small">
-              <span>{{ payment.status }}</span>
+              <span style="text-transform: uppercase;">{{ payment.status }}</span>
             </td>
             <td class="tb-small">
-              <span>{{ payment.date }}</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div
-      class="table-box is-small-tb"
-      v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"
-    >
-      <table>
-        <thead>
-          <tr>
-            <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
-            <th class="tb-small">{{ $t("AmountText") }}</th>
-            <th class="tb-small">{{ $t("StatusText") }}</th>
-            <th class="tb-small">{{ $t("PaymentDateText") }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            @click="acceptReq"
-            v-for="(payment, index) in payments"
-            :key="index"
-          >
-            <td class="tb-ss tb-center">
-              <span>{{ index + 1 }}</span>
-            </td>
-            <td class="tb-small">
-              <span>{{ payment.point }}</span>
-            </td>
-            <td class="tb-small">
-              <span>{{ payment.status }}</span>
-            </td>
-            <td class="tb-small">
-              <span>{{ payment.createdAt }}</span>
+              <span>{{ payment.date || payment.createdAt}}</span>
             </td>
           </tr>
         </tbody>
@@ -120,7 +85,7 @@ export default {
           name: t("RejectText"),
         },
       ],
-      payments: [{}],
+      payments: [],
     });
     const headers = {
       "Content-Type": "application/json",

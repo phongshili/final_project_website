@@ -47,7 +47,7 @@
             <td class="tb-right"><span>{{seeker.tel}}</span></td>
             <td class="tb-large"><span>{{seeker.email}}</span></td>
             <td class="tb-small">
-              <span>{{seeker.status}}</span>
+              <span style="text-transform: uppercase;" >{{seeker.status}}</span>
             </td>
             <td class="tb-small">
               <div class="tools">
