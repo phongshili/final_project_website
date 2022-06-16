@@ -49,12 +49,9 @@
 
 <script>
 import { ref } from "vue";
-import Datepicker from "vue3-datepicker";
 
 export default {
-  components: {
-    Datepicker,
-  },
+
   setup() {
     const firstName = ref();
     const startDate = ref(new Date());

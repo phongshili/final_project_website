@@ -35,14 +35,7 @@
             <th v-if="$userInfo.type === 'admin'" class="tb-medium tb-right">
               {{ $t("CompanyNameText") }}
             </th>
-            <th
-              v-if="
-                $userInfo.type === 'employee' || $userInfo.type === 'employer'
-              "
-              class="tb-medium tb-right"
-            >
-              {{ $t("TelText") }}
-            </th>
+   
 
             <th class="tb-medium">{{ $t("EmailText") }}</th>
             <th class="tb-small">{{ $t("ApplicationText") }}</th>
@@ -53,7 +46,7 @@
         </thead>
         <tbody>
           <tr
-            @click="$router.push({ name: 'JobPostManagement' })"
+           
             v-for="(job, index) in jobposts"
             :key="index"
           >
@@ -61,7 +54,9 @@
               <span>{{ index + 1 }}</span>
             </td>
             <td class="tb-medium">
-              <span style="text-transform: uppercase;">{{ job.positionName }}</span>
+              <span style="text-transform: uppercase">{{
+                job.positionName
+              }}</span>
             </td>
             <td class="tb-medium">
               <span>{{ job.provinceName }}</span>
@@ -69,30 +64,23 @@
             <td v-if="$userInfo.type === 'admin'" class="tb-right">
               <span> {{ job.companyName }}</span>
             </td>
-            <td
-              v-if="
-                $userInfo.type === 'employee' || $userInfo.type === 'employer'
-              "
-              class="tb-right"
-            >
-              <span> {{ job.tel }}</span>
-            </td>
+    
             <td class="tb-medium">
               <span>{{ job.email }}</span>
             </td>
             <td class="tb-small tb-center">
-              <span>2</span>
+              <span>{{job.totalJobApp}}</span>
             </td>
             <td class="tb-small">
-              <span style="text-transform: uppercase;">{{ job.status }}</span>
+              <span style="text-transform: uppercase">{{ job.status }}</span>
             </td>
             <td class="tb-small">
               <span> {{ job.startDate }}</span>
             </td>
             <td class="tb-small" v-if="$userInfo.type === 'admin'">
               <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"></i
-                ><i class="fa-solid fa-xmark delete-tool"></i>
+                <i  @click="$router.push({ name: 'JobPostManagement',params: {id:job._id}})" class="fa-solid fa-pen-to-square edit-tool"></i
+                ><i  @click="deletePost(job._id)" class="fa-solid fa-xmark delete-tool"></i>
               </div>
             </td>
             <td
@@ -104,7 +92,7 @@
               <div class="tools">
                 <button
                   class="button apply-btn"
-                  @click="$router.push({ name: 'Application' })"
+                  @click="$router.push({ name: 'Application'})"
                 >
                   {{ $t("ApplymentButtonText") }}
                 </button>
@@ -177,12 +165,30 @@ export default {
 
       dataSet.jobposts = res.data.mapPostJob; // 👈 get just results
     };
+    // need to refactor this code to hook
+    const deletePost = async (id) => {
+      if(userType.type ==="admin"){
+        await axios.delete(
+        "http://127.0.0.1:4000/admin-api/postjob-delete/" + id
+      );
+      fetchJobPostAdmin();
+      }
+            if(userType.type ==="employee"){
+        await axios.delete(
+        "http://127.0.0.1:4000/emp-api/postjob-delete" + id
+      );
+      fetchJobPostEmp();
+      }
+    };
 
     if (userType.type === "admin") fetchJobPostAdmin();
     if (userType.type === "employee" || userType.type === "employer")
       fetchJobPostEmp();
 
-    return { ...toRefs(dataSet) };
+    return {
+      ...toRefs(dataSet),
+      deletePost,
+    };
   },
 };
 </script>

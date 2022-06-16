@@ -273,5 +273,11 @@ html {
       color: $active-font-color;
 
     }
+    .is-warning{
+      margin-left: auto;
+    }
+    select {
+      font-family: $font;
+    }
 
 }

@@ -84,6 +84,10 @@ const messages = {
         FailButtonText:'FAIL',
         AcceptButtonText:'ACCEPT',
         RejectButtonText:'REJECT',
+        AddPostJobText:'POST',
+        OfflineButtonText:'OFFLINE',
+        RePostText: "RE POST",
+
         //end button text
 
         //form text
@@ -227,6 +231,9 @@ const messages = {
         FailButtonText:'ບໍ່ຜ່ານ',
         AcceptButtonText:'ອະນຸມັດ',
         RejectButtonText:'ປະຕິເສດ',
+        AddPostJobText:'ປະກາດວຽກ',
+        OfflineButtonText:'ຢຸດປະກາດ',
+        RePostText: "ປະກາດຄືນໃໝ່",
         //end button text
 
         //form text

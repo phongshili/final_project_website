@@ -12,12 +12,7 @@
         </div>
       </div>
       <div class="btn-menu">
-        <!-- <button
-        
-          class="button is-success"
-        >
-          {{ $t("AddJobSeekerText") }}
-        </button> -->
+  
         <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
@@ -36,7 +31,7 @@
         </thead>
         <tbody>
           <tr 
-            @click="$router.push({ name: 'JobSeekersManagement' })"
+          
             v-for="(seeker,index) in seekers" :key="index"
             >
             <td class="tb-ss tb-center"><span>{{index +1}}</span></td>
@@ -51,9 +46,8 @@
             </td>
             <td class="tb-small">
               <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"></i
+                <i class="fa-solid fa-pen-to-square edit-tool"  @click="$router.push({ name: 'JobSeekersManagement',params:{id:seeker._id} })"></i
                 >
-                <i class="fa-solid fa-xmark delete-tool"></i>
               </div>
             </td>
           </tr>
@@ -102,6 +96,7 @@ export default {
       dataSet.seekers = res.data.mapSeeker; // 👈 get just results
 
     };
+
       fetchSeekers();
 
     return {...toRefs(dataSet)};

@@ -125,7 +125,7 @@
         <div class="spacer"></div>
         <button class="button is-success">{{$t('ApproveButtonText')}}</button>
          <div class="spacer"></div>
-        <button class="button is-warning">{{$t('FailButtonText')}}</button>
+        <button class="button is-warning">{{$t('RejectText')}}</button>
          <div class="spacer"></div>
         <button class="button is-danger is-left">{{$t('BackText')}}</button>
       </div>

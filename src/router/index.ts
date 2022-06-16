@@ -67,7 +67,7 @@ const routes = [
     },
   },
   {
-    path: '/jobpostmanagement',
+    path: '/jobpostmanagement/:id?',
     name: 'JobPostManagement',
 
     component: JobPostManagement,
@@ -105,7 +105,7 @@ const routes = [
     },
   },
   {
-    path: '/jobseekersmanagement',
+    path: '/jobseekersmanagement/:id?',
     name: 'JobSeekersManagement',
 
     component: JobSeekersManagement,

@@ -108,10 +108,9 @@ export default {
       const res = await axios.get(
         "http://127.0.0.1:4000/admin-api/employee-get"
       );
-
       dataSet.employers = res.data.mapEmp; // 👈 get just results
     };
-
+    // need to refactor this code to hook
     const deleteEmployer = async (id) => {
       await axios.delete("http://127.0.0.1:4000/admin-api/employee-delete/" + id);
       fetchEmployer();

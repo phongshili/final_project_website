@@ -182,7 +182,6 @@
             </div>
           </div>
         </div>
-
         <!--end district dropdown -->
       </div>
 
@@ -283,12 +282,17 @@
         >
           {{ $t("AddEmployerText") }}
         </button>
-        <button class="button is-success" @click="updateEmployer" v-else>
+        <button class="button is-success" @click="updateEmployer('approve')"   v-if="$route.params.id">
           {{ $t("ApproveText") }}
         </button>
+      
         <div class="spacer"></div>
-        <button @click="$router.go(-1)" class="button is-link">
+        <button @click="$router.go(-1)" class="button is-danger">
           {{ $t("BackText") }}
+        </button>
+          <div class="spacer"></div>
+         <button class="button is-warning" @click="updateEmployer('reject')"   v-if="$route.params.id">
+          {{ $t("RejectText") }}
         </button>
       </div>
     </div>
@@ -313,7 +317,7 @@ export default {
       backgroundImage: "",
       aboutUs: "",
       erc: "",
-      point: "",
+      point: 100,
       status: "",
       isVerify: "",
       fetchProvinces: [],
@@ -395,11 +399,10 @@ export default {
         email: dataSet.email,
         tel: dataSet.tel,
         password: dataSet.password,
-        isVerify: true,
         point: dataSet.point,
       });
     };
-    const updateEmployer = async () => {
+    const updateEmployer = async (rejectStaus) => {
       await axios.put(baseUrl + "admin-api/employee-update", {
         id: dataSet.id,
         companyName: dataSet.companyName,
@@ -413,7 +416,7 @@ export default {
         districtId: dataSet.district,
         email: dataSet.email,
         tel: dataSet.tel,
-        status: "approve",
+        status: rejectStaus ,
         point: dataSet.point,
       });
     };
@@ -452,7 +455,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-select {
-  font-family: $font;
-}
+
 </style>

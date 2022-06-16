@@ -38,7 +38,7 @@
         <div class="box-detail">
           <div class="box-body">
             <div class="box-title">{{ $t("TotalUsedPointsText") }}</div>
-            <div class="box-count">{{ countTotal.totalUsedPoint }}</div>
+            <div class="box-count">{{ countTotal.totalUsedPoint || countTotal.totalUsePoint }}</div>
           </div>
         </div>
         <div
@@ -52,11 +52,6 @@
         >
           <div class="box-body">
             <div class="box-title">{{ $t("TopUpText") }}</div>
-            <!-- <div class="spacerH"></div>
-          
-            <input class="input is-primary" type="number" />
-            <div class="spacerH"></div>
-            <button class="button is-link">SEND REQUEST</button> -->
           </div>
         </div>
       </div>
