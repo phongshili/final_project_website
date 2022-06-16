@@ -126,13 +126,13 @@
         <div class="spacer"></div>
         <div class="input-group">
           <label for="user" class="text-input"
-            >{{ $t("Email") }}
+            >{{ $t("EmailText") }}
             <p class="required">*</p></label
           >
           <input
             class="input is-primary"
             type="text"
-            :placeholder="$t('Email')"
+            :placeholder="$t('EmailText')"
           />
         </div>
       </div>
@@ -251,13 +251,13 @@
       <div class="input-form">
         <div class="input-group">
           <label for="user" class="text-input"
-            >{{ $t("Skills") }}
+            >{{ $t("SkillsText") }}
             <p class="required">*</p></label
           >
           <input
             class="input is-primary"
             type="text"
-            :placeholder="$t('Skills')"
+            :placeholder="$t('SkillsText')"
           />
         </div>
         <div class="spacer"></div>

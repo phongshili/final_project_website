@@ -52,8 +52,8 @@
             <td class="tb-small">
               <span style="text-transform: uppercase;">{{position.name}}</span>
             </td>
-            <td class="tb-small">
-              <span>{{ position.__v }}</span>
+            <td class="tb-small ">
+              <span>{{ position.totalPostJob }}</span>
             </td>
             <td class="tb-small">
               <div class="tools">

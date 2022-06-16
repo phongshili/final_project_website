@@ -38,7 +38,7 @@
         <div class="box-detail">
           <div class="box-body">
             <div class="box-title">{{ $t("TotalUsedPointsText") }}</div>
-            <div class="box-count">{{ countTotal.countPoint }}</div>
+            <div class="box-count">{{ countTotal.totalUsedPoint }}</div>
           </div>
         </div>
         <div

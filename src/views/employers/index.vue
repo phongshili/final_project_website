@@ -7,7 +7,11 @@
       <div class="filter-menu">
         <filterButton :items="items"></filterButton>
         <div class="input-group">
-          <input class="input is-small" type="text" :placeholder="$t('SearchText')" />
+          <input
+            class="input is-small"
+            type="text"
+            :placeholder="$t('SearchText')"
+          />
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
       </div>
@@ -35,27 +39,36 @@
           </tr>
         </thead>
         <tbody>
-          <tr @click="$router.push({ name: 'Profile' })"
-          v-for="(emp, index) in employers" :key="index"
+          <tr
+          
+            v-for="(emp, index) in employers"
+            :key="index"
           >
-            <td class="tb-ss tb-center"><span>{{index+1}}</span></td>
-            <td class="tb-medium"><span>{{emp.companyName}}</span></td>
-            <td class="tb-medium">
-              <span>{{emp.provinceName}}</span>
+            <td class="tb-ss tb-center">
+              <span>{{ index + 1 }}</span>
             </td>
-            <td class="tb-right"><span>{{emp.tel}}</span></td>
-            <td class="tb-large"><span>{{emp.email}}</span></td>
+            <td class="tb-medium">
+              <span>{{ emp.companyName }}</span>
+            </td>
+            <td class="tb-medium">
+              <span>{{ emp.provinceName }}</span>
+            </td>
+            <td class="tb-right">
+              <span>{{ emp.tel }}</span>
+            </td>
+            <td class="tb-large">
+              <span>{{ emp.email }}</span>
+            </td>
             <td class="tb-small">
-              <span style="text-transform: uppercase;">{{emp.status}}</span>
+              <span style="text-transform: uppercase">{{ emp.status }}</span>
             </td>
             <td class="tb-small">
               <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"></i
-                ><i class="fa-solid fa-xmark delete-tool"></i>
+                <i class="fa-solid fa-pen-to-square edit-tool"   @click="$router.push({ name: 'Profile', params: { id: emp._id } })" ></i
+                ><i class="fa-solid fa-xmark delete-tool" @click="deleteEmployer(emp.userTypeId)"></i>
               </div>
             </td>
           </tr>
-     
         </tbody>
       </table>
     </div>
@@ -63,33 +76,32 @@
 </template>
 <script>
 import filterButton from "../../components/filter.vue";
-import { ref, reactive, toRefs } from "vue";
+import { reactive, toRefs } from "vue";
 import axios from "axios";
-import { useI18n } from 'vue-i18n'
+import { useI18n } from "vue-i18n";
 export default {
   components: { filterButton },
   setup() {
-    const {t} = useI18n()
+    const { t } = useI18n();
     const dataSet = reactive({
       items: [
         {
           id: 1,
           value: "online",
-          name: t('OnlineText'),
+          name: t("OnlineText"),
         },
         {
           id: 2,
           value: "office",
-          name: t('OfflineText'),
+          name: t("OfflineText"),
         },
         {
           id: 3,
           value: "expired",
-          name: t('ExpiredText'),
+          name: t("ExpiredText"),
         },
       ],
       employers: [{}],
-
     });
     // need to refactor this code to hook
     const fetchEmployer = async () => {
@@ -98,11 +110,15 @@ export default {
       );
 
       dataSet.employers = res.data.mapEmp; // 👈 get just results
-
     };
-      fetchEmployer();
 
-    return {...toRefs(dataSet)};
+    const deleteEmployer = async (id) => {
+      await axios.delete("http://127.0.0.1:4000/admin-api/employee-delete/" + id);
+      fetchEmployer();
+    };
+    fetchEmployer();
+
+    return { ...toRefs(dataSet), deleteEmployer };
   },
 };
 </script>

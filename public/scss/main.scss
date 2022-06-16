@@ -207,24 +207,21 @@ html {
           textarea:focus-visible {
             outline: 1px solid $sub-color;
           }
-      
-          .dropdown {
+          .select{
             width: 100%;
             min-width: 331px !important;
-      
-            .dropdown-trigger {
+            ::-webkit-scrollbar {
+              width: 5px;
+            }
+            ::-webkit-scrollbar-thumb {
+              border-radius: 10px;
+              background: #dadde1;
+            }
+            .dropdown {
               width: 100%;
-              .btndropdown {
-                display: flex;
-                justify-content: flex-start;
-                width: 100%;
-                padding: 7px 11px;
-                .icon {
-                  margin-left: auto !important;
-                }
-              }
             }
           }
+        
         }
         .btn-menu {
           display: flex;
