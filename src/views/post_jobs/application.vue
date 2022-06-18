@@ -20,7 +20,7 @@
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
-            <th class="tb-medium">{{ $t("FullnameText") }}</th>
+            <th class="tb-medium">{{ $t("FullNameText") }}</th>
             <th class="tb-medium">{{ $t("Province") }}</th>
             <th class="tb-medium tb-right">{{ $t("TelText") }}</th>
             <th class="tb-medium">{{ $t("EmailText") }}</th>
@@ -32,28 +32,28 @@
         <tbody>
           <tr
             @click="$router.push({ name: 'Resume' })"
-           v-for="(postJob, index) in postJobs" :key="index">
+           v-for="(application, index) in applications" :key="index">
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
             <td class="tb-medium">
-              <span>{{ postJob.positionName }}</span>
+              <span>{{ application.positionName }}</span>
             </td>
             <td class="tb-medium">
-              <span>{{ postJob.provinceName }}</span>
+              <span>{{ application.provinceName }}</span>
             </td>
             <td class="tb-right">
               <span> 99999999</span>
             </td>
                   <td class="tb-medium">
-              <span>{{ postJob.email }}</span>
+              <span>{{ application.email }}</span>
             </td>
               <td class="tb-small">
               <span> Pendding</span>
             </td>
 
             <td class="tb-small">
-              <span> {{ postJob.startDate }}</span>
+              <span> {{ application.startDate }}</span>
             </td>
           
           </tr>
@@ -65,33 +65,58 @@
 </template>
 
 <script>
-import filterButton from "../../components/filter.vue"
+import filterButton from "../../components/filter.vue";
+import {  reactive, toRefs } from "vue";
+import axios from "axios";
+import { useI18n } from 'vue-i18n'
+import store from "../../store";
 export default {
-   components: {
-    filterButton,
-  },
-  data: () => ({
-    postJobs: {},
-    postJobsTotal: 0,
-    items:[{
-      id:1,
-      value:"Pending"
-    },
-    {
-      id:2,
-      value:"Approve"
-    },
-    ]
-  }),
-  created() {
-    this.fetchPostJob();
-  },
-  methods: {
-    async fetchPostJob() {
-      const res = await this.$axios.get(`${this.$api}/admin-api/postjob-get`);
-      this.postJobs = res.data.mapPostJob;
-      this.postJobsTotal = res.data.total;
-    },
+  components: { filterButton },
+  setup() {
+    const {t} = useI18n()
+    const baseUrl = "http://127.0.0.1:4000/";
+    const auth = store.useAuthStore();
+    let token = auth.getToken;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    const dataSet = reactive({
+      items: [
+        {
+          id: 1,
+          value: "pending",
+          name: t('PendingText'),
+        },
+        {
+          id: 2,
+          value: "approve",
+          name: t('ApproveText'),
+        },
+        {
+          id: 3,
+          value: "reject",
+          name: t('RejectText'),
+        },
+      ],
+      applications: [],
+
+    });
+    // need to refactor this code to hook
+    const fetchApplications = async () => {
+      const res = await axios.get(
+       baseUrl + "emp-api/jobapplication-get",{
+        headers
+       }
+      );
+
+      dataSet.applications = res.data.mapJobApplication; // 👈 get just results
+
+    };
+
+      fetchApplications();
+
+    return {...toRefs(dataSet)};
   },
 };
 </script>

@@ -84,7 +84,7 @@ export default {
           name: t('RejectText'),
         },
       ],
-      seekers: [{}],
+      seekers: [],
 
     });
     // need to refactor this code to hook

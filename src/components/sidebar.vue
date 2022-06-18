@@ -6,11 +6,32 @@
           <img src="../assets/profile.jpg" alt="" />
         </div>
         <div class="detail">
-          <div class="name"  v-if="$userInfo.type === 'admin'">{{$userInfo.name}}</div>
-          <div class="name" v-else >{{$userInfo.companyName}}</div>
-          <div class="line" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"></div>
-          <div class="role" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >{{$t('CurrentPointText')}} : {{$userInfo.point}}</div>
-          <div class="role" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >{{$t('StatusText')}} : {{ $userInfo.status}}</div>
+          <div class="name" v-if="$userInfo.type === 'admin'">
+            {{ $userInfo.name }}
+          </div>
+          <div class="name" v-else>{{ $userInfo.companyName }}</div>
+          <div
+            class="line"
+            v-if="
+              $userInfo.type === 'employee' || $userInfo.type === 'employer'
+            "
+          ></div>
+          <div
+            class="role"
+            v-if="
+              $userInfo.type === 'employee' || $userInfo.type === 'employer'
+            "
+          >
+            {{ $t("CurrentPointText") }} : {{ $userInfo.point }}
+          </div>
+          <div
+            class="role"
+            v-if="
+              $userInfo.type === 'employee' || $userInfo.type === 'employer'
+            "
+          >
+            {{ $t("StatusText") }} : {{ $userInfo.status }}
+          </div>
         </div>
       </div>
       <div class="line"></div>
@@ -31,37 +52,31 @@
             </div>
           </router-link>
         </div>
-
-        <!-- <div class="items">
-          <router-link to="/#">
-            <div class="item">
-              <i class="fa-solid fa-user-gear"></i
-              ><span>{{ $t("AdminsManagementText") }}</span>
-            </div>
-          </router-link>
-        </div> -->
-
-        <div class="items"  v-if="$userInfo.type === 'admin'">
+        <div class="items" v-if="$userInfo.type === 'admin'">
           <router-link to="/employers">
             <div class="item">
               <i class="fa-solid fa-user-pen"></i
               ><span>{{ $t("EmployersManagementText") }}</span>
             </div>
-            <span class="count">4</span>
+            <span v-if="noti.notiEmp !== 0" class="count">{{
+              noti.notiEmp
+            }}</span>
           </router-link>
         </div>
 
-        <div class="items"  v-if="$userInfo.type === 'admin'">
+        <div class="items" v-if="$userInfo.type === 'admin'">
           <router-link to="/jobseekers">
             <div class="item">
               <i class="fa-solid fa-user-tag"></i
               ><span>{{ $t("JobSeekersManagementText") }}</span>
             </div>
-            <span class="count">4</span>
+            <span v-if="noti.notiSeeker !== 0" class="count">{{
+              noti.notiSeeker
+            }}</span>
           </router-link>
         </div>
 
-        <div class="items"  v-if="$userInfo.type === 'admin'">
+        <div class="items" v-if="$userInfo.type === 'admin'">
           <router-link to="/jobpositions">
             <div class="item">
               <i class="fa-solid fa-briefcase"></i
@@ -69,20 +84,25 @@
             </div>
           </router-link>
         </div>
-
         <div class="items">
           <router-link to="/paymentshistories">
             <div class="item">
               <i class="fa-solid fa-credit-card"></i>
               <span>{{ $t("PaymentsHistoryText") }}</span>
             </div>
-            <span class="count">4</span>
+            <span v-if="noti.notiPay !== 0  " class="count">{{
+              noti.notiPay || noti.notiPay
+            }}</span>
           </router-link>
         </div>
-         <div class="items"  v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee'">
-          <router-link to="/contactUs" >
+        <div
+          class="items"
+          v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee'"
+        >
+          <router-link to="/contactUs">
             <div class="item">
-              <i class="fa-solid fa-headset"></i><span>{{ $t("ContactUsText") }}</span>
+              <i class="fa-solid fa-headset"></i
+              ><span>{{ $t("ContactUsText") }}</span>
             </div>
           </router-link>
         </div>
@@ -92,7 +112,48 @@
 </template>
 
 <script>
+import { reactive, toRefs } from "vue";
+import axios from "axios";
+import { useI18n } from "vue-i18n";
+import store from "../store";
+
 export default {
+  setup() {
+    const { t } = useI18n();
+    const baseUrl = "http://127.0.0.1:4000/";
+    const auth = store.useAuthStore();
+    const userTypeStore = store.useAuthStore();
+    const userType = JSON.parse(userTypeStore.getUserType);
+    let token = auth.getToken;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    const dataSet = reactive({
+      noti: [],
+    });
+    const fetchNoti = async () => {
+      const res = await axios.get(baseUrl + "emp-api/payment-noti-payment", {
+        headers,
+      });
+
+      dataSet.noti = res.data; // 👈 get just results
+    };
+    const fetchNotiAdmin = async () => {
+      const res = await axios.get(baseUrl + "admin-api/employee-noti", {
+        headers,
+      });
+
+      dataSet.noti = res.data; // 👈 get just results
+    };
+    if (userType.type === "employee" || userType.type === "employer")
+      fetchNoti();
+    if (userType.type === "admin") fetchNotiAdmin();
+
+    return {
+      ...toRefs(dataSet),
+    };
+  },
 };
 </script>
 
@@ -106,7 +167,7 @@ export default {
 }
 
 .sideBar_container {
-    //disable select text
+  //disable select text
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */

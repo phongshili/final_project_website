@@ -5,7 +5,7 @@
     </div>
     <div class="form-container">
       <div class="image-form">
-        <div class="input-group" @click="$refs.logoFile.click()">
+        <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("LogoText") }}
             <p class="required">*</p></label
@@ -27,21 +27,13 @@
           <input
             class="input is-primary"
             style="display: none"
-            type="file"
-            @change="onLogoFileChange"
-            placeholder="Primary input"
-            ref="logoFile"
-          />
-          <input
-            class="input is-primary"
-            style="display: none"
             type="text"
             v-model="image"
             placeholder="Primary input"
           />
         </div>
         <div class="spacer"></div>
-        <div class="input-group isCard" @click="$refs.coverFile.click()">
+        <div class="input-group isCard">
           <label for="user" class="text-input"
             >{{ $t("CoverText") }}
             <p class="required">*</p></label
@@ -60,14 +52,6 @@
               alt=""
             />
           </div>
-          <input
-            class="input is-primary"
-            style="display: none"
-            type="file"
-            @change="onCoverFileChange"
-            placeholder="Primary input"
-            ref="coverFile"
-          />
           <input
             class="input is-primary"
             style="display: none"
@@ -100,7 +84,7 @@
           </div>
         </div>
         <!--end position dropdown -->
-        <br>
+        <br />
         <div class="spacer" v-if="$userInfo.type === 'admin'"></div>
         <!-- company dropdown -->
         <div class="input-group" v-if="$userInfo.type === 'admin'">
@@ -128,52 +112,35 @@
       <div class="spacer" v-if="$userInfo.type === 'admin'"></div>
 
       <div class="input-form" v-if="$userInfo.type === 'admin'">
-        <!-- province dropdown -->
         <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("ProvinceText") }}
             <p class="required">*</p></label
           >
-          <div class="input-area">
-            <div class="select">
-              <select class="dropdown" v-model="provinceIndex">
-                <option
-                  selected
-                  v-for="(province, index) in fetchProvinces"
-                  :key="index"
-                  :value="index"
-                >
-                  {{ province.name }}
-                </option>
-              </select>
-            </div>
-          </div>
+          <input
+            class="input is-primary"
+            type="text"
+            disabled
+            v-model="district"
+            :placeholder="$t('ProvinceText')"
+          />
         </div>
-        <!--end province dropdown -->
 
         <div class="spacer" v-if="$userInfo.type === 'admin'"></div>
-        <!-- district dropdown -->
         <div class="input-group" v-if="$userInfo.type === 'admin'">
           <label for="user" class="text-input"
             >{{ $t("DistrictText") }}
             <p class="required">*</p></label
           >
-          <div class="input-area">
-            <div class="select">
-              <select class="dropdown" v-model="district">
-                <option
-                  selected
-                  v-for="district in fetchDistricts"
-                  :key="district._id"
-                  :value="district._id"
-                >
-                  {{ district.name }}
-                </option>
-              </select>
-            </div>
-          </div>
+
+          <input
+            class="input is-primary"
+            type="text"
+            disabled
+            v-model="district"
+            :placeholder="$t('DistrictText')"
+          />
         </div>
-        <!--end district dropdown -->
       </div>
       <div class="input-form">
         <div class="input-group is-check-box">
@@ -243,7 +210,7 @@
                 <input
                   type="checkbox"
                   name="workTime"
-                  value="pasttime"
+                  value="parttime"
                   v-model="workTime"
                 />
 
@@ -263,6 +230,7 @@
             class="input is-primary"
             type="text"
             v-model="email"
+            disabled
             :placeholder="$t('EmailText')"
           />
         </div>
@@ -292,33 +260,12 @@
             class="input is-primary"
             type="text"
             v-model="tel"
+            disabled
             :placeholder="$t('ContactPhoneText')"
           />
         </div>
       </div>
-      <div class="input-form">
-        <div class="input-group">
-          <label for="user" class="text-input">{{ $t("FacebookText") }} </label>
-          <input
-            class="input is-primary"
-            type="text"
-            v-model="facebook"
-            :placeholder="$t('FacebookText')"
-          />
-        </div>
-        <div class="spacer"></div>
-        <div class="input-group">
-          <label for="user" class="text-input"
-            >{{ $t("FacebookLinkText") }}
-          </label>
-          <input
-            class="input is-primary"
-            type="text"
-            v-model="link"
-            :placeholder="$t('FacebookLinkText')"
-          />
-        </div>
-      </div>
+
       <div class="input-form">
         <div class="input-group">
           <label for="user" class="text-input"
@@ -376,22 +323,6 @@
           :placeholder="$t('DetailText')"
         ></textarea>
       </div>
-      <div class="input-group">
-        <label for="user" class="text-input"
-          >{{ $t("AboutUsText") }}
-          <p class="required">*</p></label
-        >
-        <textarea
-          class="medium"
-          name=""
-          id=""
-          cols="30"
-          rows="2"
-          v-model="aboutUs"
-          :placeholder="$t('AboutUsText')"
-        ></textarea>
-      </div>
-
       <div class="btn-menu">
         <button
           class="button is-success"
@@ -400,7 +331,11 @@
         >
           {{ $t("AddPostJobText") }}
         </button>
-        <button class="button is-link" v-if="$route.params.id">
+        <button
+          class="button is-link"
+          @click="updatePost('online')"
+          v-if="$route.params.id"
+        >
           {{ $t("EditButtonText") }}
         </button>
         <div
@@ -408,6 +343,7 @@
           v-if="$route.params.id && status === 'expired'"
         ></div>
         <button
+          @click="addPostJob"
           class="button is-success"
           v-if="$route.params.id && status === 'expired'"
         >
@@ -420,6 +356,7 @@
         </button>
         <div class="spacer"></div>
         <button
+          @click="updatePost('offline')"
           class="button is-warning"
           v-if="$route.params.id && status === 'online'"
         >
@@ -433,33 +370,38 @@
 <script>
 import { ref, reactive, toRefs, watch } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import moment from 'moment';
+import moment from "moment";
+import store from "../../store";
+
 export default {
   setup() {
     const startDate = ref(new Date());
     const endDate = ref(new Date());
     endDate.value.setMonth(startDate.value.getMonth() + 1);
-  
+
     const baseUrl = "http://127.0.0.1:4000/";
     const { t } = useI18n();
     const route = useRoute();
-
+    const router = useRouter();
+    const auth = store.useAuthStore();
+    const userTypeStore = store.useAuthStore();
+    const userType = JSON.parse(userTypeStore.getUserType);
+    let token = auth.getToken;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
     const dataSet = reactive({
-      fetchProvinces: [],
       fetchPosition: [],
       fetchEmployer: [],
-      postByID: [],
-      fetchDistricts: 0,
-      provinceIndex: 0,
       provinceId: "",
+      province: "",
       position: "",
       district: "",
+      districtId: "",
       employer: "",
-      employerById: [],
-      facebook: "",
-      link: "",
       image: "",
       backgroundImage: "",
       aboutUs: "",
@@ -473,22 +415,16 @@ export default {
       workTime: [],
       gender: [],
       experience: "",
+      id: "",
+      startDate: "",
+      endDate: "",
     });
 
     watch(
       //TODO: bug sometime need to handle
-      () => dataSet.provinceIndex,
-      () => {
-        dataSet.fetchDistricts =
-          dataSet.fetchProvinces[dataSet.provinceIndex].districts;
-        dataSet.district = dataSet.fetchDistricts[0]._id;
-      }
-    );
-    watch(
-      //TODO: bug sometime need to handle
       () => dataSet.employer,
       () => {
-        fetchEmployerByID();
+        if (userType.type === "admin") fetchEmployerByID();
       }
     );
 
@@ -508,15 +444,6 @@ export default {
       fd.append("file", seletedFile);
       const res = await axios.post(baseUrl + "admin-api/uploadimage", fd);
       return res.data.link.substring(14); // ❌ remove first 14 characters
-    };
-
-    const fetchProvinces = async () => {
-      const res = await axios.get(baseUrl + "admin-api/province-get");
-      dataSet.fetchProvinces = await res.data.provinces;
-      dataSet.fetchDistricts = await dataSet.fetchProvinces[
-        dataSet.provinceIndex
-      ].districts;
-      dataSet.district = await dataSet.fetchDistricts[0]._id;
     };
 
     const fetchPosition = async () => {
@@ -542,8 +469,10 @@ export default {
       dataSet.aboutUs = employer.aboutUs;
       dataSet.email = employer.email;
       dataSet.tel = employer.tel;
-      dataSet.link = employer.link;
-      dataSet.facebook = employer.facebook;
+      dataSet.province = employer.provinceName;
+      dataSet.provinceId = employer.provinceId;
+      (dataSet.district = employer.districtName),
+        (dataSet.districtId = employer.districtId);
     };
 
     const fetchPostByID = async () => {
@@ -560,42 +489,172 @@ export default {
       dataSet.workTime = post.workTime;
       dataSet.education = post.education;
       dataSet.detail = post.detail;
+      dataSet.id = post._id;
+      dataSet.experience = post.experience;
+      dataSet.startDate = post.startDate;
+      dataSet.endDate = post.endDate;
+    };
+
+    // employer function
+
+    // need to refactor this code to hook
+    // duplicate code
+
+    const fetchEmployerInfoByID = async () => {
+      const res = await axios.get(baseUrl + "emp-api/employee-find-id", {
+        headers,
+      });
+      const employer = res.data.findEmpId; // 👈 get just results
+      dataSet.image = employer.image;
+      dataSet.backgroundImage = employer.backgroundImage;
+      dataSet.aboutUs = employer.aboutUs;
+      dataSet.email = employer.email;
+      dataSet.tel = employer.tel;
+      dataSet.province = employer.provinceName;
+      dataSet.provinceId = employer.provinceId;
+      (dataSet.district = employer.districtName),
+        (dataSet.districtId = employer.districtId);
+    };
+
+    const fetchPostEmployerByID = async () => {
+      const res = await axios.get(
+        baseUrl + "emp-api/postjob-find-id/" + route.params.id
+      );
+      const post = res.data.findPostJobId;
+      dataSet.employer = post.employeeId;
+      dataSet.position = post.positionId;
+      dataSet.salary = post.salary;
+      dataSet.status = post.status;
+      dataSet.skills = post.skill;
+      dataSet.gender = post.gender;
+      dataSet.workTime = post.workTime;
+      dataSet.education = post.education;
+      dataSet.detail = post.detail;
+      dataSet.id = post._id;
+      dataSet.image = post.logo;
+      dataSet.backgroundImage = post.image;
+      dataSet.email = post.email;
+      dataSet.tel = post.tel;
+      dataSet.experience = post.experience;
+      dataSet.province = post.provinceName;
+      dataSet.provinceId = post.provinceId;
+      dataSet.district = post.districtName;
+      dataSet.districtId = post.districtId;
     };
 
     const addPostJob = async () => {
-      await axios.post(baseUrl + "admin-api/postjob-add", {      
-        startDate: moment(startDate.value).locale('lo').format("YYYY-MM-DD"),
-        endDate: moment(endDate.value).locale('lo').format("YYYY-MM-DD"),
-        image: dataSet.backgroundImage,
-        logo: dataSet.image,
-        gender: dataSet.gender,
-        experience: dataSet.experience,
-        skill: dataSet.skills,
-        education: dataSet.education,
-        workTime: dataSet.workTime,
-        detail: dataSet.detail,
-        contractPhone: dataSet.tel,
-        provinceId: '5eb8cb58f2913809f730ce9f',
-        positionId: dataSet.position,
-        employeeId: dataSet.employer,
-      });
+      if (userType.type === "admin")
+        await axios.post(baseUrl + "admin-api/postjob-add", {
+          startDate: moment(startDate.value).locale("lo").format("YYYY-MM-DD"),
+          endDate: moment(endDate.value).locale("lo").format("YYYY-MM-DD"),
+          image: dataSet.backgroundImage,
+          logo: dataSet.image,
+          gender: dataSet.gender,
+          experience: dataSet.experience,
+          salary: dataSet.salary,
+          skill: dataSet.skills,
+          education: dataSet.education,
+          workTime: dataSet.workTime,
+          detail: dataSet.detail,
+          contractPhone: dataSet.tel,
+          districtId: dataSet.districtId,
+          positionId: dataSet.position,
+          employeeId: dataSet.employer,
+        });
+      if (userType.type === "employee" || userType.type === "employer")
+        await axios.post(
+          baseUrl + "emp-api/postjob-add",
+          {
+            startDate: moment(startDate.value)
+              .locale("lo")
+              .format("YYYY-MM-DD"),
+            endDate: moment(endDate.value).locale("lo").format("YYYY-MM-DD"),
+            image: dataSet.backgroundImage,
+            logo: dataSet.image,
+            gender: dataSet.gender,
+            experience: dataSet.experience,
+            salary: dataSet.salary,
+            skill: dataSet.skills,
+            education: dataSet.education,
+            workTime: dataSet.workTime,
+            detail: dataSet.detail,
+            contractPhone: dataSet.tel,
+            districtId: dataSet.districtId,
+            positionId: dataSet.position,
+          },
+          { headers }
+        );
+
+      router.go(-1);
     };
 
-    if (route.params.id) fetchPostByID();
+    const updatePost = async (status) => {
+      if (userType.type === "admin")
+        await axios.put(baseUrl + "admin-api/postjob-update", {
+          id: dataSet.id,
+          startDate: dataSet.startDate,
+          endDate: dataSet.endDate,
+          image: dataSet.backgroundImage,
+          logo: dataSet.image,
+          gender: dataSet.gender,
+          experience: dataSet.experience,
+          salary: dataSet.salary,
+          skill: dataSet.skills,
+          education: dataSet.education,
+          workTime: dataSet.workTime,
+          detail: dataSet.detail,
+          contractPhone: dataSet.tel,
+          status: status,
+          districtId: dataSet.districtId,
+          positionId: dataSet.position,
+          employeeId: dataSet.employer,
+        });
+      if (userType.type === "employee" || userType.type === "employer")
+        await axios.put(baseUrl + "emp-api/postjob-update", {
+          id: dataSet.id,
+          image: dataSet.backgroundImage,
+          logo: dataSet.image,
+          gender: dataSet.gender,
+          experience: dataSet.experience,
+          salary: dataSet.salary,
+          skill: dataSet.skills,
+          education: dataSet.education,
+          workTime: dataSet.workTime,
+          detail: dataSet.detail,
+          contractPhone: dataSet.tel,
+          status: status,
+          districtId: dataSet.districtId,
+          positionId: dataSet.position,
+        });
+      router.go(-1);
+    };
 
-    fetchEmployer();
+    if (route.params.id && userType.type === "admin") fetchPostByID();
+    if (userType.type === "admin") {
+      fetchEmployer();
+    }
+
+    if (
+      (route.params.id && userType.type === "employee") ||
+      userType.type === "employer"
+    ) {
+      fetchPostEmployerByID();
+    }
+    if (userType.type === "employee" || userType.type === "employer") {
+      fetchEmployerInfoByID();
+    }
+
     fetchPosition();
-    fetchProvinces();
 
     return {
       ...toRefs(dataSet),
       addPostJob,
+      updatePost,
       onLogoFileChange,
       onCoverFileChange,
       baseUrl,
       startDate,
       endDate,
-      
     };
   },
 };

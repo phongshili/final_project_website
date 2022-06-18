@@ -251,7 +251,7 @@ const messages = {
         ProvinceText: "ສະຖານທີ່ເຮັດວຽກແຂວງ",
         CurrentDistrictText: "ເມືອງຢູ່ປະຈູບັນ",
         DistrictText: "ສະຖານທີ່ເຮັດວຽກເມືອງ",
-        EducationText: "ປະຫວັດການສຶກສາ",
+        EducationText: "ລະດັບການສຶກສາ",
         IntroduceText: "ແນະນຳຕົວເອງໂດຍຫຍໍ່",
         PasswordText: "ລະຫັດຜ່ານ",
         ConfirmPasswordText: "ຢືນຢັນລະຫັດຜ່ານ",

@@ -97,7 +97,9 @@
                   {{ $t("ApplymentButtonText") }}
                 </button>
                 <div class="spacer s"></div>
-                <button class="button is-link">
+                <button
+                    @click="$router.push({ name: 'JobPostManagement',params: {id:job._id}})"
+                 class="button is-link">
                   {{ $t("EditButtonText") }}
                 </button>
               </div>
