@@ -275,7 +275,11 @@ html {
     }
     .is-warning{
       margin-left: auto;
+      &.is-no{
+        margin-left: 0 !important;
+      }
     }
+
     select {
       font-family: $font;
     }

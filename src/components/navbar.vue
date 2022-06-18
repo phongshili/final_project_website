@@ -81,6 +81,7 @@ export default defineComponent({
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
   //end
+  z-index: 99999;
 
   position: fixed;
   width: 100%;

@@ -125,9 +125,9 @@
         <div class="spacer"></div>
         <button class="button is-success">{{$t('ApproveButtonText')}}</button>
          <div class="spacer"></div>
-        <button class="button is-warning">{{$t('RejectText')}}</button>
+         <button class="button is-warning is-no">{{$t('RejectText')}}</button>
          <div class="spacer"></div>
-        <button class="button is-danger is-left">{{$t('BackText')}}</button>
+         <button @click="$router.go(-1)" class="button is-danger is-left">{{$t('BackText')}}</button> 
       </div>
     </div>
   </div>

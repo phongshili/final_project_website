@@ -117,6 +117,7 @@
               <select class="dropdown" v-model="gender">
                 <option  name="gender" value="male">{{ $t("MaleText") }}</option>
                 <option name="gender" value="male">{{ $t("FemaleText") }}</option>
+                <option name="gender" value="other">{{ $t("OtherText") }}</option>
               </select>
             </div>
           </div>
@@ -391,7 +392,8 @@ export default {
       dataSet.image = dataSeeker.image
       dataSet.imageCard = dataSeeker.imageCard
       dataSet.experience = dataSeeker.experience
-      dataSet.gender = dataSeeker.gender
+      dataSet.gender = (dataSeeker.gender)?  dataSet.gender = 'other' : dataSet.gender = dataSeeker.gender
+
       dataSet.education = dataSeeker.education
       dataSet.language = dataSeeker.language
       dataSet.skill = dataSeeker.skill
