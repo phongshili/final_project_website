@@ -38,7 +38,9 @@
         <div class="box-detail">
           <div class="box-body">
             <div class="box-title">{{ $t("TotalUsedPointsText") }}</div>
-            <div class="box-count">{{ countTotal.totalUsedPoint || countTotal.totalUsePoint }}</div>
+            <div class="box-count">
+              {{ countTotal.totalUsedPoint || countTotal.totalUsePoint }}
+            </div>
           </div>
         </div>
         <div
@@ -79,6 +81,9 @@
           >
             <div class="">{{ req.employeeName }}</div>
             <div class="">{{ req.point }} Points</div>
+          </div>
+          <div class="payment body" v-if="$userInfo.type === 'admin' && reqpoints !==[]">
+            <div class="">No requests</div>
           </div>
         </div>
       </div>

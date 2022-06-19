@@ -285,15 +285,15 @@
         <button class="button is-success" @click="updateEmployer('approve')"   v-if="$route.params.id">
           {{ $t("ApproveText") }}
         </button>
-      
-        <div class="spacer"></div>
-        <button @click="$router.go(-1)" class="button is-danger">
-          {{ $t("BackText") }}
-        </button>
-          <div class="spacer"></div>
-         <button class="button is-warning" @click="updateEmployer('reject')"   v-if="$route.params.id">
+             <div class="spacer"></div>
+         <button class="button is-warning is-no" @click="updateEmployer('reject')"   v-if="$route.params.id">
           {{ $t("RejectText") }}
         </button>
+        <div class="spacer"></div>
+        <button @click="$router.go(-1)" class="button is-danger is-left">
+          {{ $t("BackText") }}
+        </button>
+     
       </div>
     </div>
   </div>
@@ -302,13 +302,14 @@
 <script>
 import { reactive, toRefs, watch } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute,useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 export default {
   setup() {
     const baseUrl = "http://127.0.0.1:4000/";
     const { t } = useI18n();
     const route = useRoute();
+    const router = useRouter();
     const dataSet = reactive({
       id: "",
       companyName: "",
@@ -401,6 +402,8 @@ export default {
         password: dataSet.password,
         point: dataSet.point,
       });
+      router.go(-1);
+
     };
     const updateEmployer = async (rejectStaus) => {
       await axios.put(baseUrl + "admin-api/employee-update", {
@@ -419,6 +422,7 @@ export default {
         status: rejectStaus ,
         point: dataSet.point,
       });
+      router.go(-1);
     };
 
     // SELETED FILE TO UPLOAD

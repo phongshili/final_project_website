@@ -92,7 +92,7 @@
               <div class="tools">
                 <button
                   class="button apply-btn"
-                  @click="$router.push({ name: 'Application',params: {id:job._id}})"
+                  @click="$router.push({ name: 'JobseekersIndex',params: {id:job._id}})"
                 >
                   {{ $t("ApplymentButtonText") }}
                 </button>
@@ -113,7 +113,7 @@
 
 <script>
 import filterButton from "../../components/filter.vue";
-import { ref, reactive, toRefs, computed } from "vue";
+import { reactive, toRefs,  } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import Swal from "sweetalert2";

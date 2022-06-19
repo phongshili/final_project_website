@@ -350,17 +350,18 @@
           {{ $t("RePostText") }}
         </button>
 
-        <div class="spacer"></div>
-        <button @click="$router.go(-1)" class="button is-danger">
-          {{ $t("BackText") }}
-        </button>
+      
         <div class="spacer"></div>
         <button
           @click="updatePost('offline')"
-          class="button is-warning"
+          class="button is-warning is-no"
           v-if="$route.params.id && status === 'online'"
         >
           {{ $t("OfflineButtonText") }}
+        </button>
+          <div class="spacer"></div>
+        <button @click="$router.go(-1)" class="button is-danger is-left">
+          {{ $t("BackText") }}
         </button>
       </div>
     </div>

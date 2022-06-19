@@ -4,12 +4,10 @@ import Login from '../views/Login.vue'
 import JobPostIndex from "../views/post_jobs/index.vue"
 import EmpIndex from "../views/employers/index.vue"
 import JobseekersIndex from "../views/jobseekers/index.vue"
-import JobSeekersManagement from "../views/jobseekers/jobseekers.vue"
 import JobPositionsIndex from "../views/jobpositions/index.vue"
 import PaymentsHistoryIndex from "../views/payments/index.vue"
 import Dashboard from "../views/dashboard/index.vue"
 import JobPostManagement from "../views/post_jobs/postjob_management.vue"
-import Application from "../views/post_jobs/application.vue"
 import Resume from "../views/post_jobs/resume.vue"
 import Page_404 from '../views/page_not_found.vue'
 import Profile from "../views/employers/profile.vue"
@@ -96,7 +94,7 @@ const routes = [
   },
 
   {
-    path: '/jobseekers',
+    path: '/jobseekers/:id?',
     name: 'JobseekersIndex',
 
     component: JobseekersIndex,
@@ -104,15 +102,7 @@ const routes = [
       requiresAuth: true,
     },
   },
-  {
-    path: '/jobseekersmanagement/:id?',
-    name: 'JobSeekersManagement',
 
-    component: JobSeekersManagement,
-    meta: {
-      requiresAuth: true,
-    },
-  },
   {
     path: '/jobpositions',
     name: 'JobPositionsIndex',
@@ -122,15 +112,7 @@ const routes = [
       requiresAuth: true,
     },
   },
-  {
-    path: '/application/:id?',
-    name: 'Application',
 
-    component: Application,
-    meta: {
-      requiresAuth: true,
-    },
-  },
   {
     path: '/resume/:id?',
     name: 'Resume',

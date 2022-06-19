@@ -7,12 +7,15 @@
       <div class="filter-menu">
         <filterButton :items="items"></filterButton>
         <div class="input-group">
-          <input class="input is-small" type="text" :placeholder="$t('SearchText')" />
+          <input
+            class="input is-small"
+            type="text"
+            :placeholder="$t('SearchText')"
+          />
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
       </div>
       <div class="btn-menu">
-  
         <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
@@ -26,27 +29,51 @@
             <th class="tb-medium tb-right">{{ $t("TelText") }}</th>
             <th class="tb-large">{{ $t("EmailText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
-
+            <th
+              v-if="
+                $userInfo.type === 'employee' || $userInfo.type === 'employer'
+              "
+              class="tb-small tb-center"
+            >
+              {{ $t("SubmitDateText") }}
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr 
-             @click="$router.push({ name: 'JobSeekersManagement',params:{id:seeker._id} })"
-            v-for="(seeker,index) in seekers" :key="index"
-            >
-            <td class="tb-ss tb-center"><span>{{index +1}}</span></td>
-            <td class="tb-medium"><span>{{seeker.name}} {{seeker.lastname}}</span></td>
+          <tr
+            @click="
+              $router.push({ name: 'Resume', params: { id: seeker._id } })
+            "
+            v-for="(seeker, index) in seekers"
+            :key="index"
+          >
+            <td class="tb-ss tb-center">
+              <span>{{ index + 1 }}</span>
+            </td>
             <td class="tb-medium">
-              <span>{{seeker.districtName}}</span>
+              <span>{{ seeker.name }} {{ seeker.lastname }}</span>
             </td>
-            <td class="tb-right"><span>{{seeker.tel}}</span></td>
-            <td class="tb-large"><span>{{seeker.email}}</span></td>
+            <td class="tb-medium">
+              <span>{{ seeker.districtName }}</span>
+            </td>
+            <td class="tb-right">
+              <span>{{ seeker.tel }}</span>
+            </td>
+            <td class="tb-large">
+              <span>{{ seeker.email }}</span>
+            </td>
             <td class="tb-small">
-              <span style="text-transform: uppercase;" >{{seeker.status}}</span>
+              <span style="text-transform: uppercase">{{ seeker.status || seeker.jobStatus }}</span>
             </td>
-       
+            <td
+              v-if="
+                $userInfo.type === 'employee' || $userInfo.type === 'employer'
+              "
+              class="tb-small"
+            >
+              <span> {{ seeker.createdAt }}</span>
+            </td>
           </tr>
-
         </tbody>
       </table>
     </div>
@@ -54,51 +81,72 @@
 </template>
 <script>
 import filterButton from "../../components/filter.vue";
-import { ref, reactive, toRefs } from "vue";
+import {  reactive, toRefs } from "vue";
 import axios from "axios";
-import { useI18n } from 'vue-i18n'
+import { useI18n } from "vue-i18n";
+import store from "../../store";
+import { useRoute } from "vue-router";
+
 export default {
   components: { filterButton },
   setup() {
-    const {t} = useI18n()
+    const baseUrl = "http://127.0.0.1:4000/";
+    const { t } = useI18n();
+    const route = useRoute();
+    const auth = store.useAuthStore();
+    const userTypeStore = store.useAuthStore();
+    const userType = JSON.parse(userTypeStore.getUserType);
+    let token = auth.getToken;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
     const dataSet = reactive({
       items: [
         {
           id: 1,
           value: "pending",
-          name: t('PendingText'),
+          name: t("PendingText"),
         },
         {
           id: 2,
           value: "approve",
-          name: t('ApproveText'),
+          name: t("ApproveText"),
         },
         {
           id: 3,
           value: "reject",
-          name: t('RejectText'),
+          name: t("RejectText"),
         },
       ],
       seekers: [],
-
     });
     // need to refactor this code to hook
     const fetchSeekers = async () => {
-      const res = await axios.get(
-        "http://127.0.0.1:4000/admin-api/seeker-get"
-      );
+      const res = await axios.get("http://127.0.0.1:4000/admin-api/seeker-get");
 
       dataSet.seekers = res.data.mapSeeker; // 👈 get just results
+    };
+    // need to refactor this code to hook
+    // duplicate code
+    const fetchSeekerEmp = async () => {
+      const res = await axios.get(
+       baseUrl + "emp-api/jobapplication-find-id-jobpost/"+ route.params.id,{
+        headers
+       }
+      );
 
+      dataSet.seekers = res.data.mapJobApplication; // 👈 get just results
     };
 
-      fetchSeekers();
+    if (userType.type === "admin" && !route.params.id) fetchSeekers();
+    if (userType.type === "employee" || userType.type === "employer")
+      fetchSeekerEmp();
 
-    return {...toRefs(dataSet)};
+    return { ...toRefs(dataSet) };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 </style>

@@ -5,51 +5,49 @@
     </div>
     <div class="form-container">
       <div class="detail-form-display">
-
         <div class="image-form">
-        <div class="input-group">
-          <label for="user" class="text-input"
-            >{{ $t("ProfileText") }}
-            <p class="required">*</p></label
-          >
-          <div class="img-container">
-            <img
-              v-if="!resume.image"
-              class="profile"
-              src="../../assets/default.jpg"
-              alt=""
-            />
-            <img
-              v-else
-              class="profile"
-              :src="baseUrl + '/resize-images/' + resume.image"
-              alt=""
-            />
+          <div class="input-group">
+            <label for="user" class="text-input"
+              >{{ $t("ProfileText") }}
+              <p class="required">*</p></label
+            >
+            <div class="img-container">
+              <img
+                v-if="!resume.image"
+                class="profile"
+                src="../../assets/default.jpg"
+                alt=""
+              />
+              <img
+                v-else
+                class="profile"
+                :src="baseUrl + '/resize-images/' + resume.image"
+                alt=""
+              />
+            </div>
+          </div>
+          <div class="spacer"></div>
+          <div class="input-group isCard">
+            <label for="user" class="text-input"
+              >{{ $t("PersonalIDCardImageText") }}
+              <p class="required">*</p></label
+            >
+            <div class="img-container">
+              <img
+                v-if="!resume.image"
+                class="personalIDCard"
+                src="../../assets/default1.jpg"
+                alt=""
+              />
+              <img
+                v-else
+                class="personalIDCard"
+                :src="baseUrl + '/resize-images/' + resume.image"
+                alt=""
+              />
+            </div>
           </div>
         </div>
-        <div class="spacer"></div>
-        <div class="input-group isCard">
-          <label for="user" class="text-input"
-            >{{ $t("PersonalIDCardImageText") }}
-            <p class="required">*</p></label
-          >
-          <div class="img-container">
-            <img
-              v-if="!resume.image"
-              class="personalIDCard"
-              src="../../assets/default1.jpg"
-              alt=""
-            />
-            <img
-              v-else
-              class="personalIDCard"
-              :src="baseUrl + '/resize-images/' + resume.image"
-              alt=""
-            />
-          </div>
-  
-        </div>
-      </div>
         <hr />
         <div class="input-form">
           <div class="input-group">
@@ -60,7 +58,7 @@
 
             <div class="data-detail">
               <p>
-                {{resume.introduced}}
+                {{ resume.introduced }}
               </p>
             </div>
           </div>
@@ -74,15 +72,22 @@
             <div class="spacerH"></div>
 
             <div class="data-detail">
-              <p class="is-uppercase">{{ $t("FullNameText") }} : {{resume.name}} {{resume.lastname || "-"}}</p>
+              <p class="is-uppercase">
+                {{ $t("FullNameText") }} : {{ resume.name }}
+                {{ resume.lastname || "-" }}
+              </p>
               <div class="spacerH"></div>
-              <p class="is-uppercase">{{ $t("GenderText") }} : {{resume.gender || "-"}}</p>
-                <div class="spacerH"></div>
-              <p>{{ $t("BirthDateText") }} : {{resume.birthDate || "-"}}</p>
+              <p class="is-uppercase">
+                {{ $t("GenderText") }} : {{ resume.gender || "-" }}
+              </p>
               <div class="spacerH"></div>
-              <p>{{ $t("TelText") }} : {{resume.tel || "-"}}</p>
+              <p>{{ $t("BirthDateText") }} : {{ resume.birthDate || "-" }}</p>
               <div class="spacerH"></div>
-              <p class="is-uppercase">{{ $t("EmailText") }} : {{resume.email || "-"}}</p>
+              <p>{{ $t("TelText") }} : {{ resume.tel || "-" }}</p>
+              <div class="spacerH"></div>
+              <p class="is-uppercase">
+                {{ $t("EmailText") }} : {{ resume.email || "-" }}
+              </p>
             </div>
           </div>
         </div>
@@ -95,7 +100,7 @@
             <div class="spacerH"></div>
 
             <div class="data-detail">
-              <p>{{resume.education}}</p>
+              <p>{{ resume.education }}</p>
             </div>
           </div>
         </div>
@@ -109,7 +114,7 @@
 
             <div class="data-detail">
               <p>
-               {{resume.experience}}
+                {{ resume.experience }}
               </p>
             </div>
           </div>
@@ -123,7 +128,7 @@
             <div class="spacerH"></div>
 
             <div class="data-detail">
-              <p>{{resume.language}}</p>
+              <p>{{ resume.language }}</p>
             </div>
           </div>
         </div>
@@ -133,20 +138,28 @@
             <label for="user" class="text-input">{{ $t("SkillsText") }} </label>
             <div class="spacerH"></div>
             <div class="data-detail">
-              <p>{{resume.skill}}</p>
+              <p>{{ resume.skill }}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="spacerH max"></div>
       <div class="btn-menu">
-        <button @click="updateStatus('pending')" class="button is-link" >{{$t('PenddingButtonText')}}</button>
+        <button @click="updateStatus('pending')" class="button is-link">
+          {{ $t("PenddingButtonText") }}
+        </button>
         <div class="spacer"></div>
-        <button  @click="updateStatus('approve')" class="button is-success">{{$t('ApproveButtonText')}}</button>
-         <div class="spacer"></div>
-         <button  @click="updateStatus('reject')" class="button is-warning is-no">{{$t('RejectText')}}</button>
-         <div class="spacer"></div>
-         <button @click="$router.go(-1)" class="button is-danger is-left">{{$t('BackText')}}</button> 
+        <button @click="updateStatus('approve')" class="button is-success">
+          {{ $t("ApproveButtonText") }}
+        </button>
+        <div class="spacer"></div>
+        <button @click="updateStatus('reject')" class="button is-warning is-no">
+          {{ $t("RejectText") }}
+        </button>
+        <div class="spacer"></div>
+        <button @click="$router.go(-1)" class="button is-danger is-left">
+          {{ $t("BackText") }}
+        </button>
       </div>
     </div>
   </div>
@@ -154,62 +167,83 @@
 
 <script>
 import filterButton from "../../components/filter.vue";
-import {  reactive, toRefs } from "vue";
+import { reactive, toRefs } from "vue";
 import axios from "axios";
-import { useI18n } from 'vue-i18n'
+import { useI18n } from "vue-i18n";
 import store from "../../store";
-import {useRoute,useRouter} from "vue-router"
+import { useRoute, useRouter } from "vue-router";
 export default {
   components: { filterButton },
   setup() {
-    const {t} = useI18n()
+    const { t } = useI18n();
     const baseUrl = "http://127.0.0.1:4000/";
     const auth = store.useAuthStore();
     let token = auth.getToken;
     const route = useRoute();
     const router = useRouter();
+    const userTypeStore = store.useAuthStore();
+    const userType = JSON.parse(userTypeStore.getUserType);
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,
     };
     const dataSet = reactive({
-
       resume: [],
-
+      comment: "",
     });
     // need to refactor this code to hook
     const fetchResume = async () => {
       const res = await axios.get(
-       baseUrl + "emp-api/jobapplication-find-id/"+ route.params.id,{
-        headers
-       }
+        baseUrl + "emp-api/jobapplication-find-id/" + route.params.id,
+        {
+          headers,
+        }
       );
 
       dataSet.resume = res.data.mapJobApplication; // 👈 get just results
+    };
+    // need to refactor this code to hook
+    //duplicate code
+    const fetchResumeEmployer = async () => {
+      const res = await axios.get(
+        baseUrl + "admin-api/seeker-find-id/" + route.params.id,
+        {
+          headers,
+        }
+      );
 
+      dataSet.resume = res.data.mapSeeker; // 👈 get just results
     };
 
     const updateStatus = async (status) => {
-       await axios.put(baseUrl + "emp-api/jobapplication-update", {
-        id:dataSet.resume._id,
-        jobStatus:status
-       })
-       router.go(-1);
-    }
+      if((userType.type === "admin" && status ==='reject')){
+        alert(status)
+      }
+      if (userType.type === "employee" || userType.type === "employer")
+        await axios.put(baseUrl + "emp-api/jobapplication-update", {
+          id: dataSet.resume._id,
+          jobStatus: status,
+        });
+      if (userType.type === "admin" && route.params.id)
+        await axios.put(baseUrl + "admin-api/seeker-update", {
+          id: dataSet.resume.userTypeId,
+          jobStatus: status,
+          comment: dataSet.comment,
+        });
+      router.go(-1);
+    };
 
-    fetchResume();
+    if (userType.type === "admin" && route.params.id) fetchResumeEmployer();
+    if (userType.type === "employee" || userType.type === "employer")
+      fetchResume();
 
-    return {...toRefs(dataSet),updateStatus,baseUrl};
+    return { ...toRefs(dataSet), updateStatus, baseUrl };
   },
 };
-
-
 </script>
 
 <style lang="scss" scoped>
-.is-left{
-  margin-left: auto;
-}
+
 .text-input {
   font-size: $subtitle;
   font-weight: 600;
