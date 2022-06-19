@@ -29,6 +29,7 @@ const messages = {
         TotalPostText:'Total Posts',
         TotalEmployersText:'Total Employers',
         TotalApplicationText: "Total Applications",
+        ApplicationApply: "Application Register",
         TotalUsedPointsText:"Total Used Points",
         TopUpText:"Top-Up",
         TotalJobSeekr:"Total Jobseekrs",
@@ -180,6 +181,7 @@ const messages = {
         TopUpText:"ເຕີມພ້ອຍ",
         TotalJobSeekr:"ຈຳນວນຜູ້ສະໝັກວຽກທັງໝົດ",
         CurrentPointText:"ຈຳນວນພ້ອຍທີ່ຍັງເຫຼືອ",
+        ApplicationApply:"ຜູ້ສະໝັກວຽກ",
     
           //status
           OnlineText: "ປະກາດ",

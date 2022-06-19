@@ -1,7 +1,7 @@
 <template>
   <div class="_container">
     <div class="container-header">
-      <label>{{ $t("PostJobsText") }}</label>
+      <label>{{ $t("ApplicationApply") }}</label>
     </div>
     <div class="filter">
       <div class="filter-menu">
@@ -11,7 +11,6 @@
          
       </div>
       <div class="btn-menu">
-        <button class="button is-success" @click="$router.push({ name: 'JobPostManagement' })" >{{$t('PostJobText')}}</button>
         <button class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
@@ -21,7 +20,7 @@
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
             <th class="tb-medium">{{ $t("FullNameText") }}</th>
-            <th class="tb-medium">{{ $t("Province") }}</th>
+            <th class="tb-medium">{{ $t("CurrentProvinceText") }}</th>
             <th class="tb-medium tb-right">{{ $t("TelText") }}</th>
             <th class="tb-medium">{{ $t("EmailText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
@@ -31,29 +30,29 @@
         </thead>
         <tbody>
           <tr
-            @click="$router.push({ name: 'Resume' })"
+            @click="$router.push({ name: 'Resume',params: {id:application._id}})"
            v-for="(application, index) in applications" :key="index">
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
             <td class="tb-medium">
-              <span>{{ application.positionName }}</span>
+              <span>{{application.name}} {{ application.lastname}}</span>
             </td>
             <td class="tb-medium">
               <span>{{ application.provinceName }}</span>
             </td>
             <td class="tb-right">
-              <span> 99999999</span>
+              <span> {{application.tel}}</span>
             </td>
                   <td class="tb-medium">
               <span>{{ application.email }}</span>
             </td>
               <td class="tb-small">
-              <span> Pendding</span>
+              <span style="text-transform: uppercase"> {{application.jobStatus}}</span>
             </td>
 
             <td class="tb-small">
-              <span> {{ application.startDate }}</span>
+              <span> {{ application.createdAt }}</span>
             </td>
           
           </tr>
@@ -70,6 +69,7 @@ import {  reactive, toRefs } from "vue";
 import axios from "axios";
 import { useI18n } from 'vue-i18n'
 import store from "../../store";
+import {useRoute,useRouter} from "vue-router"
 export default {
   components: { filterButton },
   setup() {
@@ -77,6 +77,8 @@ export default {
     const baseUrl = "http://127.0.0.1:4000/";
     const auth = store.useAuthStore();
     let token = auth.getToken;
+    const route = useRoute();
+    const router = useRouter();
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,
@@ -105,7 +107,7 @@ export default {
     // need to refactor this code to hook
     const fetchApplications = async () => {
       const res = await axios.get(
-       baseUrl + "emp-api/jobapplication-get",{
+       baseUrl + "emp-api/jobapplication-find-id-jobpost/"+ route.params.id,{
         headers
        }
       );

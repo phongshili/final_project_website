@@ -123,7 +123,7 @@ const routes = [
     },
   },
   {
-    path: '/application',
+    path: '/application/:id?',
     name: 'Application',
 
     component: Application,
@@ -132,7 +132,7 @@ const routes = [
     },
   },
   {
-    path: '/resume',
+    path: '/resume/:id?',
     name: 'Resume',
 
     component: Resume,

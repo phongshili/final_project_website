@@ -26,12 +26,12 @@
             <th class="tb-medium tb-right">{{ $t("TelText") }}</th>
             <th class="tb-large">{{ $t("EmailText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
-            <th class="tb-small tb-center">{{ $t("OptionsText") }}</th>
+
           </tr>
         </thead>
         <tbody>
           <tr 
-          
+             @click="$router.push({ name: 'JobSeekersManagement',params:{id:seeker._id} })"
             v-for="(seeker,index) in seekers" :key="index"
             >
             <td class="tb-ss tb-center"><span>{{index +1}}</span></td>
@@ -44,12 +44,7 @@
             <td class="tb-small">
               <span style="text-transform: uppercase;" >{{seeker.status}}</span>
             </td>
-            <td class="tb-small">
-              <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"  @click="$router.push({ name: 'JobSeekersManagement',params:{id:seeker._id} })"></i
-                >
-              </div>
-            </td>
+       
           </tr>
 
         </tbody>

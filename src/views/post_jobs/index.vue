@@ -92,7 +92,7 @@
               <div class="tools">
                 <button
                   class="button apply-btn"
-                  @click="$router.push({ name: 'Application'})"
+                  @click="$router.push({ name: 'Application',params: {id:job._id}})"
                 >
                   {{ $t("ApplymentButtonText") }}
                 </button>

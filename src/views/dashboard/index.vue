@@ -30,7 +30,7 @@
           <div class="box-body">
             <div class="box-title">{{ $t("TotalApplicationText") }}</div>
             <div class="box-count">
-              {{ countTotal.totalJobApp || countTotal.totalApprove }}
+              {{ countTotal.totalJobApp }}
             </div>
           </div>
         </div>
