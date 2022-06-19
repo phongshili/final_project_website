@@ -226,8 +226,8 @@ export default {
         });
       if (userType.type === "admin" && route.params.id)
         await axios.put(baseUrl + "admin-api/seeker-update", {
-          id: dataSet.resume.userTypeId,
-          jobStatus: status,
+          id: dataSet.resume._id,
+          status: status,
           comment: dataSet.comment,
         });
       router.go(-1);
