@@ -209,29 +209,7 @@
           />
         </div>
       </div>
-      <div class="input-form">
-        <div class="input-group">
-          <label for="user" class="text-input">{{ $t("FacebookText") }} </label>
-          <input
-            class="input is-primary"
-            type="text"
-            v-model="facebook"
-            :placeholder="$t('FacebookText')"
-          />
-        </div>
-        <div class="spacer"></div>
-        <div class="input-group">
-          <label for="user" class="text-input"
-            >{{ $t("FacebookLinkText") }}
-          </label>
-          <input
-            class="input is-primary"
-            type="text"
-            v-model="link"
-            :placeholder="$t('FacebookLinkText')"
-          />
-        </div>
-      </div>
+
       <div class="input-group">
         <label for="user" class="text-input"
           >{{ $t("AboutUsText") }}
@@ -247,7 +225,7 @@
           :placeholder="$t('AboutUsText')"
         ></textarea>
       </div>
-      <div class="input-form" v-if="!$route.params.id">
+      <div class="input-form" v-if="!$route.params.id && $userInfo.type === 'admin'">
         <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("PasswordText") }}
@@ -278,38 +256,62 @@
         <button
           class="button is-success"
           @click="addEmployer"
-          v-if="!$route.params.id"
+          v-if="!$route.params.id && $userInfo.type === 'admin'"
         >
           {{ $t("AddEmployerText") }}
         </button>
-        <button class="button is-success" @click="updateEmployer('approve')"   v-if="$route.params.id">
+        <button
+          class="button is-success"
+          @click="updateEmployer('approve')"
+          v-if="$route.params.id && $userInfo.type === 'admin'"
+        >
           {{ $t("ApproveText") }}
         </button>
-             <div class="spacer"></div>
-         <button class="button is-warning is-no" @click="updateEmployer('reject')"   v-if="$route.params.id">
+        <button
+          class="button is-link"
+          @click="empUpdateProfile"
+          v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"
+        >
+          {{ $t("EditButtonText") }}
+        </button>
+        <div class="spacer"></div>
+        <button
+          class="button is-warning is-no"
+          @click="updateEmployer('reject')"
+          v-if="$route.params.id && $userInfo.type === 'admin'"
+        >
           {{ $t("RejectText") }}
         </button>
         <div class="spacer"></div>
         <button @click="$router.go(-1)" class="button is-danger is-left">
           {{ $t("BackText") }}
         </button>
-     
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { reactive, toRefs, watch } from "vue";
+import { reactive, toRefs } from "vue";
 import axios from "axios";
-import { useRoute,useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import store from "../../store";
+
 export default {
   setup() {
     const baseUrl = "http://127.0.0.1:4000/";
     const { t } = useI18n();
     const route = useRoute();
     const router = useRouter();
+    const auth = store.useAuthStore();
+    const userTypeStore = store.useAuthStore();
+    const userType = JSON.parse(userTypeStore.getUserType);
+    let token = auth.getToken;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
     const dataSet = reactive({
       id: "",
       companyName: "",
@@ -329,21 +331,10 @@ export default {
       tel: "",
       type: "",
       provinceIndex: 0,
-      facebook: "",
-      link: "",
+
       password: "",
       confirmPassword: "",
     });
-
-    // watch(
-    //   //TODO: bug sometime need to handle
-    //   () => dataSet.provinceIndex,
-    //   () => {
-    //     dataSet.fetchDistricts =
-    //       dataSet.fetchProvinces[dataSet.provinceIndex].districts;
-    //     dataSet.district = dataSet.fetchDistricts[0]._id;
-    //   }
-    // );
 
     // need to refactor this code to hook
     const fetchEmployerByID = async () => {
@@ -373,9 +364,43 @@ export default {
       dataSet.email = employer.email;
       dataSet.tel = employer.tel;
       dataSet.type = employer.type;
-      dataSet.link = employer.link;
-      dataSet.facebook = employer.facebook;
+
     };
+
+
+    // employer fetch profile data 
+
+    const fetchEmployerProfile = async () => {
+       const res = await axios.get(
+        baseUrl + "emp-api/employee-find-id",{
+          headers
+        }
+      );
+      const profile = res.data.findEmpId
+
+       dataSet.id = profile.userTypeId;
+      dataSet.companyName = profile.companyName;
+      dataSet.contractName = profile.contractName;
+      dataSet.image = profile.image;
+      dataSet.backgroundImage = profile.backgroundImage;
+      dataSet.aboutUs = profile.aboutUs;
+      dataSet.erc = profile.erc;
+      dataSet.point = profile.point;
+      dataSet.status = profile.status;
+      dataSet.district = profile.district;
+      // find index
+      const selectedProvinceId = profile.provinceId;
+      const findeProvinceIndex = dataSet.fetchProvinces.findIndex(
+        (el) => selectedProvinceId === el._id
+      );
+      dataSet.provinceIndex = findeProvinceIndex;
+      dataSet.district = profile.districtId;
+      dataSet.userTypeId = profile.userTypeId;
+      dataSet.email = profile.email;
+      dataSet.tel = profile.tel;
+      dataSet.type = profile.type;
+
+    }
 
     const fetchProvinces = async () => {
       const res = await axios.get(baseUrl + "admin-api/province-get");
@@ -392,8 +417,7 @@ export default {
         contractName: dataSet.contractName,
         image: dataSet.image,
         backgroundImage: dataSet.backgroundImage,
-        facebook: dataSet.facebook,
-        link: dataSet.link,
+       
         aboutUs: dataSet.aboutUs,
         erc: dataSet.erc,
         districtId: dataSet.district,
@@ -403,7 +427,6 @@ export default {
         point: dataSet.point,
       });
       router.go(-1);
-
     };
     const updateEmployer = async (rejectStaus) => {
       await axios.put(baseUrl + "admin-api/employee-update", {
@@ -412,17 +435,35 @@ export default {
         contractName: dataSet.contractName,
         image: dataSet.image,
         backgroundImage: dataSet.backgroundImage,
-        facebook: dataSet.facebook,
-        link: dataSet.link,
+
         aboutUs: dataSet.aboutUs,
         erc: dataSet.erc,
         districtId: dataSet.district,
         email: dataSet.email,
         tel: dataSet.tel,
-        status: rejectStaus ,
+        status: rejectStaus,
         point: dataSet.point,
       });
       router.go(-1);
+    };
+
+
+    // employer role update their profile
+    const empUpdateProfile = async () => {
+       await axios.put(baseUrl + "emp-api/employee-update", {
+        companyName: dataSet.companyName,
+        contractName: dataSet.contractName,
+        image: dataSet.image,
+        backgroundImage: dataSet.backgroundImage,
+        aboutUs: dataSet.aboutUs,
+        erc: dataSet.erc,
+        districtId: dataSet.district,
+        email: dataSet.email,
+        tel: dataSet.tel,
+       },{headers})
+      router.go(-1);
+
+
     };
 
     // SELETED FILE TO UPLOAD
@@ -443,14 +484,16 @@ export default {
       return res.data.link.substring(14); // ❌ remove first 14 characters
     };
     //get district data when select province
-    const getDistrictData = async ()=>{
-       dataSet.fetchDistricts =
-          dataSet.fetchProvinces[dataSet.provinceIndex].districts;
-        dataSet.district = dataSet.fetchDistricts[0]._id;
-    }
+    const getDistrictData = async () => {
+      dataSet.fetchDistricts =
+        dataSet.fetchProvinces[dataSet.provinceIndex].districts;
+      dataSet.district = dataSet.fetchDistricts[0]._id;
+    };
     fetchProvinces();
-    if (route.params.id) fetchEmployerByID();
+    if (route.params.id && userType === "admin") fetchEmployerByID();
 
+    // if login by employer fetch profile
+    if(userType.type === "employee" || userType.type === "employer")fetchEmployerProfile()
     return {
       ...toRefs(dataSet),
       baseUrl,
@@ -458,6 +501,7 @@ export default {
       onCoverFileChange,
       getDistrictData,
       addEmployer,
+      empUpdateProfile,
       updateEmployer,
     };
   },
@@ -465,5 +509,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

@@ -93,8 +93,8 @@
             <p class="required">*</p></label
           >
           <div class="input-area">
-            <div class="select" @click="getCompanyData">
-              <select class="dropdown" v-model="employer">
+            <div class="select"  >
+              <select class="dropdown" @click="getCompanyData" v-model="employer">
                 <option 
                   selected
                   v-for="(employer, index) in fetchEmployer"
@@ -366,7 +366,7 @@
 </template>
 
 <script>
-import { ref, reactive, toRefs, watch } from "vue";
+import { ref, reactive, toRefs } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -483,6 +483,15 @@ export default {
       dataSet.experience = post.experience;
       dataSet.startDate = post.startDate;
       dataSet.endDate = post.endDate;
+      dataSet.province = post.provinceName;
+      dataSet.provinceId = post.provinceId;
+      dataSet.district = post.districtName,
+      dataSet.districtId = post.districtId;
+      dataSet.image = post.logo;
+      dataSet.backgroundImage = post.image;
+      dataSet.aboutUs = post.aboutUs;
+      dataSet.email = post.email;
+      dataSet.tel = post.tel;
     };
 
     // employer function
