@@ -142,7 +142,7 @@
             <p class="required">*</p></label
           >
           <div class="input-area">
-            <div class="select">
+            <div class="select" @click="getDistrictData">
               <select class="dropdown" v-model="provinceIndex">
                 <option
                   selected
@@ -335,15 +335,15 @@ export default {
       confirmPassword: "",
     });
 
-    watch(
-      //TODO: bug sometime need to handle
-      () => dataSet.provinceIndex,
-      () => {
-        dataSet.fetchDistricts =
-          dataSet.fetchProvinces[dataSet.provinceIndex].districts;
-        dataSet.district = dataSet.fetchDistricts[0]._id;
-      }
-    );
+    // watch(
+    //   //TODO: bug sometime need to handle
+    //   () => dataSet.provinceIndex,
+    //   () => {
+    //     dataSet.fetchDistricts =
+    //       dataSet.fetchProvinces[dataSet.provinceIndex].districts;
+    //     dataSet.district = dataSet.fetchDistricts[0]._id;
+    //   }
+    // );
 
     // need to refactor this code to hook
     const fetchEmployerByID = async () => {
@@ -442,7 +442,12 @@ export default {
       const res = await axios.post(baseUrl + "admin-api/uploadimage", fd);
       return res.data.link.substring(14); // ❌ remove first 14 characters
     };
-
+    //get district data when select province
+    const getDistrictData = async ()=>{
+       dataSet.fetchDistricts =
+          dataSet.fetchProvinces[dataSet.provinceIndex].districts;
+        dataSet.district = dataSet.fetchDistricts[0]._id;
+    }
     fetchProvinces();
     if (route.params.id) fetchEmployerByID();
 
@@ -451,6 +456,7 @@ export default {
       baseUrl,
       onLogoFileChange,
       onCoverFileChange,
+      getDistrictData,
       addEmployer,
       updateEmployer,
     };
