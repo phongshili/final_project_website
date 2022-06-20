@@ -417,7 +417,6 @@ export default {
         contractName: dataSet.contractName,
         image: dataSet.image,
         backgroundImage: dataSet.backgroundImage,
-       
         aboutUs: dataSet.aboutUs,
         erc: dataSet.erc,
         districtId: dataSet.district,
@@ -435,7 +434,6 @@ export default {
         contractName: dataSet.contractName,
         image: dataSet.image,
         backgroundImage: dataSet.backgroundImage,
-
         aboutUs: dataSet.aboutUs,
         erc: dataSet.erc,
         districtId: dataSet.district,

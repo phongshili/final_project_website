@@ -3,26 +3,65 @@
     <!-- form sign up start -->
     <div class="login">
       <div class="text-title subtitle">{{ $t("SignUpText") }}</div>
-        <div class="line"></div>
+      <div class="line"></div>
       <div class="input_group">
         <input
-          v-model="email"
+          v-model="companyName"
           class="input"
           type="text"
           :placeholder="$t('CompanyNameText')"
         />
         <input
-          v-model="email"
+          v-model="contractName"
           class="input"
           type="text"
           :placeholder="$t('ContactNameText')"
         />
+           <input
+          v-model="tel"
+          class="input"
+          type="number"
+          :placeholder="$t('TelText')"
+        />
+        <!-- dropdown  -->
+        <div class="input-area">
+          <div class="select" @click="getDistrictData">
+            <select class="dropdown" v-model="provinceIndex">
+              <option
+                selected
+                v-for="(province, index) in fetchProvinces"
+                :key="index"
+                :value="index"
+              >
+                {{ province.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="spacerH m"></div>
+        <div class="input-area">
+          <div class="select">
+            <select class="dropdown" v-model="districtId">
+              <option
+                selected
+                v-for="district in fetchDistricts"
+                :key="district._id"
+                :value="district._id"
+              >
+                {{ district.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+         <div class="spacerH m"></div>
+        <!-- end dropdown -->
         <input
-          v-model="password"
+          v-model="email"
           class="input"
           type="email"
           :placeholder="$t('EmailText')"
         />
+        
         <input
           v-model="password"
           class="input"
@@ -30,19 +69,21 @@
           :placeholder="$t('Passwordplaceholder')"
         />
         <input
-          v-model="password"
+          v-model="confirmPassword"
           class="input"
           type="password"
           :placeholder="$t('ConfirmPasswordText')"
         />
+
+        
       </div>
 
       <div class="action-group">
-        <button @click="signIn" class="button btnSignIn">
+        <button @click="register" class="button btnSignIn">
           {{ $t("CreateNewAccountText") }}
         </button>
         <div class="line"></div>
-          <button @click="$router.push({name:'Login'})" class="button">
+        <button @click="$router.push({ name: 'Login' })" class="button">
           {{ $t("LoginButtonText") }}
         </button>
       </div>
@@ -68,21 +109,61 @@
 </template>
 
 <script >
-import { ref } from "vue-demi";
-import { useAuthStore, useLanguageSwitcher } from "../../store";
-import { useRouter, useRoute } from 'vue-router'
+import { reactive, toRefs } from "vue-demi";
+import { useLanguageSwitcher } from "../../store";
+import { useRouter } from "vue-router";
+import axios from "axios";
+import { useI18n } from "vue-i18n";
+
 export default {
   setup() {
-    const router = useRouter()
-    const route = useRoute()
-    let email = ref();
-    let password = ref();
-    const store = useAuthStore();
+    const router = useRouter();
     const storeSwitcher = useLanguageSwitcher();
-    const signIn = async () => {
-      router.push({name:'Verify'})
+    const baseUrl = "http://127.0.0.1:4000/";
+    const { t } = useI18n();
+    const dataSet = reactive({
+      email: "",
+      password: "",
+      confirmPassword: "",
+      companyName: "",
+      contractName: "",
+      districtId: "",
+      tel: "",
+      fetchProvinces: [],
+      fetchDistricts: 0,
+      provinceIndex: 0,
+    });
+    const fetchProvinces = async () => {
+      const res = await axios.get(baseUrl + "admin-api/province-get");
+      dataSet.fetchProvinces = await res.data.provinces;
+      dataSet.fetchDistricts = await dataSet.fetchProvinces[
+        dataSet.provinceIndex
+      ].districts;
+      dataSet.districtId = await dataSet.fetchDistricts[0]._id;
     };
-    return { email, password, signIn, storeSwitcher };
+    //get district data when select province
+    const getDistrictData = async () => {
+      dataSet.fetchDistricts =
+        dataSet.fetchProvinces[dataSet.provinceIndex].districts;
+      dataSet.districtId = dataSet.fetchDistricts[0]._id;
+    };
+
+    fetchProvinces();
+
+    const register = async () => {
+
+    const res = await axios.post(baseUrl +'emp-api/employee-add',{
+      email: dataSet.email.toLowerCase(),
+      password: dataSet.password,
+      companyName: dataSet.companyName.toLowerCase(),
+      contractName: dataSet.contractName.toLowerCase(),
+      districtId: dataSet.districtId,
+      tel: dataSet.tel,
+      })
+      const token = res.data.Token
+      router.push({ name: "Verify",params:{token,path:"verifyOTP"} });
+    };
+    return { ...toRefs(dataSet), register, storeSwitcher, getDistrictData };
   },
 };
 </script>
@@ -111,6 +192,24 @@ export default {
     }
     .input_group {
       padding: 10px 60px;
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+      }
+
+      input[type="number"] {
+        -moz-appearance: textfield; /* Firefox */
+      }
+      .input-area{
+        .select{
+          width: 100%;
+          select{
+             width: 100%;
+          }
+        }
+      }
     }
     .action-group {
       padding: 10px 60px;

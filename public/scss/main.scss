@@ -108,6 +108,9 @@ html {
       .spacerH {
         height: 10px !important;
         visibility: hidden;
+        &.m{
+          height: 15px !important;
+        }
         &.max{
           height: 25px !important;
         }
