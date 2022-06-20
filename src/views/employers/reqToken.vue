@@ -1,25 +1,20 @@
 <template>
   <div class="container">
-    <!-- form verify up start -->
     <div class="login">
-      <div class="text-title subtitle">{{ $t("VerifyOtpText") }}</div>
+      <div class="text-title subtitle">{{ $t("FormSentOTPText") }}</div>
       <div class="input_group">
         <input
           v-model="verifyOtp"
           class="input"
-          type="text"
-          :placeholder="$t('OtpCodeText')"
+          type="number"
+          :placeholder="$t('TelHintText')"
         />
         <div class="action-group">
-          <button v-if="route.params.path ==='verifyOTP'" @click="verify" class="button btnSignIn">
-            {{ $t("SubmitText") }}
-          </button>
-          <button v-if="route.params.path ==='resetPassword'" @click="verifyResetPassword" class="button btnSignIn">
-            {{ $t("SubmitText") }}
+          <button @click="verify" class="button btnSignIn">
+            {{ $t("SendText") }}
           </button>
         </div>
       </div>
-      <!-- form verify up end -->
     </div>
   </div>
 </template>
@@ -36,23 +31,15 @@ export default {
     const baseUrl = "http://127.0.0.1:4000/";
 
     let verifyOtp = ref();
-     const verify = async () => {
-        const res = await axios.post(baseUrl+'emp-api/employee-confirm-otp',{
-            verifyToken: route.params.token,
-            VerifyCode:verifyOtp.value,
+    const verify = async () => {
+        const res = await axios.post(baseUrl+'emp-api/employee-sendverify-tel',{
+            tel:verifyOtp.value,
         })
         const token = res.data.Token
-     if(route.params.path ==="verifyOTP") router.push({ name: "Login"});
+ router.push({ name: "Verify",params:{token,path:route.params.path} });
+    
     };
-    const verifyResetPassword = async () =>{
-      const res = await axios.post(baseUrl+'emp-api/employee-verify-code',{
-            verifyToken: route.params.token,
-            VerifyCode:verifyOtp.value,
-        })
-        const token = res.data.Token
-         router.push({ name: "ForgetPassword",params:{ token}});
-    }
-    return { verifyOtp, verify ,verifyResetPassword,route};
+    return { verifyOtp, verify };
   },
 };
 </script>
@@ -81,6 +68,19 @@ export default {
     }
     .input_group {
       padding: 10px 60px;
+      input {
+        width: 20em;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+      }
+
+      input[type="number"] {
+        -moz-appearance: textfield; /* Firefox */
+      }
     }
     .action-group {
       padding: 10px 60px;

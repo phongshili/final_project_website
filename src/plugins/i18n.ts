@@ -34,6 +34,8 @@ const messages = {
         TopUpText:"Top-Up",
         TotalJobSeekr:"Total Jobseekrs",
         CurrentPointText:"Current Points",
+        OrText:'Or',
+
 
         //status
         OnlineText: "Online",
@@ -89,10 +91,14 @@ const messages = {
         AddPostJobText:'POST',
         OfflineButtonText:'OFFLINE',
         RePostText: "RE POST",
+        SendText:"SEND",
+        ConfirmButtonText:"CONFIRM",
 
+        
         //end button text
 
         //form text
+        ResetPassword : "Reset Password",
         FirstNameText: "First Name",
         LastNameText: "Last Name",
         PosonalIDNoText: "Posonal ID Number",
@@ -142,7 +148,10 @@ const messages = {
         BasicInfoText:'Basic Info',
         weeklyText:'Weekly',
         monthlyText: "Monthly",
-        yearlyText:"Yearly"
+        yearlyText:"Yearly",
+
+        FormSentOTPText:"Sent OTP",
+        TelHintText:"Please Enter Your Phone Number",
 
         //end form text
 
@@ -183,6 +192,7 @@ const messages = {
         TotalJobSeekr:"ຈຳນວນຜູ້ສະໝັກວຽກທັງໝົດ",
         CurrentPointText:"ຈຳນວນພ້ອຍທີ່ຍັງເຫຼືອ",
         ApplicationApply:"ຜູ້ສະໝັກວຽກ",
+        OrText:'ຫຼື',
     
           //status
           OnlineText: "ປະກາດ",
@@ -238,9 +248,13 @@ const messages = {
         AddPostJobText:'ປະກາດວຽກ',
         OfflineButtonText:'ຢຸດປະກາດ',
         RePostText: "ປະກາດຄືນໃໝ່",
+        SendText:"ສົ່ງ",
+        ConfirmButtonText:"ຢືນຢັນ",
         //end button text
 
         //form text
+        ResetPassword : "ປ່ຽນລະຫັດຜ່ານ",
+
         FirstNameText: "ຊື່",
         LastNameText: "ນາມສະກຸນ",
         PosonalIDNoText: "ເລກບັດປະຈຳຕົວ",
@@ -288,7 +302,12 @@ const messages = {
         BasicInfoText:'ຂໍ້ມວນພື້ນຖານ',
         weeklyText:'ປະຈຳອາທິດ',
         monthlyText: "ປະຈຳເດືອນ",
-        yearlyText:"ປະຈຳປິ"
+        yearlyText:"ປະຈຳປິ",
+        FormSentOTPText:"ສົ່ງລະຫັດ OTP",
+        TelHintText:"ກະລູນາປ້ອນເບີໂທ",
+
+
+
         //end form text
 
 

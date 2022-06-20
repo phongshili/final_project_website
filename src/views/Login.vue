@@ -31,13 +31,41 @@
       </div>
 
       <div class="action-group">
-        <p class="text-right">{{ $t("ForgetPassword") }}</p>
+        <div class="option-group">
+          <p
+            @click="
+              $router.push({ name: 'ReqToken', params: { path: 'verifyOTP' } })
+            "
+            class="text-right verify"
+          >
+            {{ $t("VerifyOtpText") }}
+          </p>
+          <div class="spacer s"></div>
+
+          <p>{{ $t("OrText") }}</p>
+          <div class="spacer s"></div>
+          <p
+            @click="
+              $router.push({
+                name: 'ReqToken',
+                params: { path: 'resetPassword' },
+              })
+            "
+            class="text-right verify"
+          >
+            {{ $t("ForgetPassword") }}
+          </p>
+        </div>
+
         <button @click="login" class="button">
           {{ $t("LoginButtonText") }}
         </button>
         <div class="line"></div>
 
-        <button class="button btnSignIn" @click="$router.push({name: 'SignIn'})">
+        <button
+          class="button btnSignIn"
+          @click="$router.push({ name: 'SignIn' })"
+        >
           {{ $t("CreateNewAccountText") }}
         </button>
       </div>
@@ -96,8 +124,7 @@ export default {
     .line {
       background: $shadow-color;
       height: 2px;
-            margin: 20px 0px;
-
+      margin: 20px 0px;
     }
     .logo {
       display: flex;
@@ -115,18 +142,25 @@ export default {
       p {
         padding-bottom: $margin-bottom;
       }
+      p:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      .option-group {
+        display: flex;
+      }
       .button {
         width: 100%;
         color: $active-font-color;
         background: $primary-color;
         &.btnSignIn {
-        background: #36ab32;
-      }
+          background: #36ab32;
+        }
       }
       .button:hover {
         background: $hover-color;
       }
-  
+
       .btnSignIn:hover {
         background: #36ab6d;
       }

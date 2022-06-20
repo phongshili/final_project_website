@@ -15,6 +15,8 @@ import SignIn from "../views/employers/register.vue"
 import ChangePassword from "../views/employers/change_password.vue"
 import Verify from "../views/employers/verify_otp.vue"
 import ConstactUs from "../views/contact_us.vue"
+import reqToken from "../views/employers/reqToken.vue"
+import forgetPassword from "../views/employers/forget_password.vue"
 
 const routes = [
   {
@@ -39,13 +41,22 @@ const routes = [
     },
   },
   {
-    path: '/verify',
+    path: '/verify/:path?/:token?',
     name: 'Verify',
     component: Verify,
     meta: {
       requiresVisitor: true,
     },
   },
+  {
+    path: '/resetpassword/:token?',
+    name: 'ForgetPassword',
+    component: forgetPassword,
+    meta: {
+      requiresVisitor: true,
+    },
+  },
+  
   {
     path: '/dashboard',
     name: 'Dashboard',
@@ -90,6 +101,15 @@ const routes = [
     component: ChangePassword,
     meta: {
       requiresAuth: true,
+    },
+  },
+  {
+    path: '/reqtoken/:path?',
+    name: 'ReqToken',
+
+    component: reqToken,
+    meta: {
+      requiresVisitor: true,
     },
   },
 
