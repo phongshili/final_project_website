@@ -93,9 +93,9 @@
             <p class="required">*</p></label
           >
           <div class="input-area">
-            <div class="select">
+            <div class="select" @click="getCompanyData">
               <select class="dropdown" v-model="employer">
-                <option
+                <option 
                   selected
                   v-for="(employer, index) in fetchEmployer"
                   :key="index"
@@ -334,14 +334,11 @@
         <button
           class="button is-link"
           @click="updatePost('online')"
-          v-if="$route.params.id"
+          v-if="$route.params.id &&  status !== 'expired'"
         >
           {{ $t("EditButtonText") }}
         </button>
-        <div
-          class="spacer"
-          v-if="$route.params.id && status === 'expired'"
-        ></div>
+   
         <button
           @click="addPostJob"
           class="button is-success"
@@ -351,7 +348,7 @@
         </button>
 
       
-        <div class="spacer"></div>
+        <div class="spacer"  v-if="$route.params.id && status === 'online'"></div>
         <button
           @click="updatePost('offline')"
           class="button is-warning is-no"
@@ -420,14 +417,6 @@ export default {
       startDate: "",
       endDate: "",
     });
-
-    watch(
-      //TODO: bug sometime need to handle
-      () => dataSet.employer,
-      () => {
-        if (userType.type === "admin") fetchEmployerByID();
-      }
-    );
 
     // SELETED FILE TO UPLOAD
     const onLogoFileChange = async (e) => {
@@ -629,6 +618,11 @@ export default {
         });
       router.go(-1);
     };
+    // get data when click select company
+    const getCompanyData = async ()=>{
+      await fetchEmployerByID();
+      console.log('hu')
+    }
 
     if (route.params.id && userType.type === "admin") fetchPostByID();
     if (userType.type === "admin") {
@@ -653,6 +647,7 @@ export default {
       updatePost,
       onLogoFileChange,
       onCoverFileChange,
+      getCompanyData,
       baseUrl,
       startDate,
       endDate,
