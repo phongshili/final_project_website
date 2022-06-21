@@ -4,7 +4,7 @@
       <label>{{ $t("ChangePasswordText") }}</label>
     </div>
     <div class="form-container">
-              <div class="input-group sm">
+      <div class="input-group sm">
         <label for="user" class="text-input"
           >{{ $t("OldPasswordText") }}
           <p class="required">*</p>
@@ -12,6 +12,7 @@
         <input
           class="input is-primary"
           type="text"
+          v-model="oldPassword"
           :placeholder="$t('OldPasswordText')"
         />
       </div>
@@ -23,6 +24,7 @@
         <input
           class="input is-primary"
           type="text"
+          v-model="newPassword"
           :placeholder="$t('NewPasswordText')"
         />
       </div>
@@ -35,34 +37,46 @@
         <input
           class="input is-primary"
           type="text"
+          v-model="confirmPassword"
           :placeholder="$t('ConfirmPasswordText')"
         />
       </div>
       <div class="btn-menu">
-        <button class="button is-success" @click="add">SAVE</button>
+        <button class="button is-link" @click="changePassword">
+          {{ $t("EditButtonText") }}
+        </button>
         <div class="spacer"></div>
-        <button class="button is-link">BACK</button>
+        <button @click="$router.go(-1)" class="button is-danger is-left">
+          {{ $t("BackText") }}
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref } from "vue-demi";
+import { useRouter, useRoute } from "vue-router";
+import axios from "axios";
 
 export default {
-
   setup() {
-    const firstName = ref();
-    const startDate = ref(new Date());
-    const endDate = ref(new Date());
-    endDate.value.setMonth(startDate.value.getMonth() + 1);
-    function add() {
-      console.log(firstName.value);
-      console.log("end date" + endDate.value);
-      console.log("start date" + startDate.value);
-    }
-    return { firstName, add, startDate, endDate };
+    const router = useRouter();
+    const route = useRoute();
+    const baseUrl = "http://127.0.0.1:4000/";
+    let oldPassword = ref();
+    let newPassword = ref();
+    let confirmPassword = ref();
+
+    const changePassword = async () => {
+      // await axios.post(baseUrl+'emp-api/employee-change-password',{
+      //     changePassToken: route.params.token,
+      //     newPassword:newPassword.value,
+      // })
+      router.push({ name: "Dashboard" });
+    };
+
+    return { oldPassword, newPassword, confirmPassword, changePassword };
   },
 };
 </script>

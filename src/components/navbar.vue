@@ -2,7 +2,7 @@
   <div class="navbar">
     <div class="logo">
       <img
-        src="https://danpottsdoes.files.wordpress.com/2017/09/vue-js_logo-svg.png"
+        src="../assets/jibjib_icon.png"
         alt=""
       />
       <p>Job Management</p>
@@ -16,7 +16,6 @@
           <img src="../assets/jibjib_icon.png" alt="" />
           <div class="name" v-if="$userInfo.type === 'admin'">
             {{ $userInfo.name + ' ' + $userInfo.lastname }}
-            
           </div>
           <div class="name" v-else>{{ $userInfo.companyName }}</div>
         </div>
@@ -25,7 +24,7 @@
           <i class="fa-solid fa-address-card"></i>
           <p>{{ $t("ProfileText") }}</p>
         </div>
-        <div class="dropdown-item" @click="$router.push({ name: 'ChangePassword' })" >
+        <div class="dropdown-item" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" @click="$router.push({ name: 'ChangePassword' })" >
           <i class="fa-solid fa-lock"></i>
           <p>{{ $t("ChangePasswordText") }}</p>
         </div>
