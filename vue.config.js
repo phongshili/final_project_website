@@ -20,5 +20,8 @@ module.exports = {
                 '@views': path.resolve(__dirname, 'src/views'),
             }
         }
-    }
+    },
+    plugins: [
+        '~plugins/vue-js-modal.js'
+    ],
 }

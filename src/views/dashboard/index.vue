@@ -105,7 +105,7 @@ import {
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 Chart.defaults.font.family = "Noto Sans Lao";
-import { ref, reactive, toRefs, computed } from "vue";
+import {reactive, toRefs } from "vue";
 import axios from "axios";
 import store from "../../store";
 export default {
@@ -160,6 +160,97 @@ export default {
     }
     if (userType.type === "employee" || userType.type === "employer")
       fetchCountTotalEmp();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn-success",
+        cancelButton: "btn-danger",
+      },
+      buttonsStyling: true,
+    });
+    const acceptReq = () => {
+      swalWithBootstrapButtons
+        .fire({
+          title: t("PaymentReqText"),
+          text: "Top-Up 90 Points",
+          showCancelButton: true,
+          confirmButtonText: t("AcceptButtonText"),
+          cancelButtonText: t("RejectButtonText"),
+          // reverseButtons: true,
+          imageUrl: "https://unsplash.it/400/200",
+          imageWidth: 400,
+          imageHeight: 200,
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Payment has been approve",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalWithBootstrapButtons.fire({
+              icon: "warning",
+              input: "text",
+              title: "Somethings went wrong? :(",
+            });
+          }
+        });
+    };
+    const sendReq = () => {
+      swalWithBootstrapButtons
+        .fire({
+          title: "Top-Up",
+          showCancelButton: true,
+          confirmButtonText: "Send Request!",
+          cancelButtonColor: "#d33",
+          input: "text",
+
+          // reverseButtons: true,
+          imageUrl:
+            "http://127.0.0.1:4000/resize-images/0b114727-89f4-4d9e-88d8-31fbad96eee8.jpeg",
+          imageWidth: 400,
+          imageHeight: 200,
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Send Request Successed!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        });
+    };
+
+
+
+
+
 
     // const reportListData = {
     //   labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
@@ -233,74 +324,7 @@ export default {
       ],
     };
 
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn-success",
-        cancelButton: "btn-danger",
-      },
-      buttonsStyling: true,
-    });
-    const acceptReq = () => {
-      swalWithBootstrapButtons
-        .fire({
-          title: t("PaymentReqText"),
-          text: "Top-Up 90 Points",
-          showCancelButton: true,
-          confirmButtonText: t("AcceptButtonText"),
-          cancelButtonText: t("RejectButtonText"),
-          // reverseButtons: true,
-          imageUrl: "https://unsplash.it/400/200",
-          imageWidth: 400,
-          imageHeight: 200,
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Payment has been approve",
-              showConfirmButton: false,
-              timer: 1000,
-            });
-          } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
-            swalWithBootstrapButtons.fire({
-              icon: "warning",
-              input: "text",
-              title: "Somethings went wrong? :(",
-            });
-          }
-        });
-    };
-    const sendReq = () => {
-      swalWithBootstrapButtons
-        .fire({
-          title: "Top-Up",
-          showCancelButton: true,
-          confirmButtonText: "Send Request!",
-          cancelButtonColor: "#d33",
-          input: "text",
-
-          // reverseButtons: true,
-          imageUrl:
-            "http://127.0.0.1:4000/resize-images/0b114727-89f4-4d9e-88d8-31fbad96eee8.jpeg",
-          imageWidth: 400,
-          imageHeight: 200,
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Send Request Successed!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          }
-        });
-    };
+    
 
     return { acceptReq, sendReq, ...toRefs(dataSet), monthly, yealy, weekly };
   },

@@ -58,6 +58,9 @@
 import { ref } from "vue-demi";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
+import { useI18n } from "vue-i18n";
+import store from "../../store";
+
 
 export default {
   setup() {
@@ -68,11 +71,19 @@ export default {
     let newPassword = ref();
     let confirmPassword = ref();
 
+    const { t } = useI18n();
+
+    const auth = store.useAuthStore();
+    let token = auth.getToken;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
     const changePassword = async () => {
-      // await axios.post(baseUrl+'emp-api/employee-change-password',{
-      //     changePassToken: route.params.token,
-      //     newPassword:newPassword.value,
-      // })
+      await axios.put(baseUrl+'admin-api/change-password',{
+          password: oldPassword.value,
+          newPassword:newPassword.value,
+      },{headers})
       router.push({ name: "Dashboard" });
     };
 
