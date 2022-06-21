@@ -194,6 +194,8 @@ export default {
       .profile {
         display: flex;
         justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 15px;
         img {
           width: 150px;
           height: 150px;
