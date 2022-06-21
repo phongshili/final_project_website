@@ -1,81 +1,118 @@
+
 <template>
   <div class="_container">
-<div id="demo">
-  <div class="w-full flex justify-center">
-    <input
-      placeholder="Enter Pokemon here"
-      type="text"
-      class="mt-10 p-2 border-blue-500 border-2"
-      v-model="text"
-    />
-  </div>
-  <input type="text" v-model="queryText">
-  <button @click="queryData('pending')">Pending</button>
-  <button @click="queryData(queryText)">query</button>
-  <div class="mt-10 p-4 flex flex-wrap justify-center">
-    {{filteredPokemon}}
-    <div
-      class="ml-4 text-2xl text-blue-400"
-      v-for="(pokemon, i) in filteredPokemon"
-      :key="i"
-    >
-    <p>{{ pokemon.employeeName}}</p>
-                          <!-- // 👇 call function to get index -->
-      <router-link :to="`/about/${getPokemonId(pokemon.employeeName)}`">
-        {{ pokemon.employeeName }} - id {{ getPokemonId(pokemons.employeeName) }}
-      </router-link>
+    <div class="input-group">
+      <label for="user" class="text-input"
+        >{{ $t("ProvinceText") }}
+        <p class="required">*</p></label
+      >
+      <div class="input-area">
+        <div class="select">
+          <select class="dropdown" v-model="provinceID">
+            <option
+              selected
+              v-for="province in provinceArray"
+              :key="province._id"
+              :value="province._id"
+            >
+              {{ province.name }}
+            </option>
+          </select>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+
+    <div class="input-group">
+      <div class="input-area">
+        <div class="select">
+          <select class="dropdown" v-model="districtID">
+            <option
+              selected
+              v-for="province in districtArray"
+              :key="province._id"
+              :value="province._id"
+            >
+              {{ province.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button @click="fetch">fetch</button>
   </div>
 </template>
-<script>
-import { ref,reactive ,toRefs,computed} from "vue";
-import Swal from "sweetalert2";
-import axios from 'axios';
-export default {
 
- setup() {
-     let queryText = ref('')
-    const state = reactive({
-      pokemons: [],
-      filteredPokemon: computed(() => updatePokemon()),
-      text: "",
-      urlIdLookup: {},
+<script>
+import { reactive, toRefs, watch } from "vue";
+import axios from "axios";
+import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import store from "../store";
+export default {
+  async setup() {
+    const baseUrl = "http://127.0.0.1:4000/";
+    const { t } = useI18n();
+    const route = useRoute();
+    const router = useRouter();
+    const auth = store.useAuthStore();
+    const userTypeStore = store.useAuthStore();
+    const userType = JSON.parse(userTypeStore.getUserType);
+    let token = auth.getToken;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+
+    const dataSet = reactive({
+      provinceArray: [],
+      districtArray: [],
+      provinceID: "",
+      districtID: "",
+      id: "62b0b1f0dc541705fca8b192",
     });
 
-    const fetchPokemon = () => {
-      axios
-        .get("http://127.0.0.1:4000/admin-api/payment-get?status="+queryText.value)
-        .then((response) => {
-          state.pokemons = response.data.mapPayment; // 👈 get just results
-        });
+    const fetchProvinces = async () => {
+      const res = await axios.get(baseUrl + "admin-api/province-get");
+      dataSet.provinceArray = await res.data.provinces;
+      dataSet.provinceID = dataSet.provinceArray[0]._id
+    };
+    const fetchDistricts = async () => {
+      const res = dataSet.provinceArray.filter((e) => {
+        return e._id.match(dataSet.provinceID);
+      });
+      dataSet.districtArray = res[0].districts;
     };
 
-    fetchPokemon();
-    
-    const queryData=(val)=>{
- 
-         queryText.value = val;
-
-         fetchPokemon();
-    }
-  
-    // 👇 function to get index
-    const getPokemonId = (item) => {
-      return state.pokemons.findIndex((p) => p.employeeName === item);
-    };
-
-    function updatePokemon() {
-      if (!state.text) {
-        return [];
+    watch(
+      //TODO: bug sometime need to handle
+      () => dataSet.provinceID,
+      async () => {
+        await fetchDistricts();
+        dataSet.districtID = dataSet.districtArray[0]._id;
       }
-      return state.pokemons.filter((pokemon) =>
-        pokemon.employeeName.includes(state.text)
+    );
+
+    const fetch = async () => {
+      const res = await axios.get(
+        baseUrl + "admin-api/employee-find-id/" + dataSet.id
       );
-    }
-                                                        // 👇 return new function
-    return { ...toRefs(state), fetchPokemon, updatePokemon, getPokemonId ,queryText,queryData };
+      const employer = res.data.findEmpId; // 👈 get just results
+      dataSet.provinceID = employer.provinceId;
+      dataSet.districtID = employer.districtId;
+      fetchDistricts();
+    };
+
+    const getdata = async () => {
+      await fetchProvinces();
+      await fetchDistricts();
+      dataSet.districtID = dataSet.districtArray[0]._id;
+    };
+
+    await fetchProvinces();
+    await fetchDistricts();
+
+  
+    return { ...toRefs(dataSet), fetch, getdata };
   },
 };
 </script>

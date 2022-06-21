@@ -17,7 +17,7 @@
           type="text"
           :placeholder="$t('ContactNameText')"
         />
-           <input
+        <input
           v-model="tel"
           class="input"
           type="number"
@@ -25,13 +25,13 @@
         />
         <!-- dropdown  -->
         <div class="input-area">
-          <div class="select" @click="getDistrictData">
-            <select class="dropdown" v-model="provinceIndex">
+          <div class="select">
+            <select class="dropdown" v-model="provinceID">
               <option
                 selected
-                v-for="(province, index) in fetchProvinces"
-                :key="index"
-                :value="index"
+                v-for="province in provinceArray"
+                :key="province._id"
+                :value="province._id"
               >
                 {{ province.name }}
               </option>
@@ -41,10 +41,10 @@
         <div class="spacerH m"></div>
         <div class="input-area">
           <div class="select">
-            <select class="dropdown" v-model="districtId">
+            <select class="dropdown" v-model="districtID">
               <option
                 selected
-                v-for="district in fetchDistricts"
+                v-for="district in districtArray"
                 :key="district._id"
                 :value="district._id"
               >
@@ -53,7 +53,7 @@
             </select>
           </div>
         </div>
-         <div class="spacerH m"></div>
+        <div class="spacerH m"></div>
         <!-- end dropdown -->
         <input
           v-model="email"
@@ -61,7 +61,7 @@
           type="email"
           :placeholder="$t('EmailText')"
         />
-        
+
         <input
           v-model="password"
           class="input"
@@ -74,8 +74,6 @@
           type="password"
           :placeholder="$t('ConfirmPasswordText')"
         />
-
-        
       </div>
 
       <div class="action-group">
@@ -109,14 +107,14 @@
 </template>
 
 <script >
-import { reactive, toRefs } from "vue-demi";
+import { reactive, toRefs, watch } from "vue-demi";
 import { useLanguageSwitcher } from "../../store";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 
 export default {
-  setup() {
+  async setup() {
     const router = useRouter();
     const storeSwitcher = useLanguageSwitcher();
     const baseUrl = "http://127.0.0.1:4000/";
@@ -127,43 +125,48 @@ export default {
       confirmPassword: "",
       companyName: "",
       contractName: "",
-      districtId: "",
       tel: "",
-      fetchProvinces: [],
-      fetchDistricts: 0,
-      provinceIndex: 0,
+      provinceArray: [],
+      districtArray: [],
+      provinceID: "",
+      districtID: "",
     });
+    watch(
+      () => dataSet.provinceID,
+      async () => {
+        await fetchDistricts();
+        dataSet.districtID = dataSet.districtArray[0]._id;
+      }
+    );
+
     const fetchProvinces = async () => {
       const res = await axios.get(baseUrl + "admin-api/province-get");
-      dataSet.fetchProvinces = await res.data.provinces;
-      dataSet.fetchDistricts = await dataSet.fetchProvinces[
-        dataSet.provinceIndex
-      ].districts;
-      dataSet.districtId = await dataSet.fetchDistricts[0]._id;
+      dataSet.provinceArray = await res.data.provinces;
+      dataSet.provinceID = dataSet.provinceArray[0]._id;
     };
-    //get district data when select province
-    const getDistrictData = async () => {
-      dataSet.fetchDistricts =
-        dataSet.fetchProvinces[dataSet.provinceIndex].districts;
-      dataSet.districtId = dataSet.fetchDistricts[0]._id;
+    const fetchDistricts = async () => {
+      const res = dataSet.provinceArray.filter((e) => {
+        return e._id.match(dataSet.provinceID);
+      });
+      dataSet.districtArray = res[0].districts;
     };
 
-    fetchProvinces();
+    await fetchProvinces();
+    await fetchDistricts();
 
     const register = async () => {
-
-    const res = await axios.post(baseUrl +'emp-api/employee-add',{
-      email: dataSet.email.toLowerCase(),
-      password: dataSet.password,
-      companyName: dataSet.companyName.toLowerCase(),
-      contractName: dataSet.contractName.toLowerCase(),
-      districtId: dataSet.districtId,
-      tel: dataSet.tel,
-      })
-      const token = res.data.Token
-      router.push({ name: "Verify",params:{token,path:"verifyOTP"} });
+      const res = await axios.post(baseUrl + "emp-api/employee-add", {
+        email: dataSet.email.toLowerCase(),
+        password: dataSet.password,
+        companyName: dataSet.companyName.toLowerCase(),
+        contractName: dataSet.contractName.toLowerCase(),
+        districtId: dataSet.districtId,
+        tel: dataSet.tel,
+      });
+      const token = res.data.Token;
+      router.push({ name: "Verify", params: { token, path: "verifyOTP" } });
     };
-    return { ...toRefs(dataSet), register, storeSwitcher, getDistrictData };
+    return { ...toRefs(dataSet), register, storeSwitcher };
   },
 };
 </script>
@@ -202,11 +205,11 @@ export default {
       input[type="number"] {
         -moz-appearance: textfield; /* Firefox */
       }
-      .input-area{
-        .select{
+      .input-area {
+        .select {
           width: 100%;
-          select{
-             width: 100%;
+          select {
+            width: 100%;
           }
         }
       }

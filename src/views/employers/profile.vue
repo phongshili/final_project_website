@@ -134,7 +134,7 @@
         </div>
       </div>
 
-      <div class="input-form" v-if="fetchProvinces">
+      <div class="input-form">
         <!-- province dropdown -->
         <div class="input-group">
           <label for="user" class="text-input"
@@ -142,13 +142,13 @@
             <p class="required">*</p></label
           >
           <div class="input-area">
-            <div class="select" @click="getDistrictData">
-              <select class="dropdown" v-model="provinceIndex">
+            <div class="select" @click="setDistrict">
+              <select class="dropdown" v-model="provinceID">
                 <option
                   selected
-                  v-for="(province, index) in fetchProvinces"
-                  :key="index"
-                  :value="index"
+                  v-for="province in provinceArray"
+                  :key="province._id"
+                  :value="province._id"
                 >
                   {{ province.name }}
                 </option>
@@ -169,10 +169,10 @@
           >
           <div class="input-area">
             <div class="select">
-              <select class="dropdown" v-model="district">
+              <select class="dropdown" v-model="districtID">
                 <option
                   selected
-                  v-for="district in fetchDistricts"
+                  v-for="district in districtArray"
                   :key="district._id"
                   :value="district._id"
                 >
@@ -225,7 +225,10 @@
           :placeholder="$t('AboutUsText')"
         ></textarea>
       </div>
-      <div class="input-form" v-if="!$route.params.id && $userInfo.type === 'admin'">
+      <div
+        class="input-form"
+        v-if="!$route.params.id && $userInfo.type === 'admin'"
+      >
         <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("PasswordText") }}
@@ -292,14 +295,14 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, watch } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import store from "../../store";
 
 export default {
-  setup() {
+  async setup() {
     const baseUrl = "http://127.0.0.1:4000/";
     const { t } = useI18n();
     const route = useRoute();
@@ -323,92 +326,99 @@ export default {
       point: 100,
       status: "",
       isVerify: "",
-      fetchProvinces: [],
-      fetchDistricts: 0,
-      district: "",
       userTypeId: "",
       email: "",
       tel: "",
       type: "",
-      provinceIndex: 0,
-
       password: "",
       confirmPassword: "",
+      provinceArray: [],
+      districtArray: [],
+      provinceID: "5eb8cb58f2913809f730ce9c", //set default for province to vientian capital
+      districtID: "5ec5f96ecc249b11cae0404e", // set default for district to chanthabuly
+      profile: [],
     });
+
+    // // watch if provinceID has changed do something
+    watch(
+      () => dataSet.provinceID,
+      async () => {
+        await fetchDistricts();
+        // dataSet.districtID = dataSet.districtArray[0]._id;
+      }
+    );
 
     // need to refactor this code to hook
     const fetchEmployerByID = async () => {
       const res = await axios.get(
         baseUrl + "admin-api/employee-find-id/" + route.params.id
       );
-      const employer = res.data.findEmpId; // 👈 get just results
-      dataSet.id = employer.userTypeId;
-      dataSet.companyName = employer.companyName;
-      dataSet.contractName = employer.contractName;
-      dataSet.image = employer.image;
-      dataSet.backgroundImage = employer.backgroundImage;
-      dataSet.aboutUs = employer.aboutUs;
-      dataSet.erc = employer.erc;
-      dataSet.point = employer.point;
-      dataSet.status = employer.status;
-      dataSet.isVerify = employer.isVerify;
-      dataSet.district = employer.district;
-      // find index
-      const selectedProvinceId = employer.provinceId;
-      const findeProvinceIndex = dataSet.fetchProvinces.findIndex(
-        (el) => selectedProvinceId === el._id
-      );
-      dataSet.provinceIndex = findeProvinceIndex;
-      dataSet.district = employer.districtId;
-      dataSet.userTypeId = employer.userTypeId;
-      dataSet.email = employer.email;
-      dataSet.tel = employer.tel;
-      dataSet.type = employer.type;
-
+      dataSet.profile = res.data.findEmpId; // 👈 get just results
+      dataSet.id = dataSet.profile._id;
+      dataSet.companyName = dataSet.profile.companyName;
+      dataSet.contractName = dataSet.profile.contractName;
+      dataSet.image = dataSet.profile.image;
+      dataSet.backgroundImage = dataSet.profile.backgroundImage;
+      dataSet.aboutUs = dataSet.profile.aboutUs;
+      dataSet.erc = dataSet.profile.erc;
+      dataSet.point = dataSet.profile.point;
+      dataSet.status = dataSet.profile.status;
+      dataSet.isVerify = dataSet.profile.isVerify;
+      dataSet.provinceID = dataSet.profile.provinceId;
+      dataSet.districtID = dataSet.profile.districtId;
+      dataSet.userTypeId = dataSet.profile.userTypeId;
+      dataSet.email = dataSet.profile.email;
+      dataSet.tel = dataSet.profile.tel;
+      dataSet.type = dataSet.profile.type;
     };
 
-
-    // employer fetch profile data 
+    // employer fetch profile data
 
     const fetchEmployerProfile = async () => {
-       const res = await axios.get(
-        baseUrl + "emp-api/employee-find-id",{
-          headers
-        }
-      );
-      const profile = res.data.findEmpId
+      const res = await axios.get(baseUrl + "emp-api/employee-find-id", {
+        headers,
+      });
+      dataSet.profile = res.data.findEmpId;
 
-       dataSet.id = profile.userTypeId;
-      dataSet.companyName = profile.companyName;
-      dataSet.contractName = profile.contractName;
-      dataSet.image = profile.image;
-      dataSet.backgroundImage = profile.backgroundImage;
-      dataSet.aboutUs = profile.aboutUs;
-      dataSet.erc = profile.erc;
-      dataSet.point = profile.point;
-      dataSet.status = profile.status;
-      dataSet.district = profile.district;
-      // find index
-      const selectedProvinceId = profile.provinceId;
-      const findeProvinceIndex = dataSet.fetchProvinces.findIndex(
-        (el) => selectedProvinceId === el._id
-      );
-      dataSet.provinceIndex = findeProvinceIndex;
-      dataSet.district = profile.districtId;
-      dataSet.userTypeId = profile.userTypeId;
-      dataSet.email = profile.email;
-      dataSet.tel = profile.tel;
-      dataSet.type = profile.type;
+      dataSet.id = dataSet.profile.userTypeId;
+      dataSet.companyName = dataSet.profile.companyName;
+      dataSet.contractName = dataSet.profile.contractName;
+      dataSet.image = dataSet.profile.image;
+      dataSet.backgroundImage = dataSet.profile.backgroundImage;
+      dataSet.aboutUs = dataSet.profile.aboutUs;
+      dataSet.erc = dataSet.profile.erc;
+      dataSet.point = dataSet.profile.point;
+      dataSet.status = dataSet.profile.status;
+      dataSet.provinceID = dataSet.profile.provinceId;
+      dataSet.districtID = dataSet.profile.districtId;
+      dataSet.userTypeId = dataSet.profile.userTypeId;
+      dataSet.email = dataSet.profile.email;
+      dataSet.tel = dataSet.profile.tel;
+      dataSet.type = dataSet.profile.type;
+    };
 
-    }
-
+    // fetch province 
     const fetchProvinces = async () => {
       const res = await axios.get(baseUrl + "admin-api/province-get");
-      dataSet.fetchProvinces = await res.data.provinces;
-      dataSet.fetchDistricts = await dataSet.fetchProvinces[
-        dataSet.provinceIndex
-      ].districts;
-      dataSet.district = await dataSet.fetchDistricts[0]._id;
+      dataSet.provinceArray = await res.data.provinces;
+      dataSet.provinceID = dataSet.provinceArray[0]._id;
+    };
+
+    // set value to district
+    const fetchDistricts = async () => {
+      const res = dataSet.provinceArray.filter((e) => {
+        return e._id.match(dataSet.provinceID);
+      });
+      dataSet.districtArray = res[0].districts;
+    };
+
+    // make sure provinceId watcher is work corrected
+    const setDistrict = async () => {
+      await fetchDistricts();
+
+      if (dataSet.provinceID !== dataSet.profile.provinceId) {
+        dataSet.districtID = dataSet.districtArray[0]._id;
+      }
     };
 
     const addEmployer = async () => {
@@ -419,7 +429,7 @@ export default {
         backgroundImage: dataSet.backgroundImage,
         aboutUs: dataSet.aboutUs,
         erc: dataSet.erc,
-        districtId: dataSet.district,
+        districtId: dataSet.districtID,
         email: dataSet.email,
         tel: dataSet.tel,
         password: dataSet.password,
@@ -429,14 +439,14 @@ export default {
     };
     const updateEmployer = async (rejectStaus) => {
       await axios.put(baseUrl + "admin-api/employee-update", {
-        id: dataSet.id,
+        id: dataSet.userTypeId,
         companyName: dataSet.companyName,
         contractName: dataSet.contractName,
         image: dataSet.image,
         backgroundImage: dataSet.backgroundImage,
         aboutUs: dataSet.aboutUs,
         erc: dataSet.erc,
-        districtId: dataSet.district,
+        districtId: dataSet.districtID,
         email: dataSet.email,
         tel: dataSet.tel,
         status: rejectStaus,
@@ -445,23 +455,24 @@ export default {
       router.go(-1);
     };
 
-
     // employer role update their profile
     const empUpdateProfile = async () => {
-       await axios.put(baseUrl + "emp-api/employee-update", {
-        companyName: dataSet.companyName,
-        contractName: dataSet.contractName,
-        image: dataSet.image,
-        backgroundImage: dataSet.backgroundImage,
-        aboutUs: dataSet.aboutUs,
-        erc: dataSet.erc,
-        districtId: dataSet.district,
-        email: dataSet.email,
-        tel: dataSet.tel,
-       },{headers})
+      await axios.put(
+        baseUrl + "emp-api/employee-update",
+        {
+          companyName: dataSet.companyName,
+          contractName: dataSet.contractName,
+          image: dataSet.image,
+          backgroundImage: dataSet.backgroundImage,
+          aboutUs: dataSet.aboutUs,
+          erc: dataSet.erc,
+          districtId: dataSet.districtID,
+          email: dataSet.email,
+          tel: dataSet.tel,
+        },
+        { headers }
+      );
       router.go(-1);
-
-
     };
 
     // SELETED FILE TO UPLOAD
@@ -481,26 +492,25 @@ export default {
       const res = await axios.post(baseUrl + "admin-api/uploadimage", fd);
       return res.data.link.substring(14); // ❌ remove first 14 characters
     };
-    //get district data when select province
-    const getDistrictData = async () => {
-      dataSet.fetchDistricts =
-        dataSet.fetchProvinces[dataSet.provinceIndex].districts;
-      dataSet.district = dataSet.fetchDistricts[0]._id;
-    };
-    fetchProvinces();
-    if (route.params.id && userType === "admin") fetchEmployerByID();
+
+    await fetchProvinces();
+
+    await fetchDistricts();
+
+    if (route.params.id && userType.type === "admin") await fetchEmployerByID();
 
     // if login by employer fetch profile
-    if(userType.type === "employee" || userType.type === "employer")fetchEmployerProfile()
+    if (userType.type === "employee" || userType.type === "employer")
+      await fetchEmployerProfile();
     return {
       ...toRefs(dataSet),
       baseUrl,
       onLogoFileChange,
       onCoverFileChange,
-      getDistrictData,
       addEmployer,
       empUpdateProfile,
       updateEmployer,
+      setDistrict,
     };
   },
 };

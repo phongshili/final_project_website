@@ -3,7 +3,7 @@
     <div class="sidebar">
       <div class="sidebar-header">
         <div class="profile">
-          <img src="../assets/profile.jpg" alt="" />
+          <img src="../assets/jibjib_icon.png" alt="" />
         </div>
         <div class="detail">
           <div class="name" v-if="$userInfo.type === 'admin'">

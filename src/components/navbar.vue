@@ -13,7 +13,7 @@
       </div>
       <div class="option-list" :class="{ 'is-Active': isActive }">
         <div class="profile">
-          <img src="../assets/profile.jpg" alt="" />
+          <img src="../assets/jibjib_icon.png" alt="" />
           <div class="name" v-if="$userInfo.type === 'admin'">
             {{ $userInfo.name + ' ' + $userInfo.lastname }}
             

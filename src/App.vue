@@ -1,4 +1,7 @@
+
+
 <template>
+<Suspense>
   <div id="app">
     <div class="content">
       <div class="navBar" v-if="auth">
@@ -11,6 +14,8 @@
 
     </div>
   </div>
+</Suspense>
+
 </template>
 <script >
 import sideBar from "./components/sidebar.vue";
