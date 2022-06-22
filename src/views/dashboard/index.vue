@@ -50,7 +50,7 @@
         <div
           class="box-detail"
           v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"
-          @click="sendReq"
+          @click="modalAction"
         >
           <div class="box-body">
             <div class="box-title">{{ $t("TopUpText") }}</div>
@@ -62,7 +62,7 @@
       <customModal :modalActive="modalActive">
         <div class="modal-content">
           <div class="modal-detail">
-            <div class="image-input" @click="$refs.logoFile.click()">
+            <div  class="image-input" @click="$refs.logoFile.click()">
               <div class="modal-image-container">
                 <img
                   v-if="!bill"
@@ -70,14 +70,10 @@
                   src="@/assets/default.jpg"
                   alt=""
                 />
-                <img
-                  v-else
-                  class="bill"
-                  :src="baseUrl  + bill"
-                  alt=""
-                />
+                <img v-else class="bill" :src="baseUrl + bill" alt="" />
               </div>
               <input
+              v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee' && id ===null"
                 class="input is-primary"
                 style="display: none"
                 type="file"
@@ -86,21 +82,13 @@
                 ref="logoFile"
               />
               <input
-              v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" 
+              v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee' && id ===null"
                 class="input is-primary"
                 style="display: none"
                 type="text"
                 v-model="bill"
                 placeholder="Primary input"
               />
-               <input
-               v-if="$userInfo.type === 'admin' && status === 'pending'" 
-              class="input is-primary"
-              type="text"
-              disabled
-              v-model="amount"
-              :placeholder="$t('AmountText')"
-            />
             </div>
             <div class="spacerH"></div>
 
@@ -112,16 +100,35 @@
                 class="input is-primary"
                 type="text"
                 v-model="amount"
+                :disabled="isDisabled"
                 :placeholder="$t('AmountText')"
               />
             </div>
             <div class="spacerH"></div>
             <div class="btn-option-group">
-              <button @click="sendReq" class="button is-success">
+              <button  v-if="$userInfo.type === 'employee'|| $userInfo.type === 'employer'" @click="sendReq" class="button is-success">
                 {{ $t("SendText") }}
               </button>
+              <button
+                v-if="$userInfo.type === 'admin' && status === 'pending'"
+                @click="ApproveReq('confirmed')"
+                class="button is-success"
+              >
+                {{ $t("ApproveText") }}
+              </button>
+              <div
+                class="spacer"
+                v-if="$userInfo.type === 'admin' && status === 'pending'"
+              ></div>
+              <button
+                class="button is-warning is-no"
+                @click="ApproveReq('cancel')"
+                v-if="$userInfo.type === 'admin' && status === 'pending'"
+              >
+                {{ $t("RejectText") }}
+              </button>
               <div class="spacer"></div>
-              <button @click="close" class="button is-danger">
+              <button @click="modalAction" class="button is-danger">
                 {{ $t("CancelText") }}
               </button>
             </div>
@@ -134,8 +141,8 @@
         <div class="chart-container">
           <BarChart :chartData="weekly" />
         </div>
-        <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
-        <div class="payment-container" v-if="$userInfo.type === 'admin'">
+        <div class="spacer left"></div>
+        <div class="payment-container">
           <div class="payment">
             <div class="box-title">{{ $t("PaymentReqText") }}</div>
             <div
@@ -147,16 +154,23 @@
           </div>
           <div
             class="payment body"
-            @click="sendReq"
-            v-for="req in reqpoints"
-            :key="req._id"
+            @click="showReceipt(payment._id)"
+            v-for="payment in payments"
+            :key="payment._id"
           >
-            <div class="">{{ req.employeeName }}</div>
-            <div class="">{{ req.point }} Points</div>
+            <div v-if="$userInfo.type === 'admin'" class="">{{ payment.employeeName }}</div>
+            <div v-if="$userInfo.type === 'employee'|| $userInfo.type === 'employer'" class="">{{ payment.createdAt }}</div>
+
+
+            <div class="">{{ payment.point }} Points</div>
+            <div v-if="payment.status === 'cancel'" class="cancel">{{ payment.status }}</div>
+            <div v-if="payment.status === 'pending'" class="pending">{{ payment.status }}</div>
+
+
           </div>
           <div
             class="payment body"
-            v-if="$userInfo.type === 'admin' && reqpoints === []"
+            v-if="$userInfo.type === 'admin' && payments === []"
           >
             <div class="">No requests</div>
           </div>
@@ -169,7 +183,6 @@
 </template>
 <script>
 import { useI18n } from "vue-i18n";
-import Swal from "sweetalert2";
 import {
   DoughnutChart,
   BarChart,
@@ -195,11 +208,9 @@ export default {
     LineChart,
     customModal,
   },
-async  setup() {
+  async setup() {
     const { t } = useI18n();
-    const modalActive = ref(false);
-    const bill = ref();
-    const amount = ref();
+
     const baseUrl = "http://127.0.0.1:4000/";
     const auth = store.useAuthStore();
     const userTypeStore = store.useAuthStore();
@@ -207,7 +218,14 @@ async  setup() {
     let token = auth.getToken;
     const dataSet = reactive({
       countTotal: {},
-      reqpoints: [{}],
+      payments: [],
+      modalActive: false,
+      bill: "",
+      amount: "",
+      id: "",
+      findPayment: [],
+      status: "",
+      isDisabled: false
     });
 
     const headers = {
@@ -228,7 +246,27 @@ async  setup() {
         "http://127.0.0.1:4000/admin-api/payment-get?status=pending"
       );
 
-      dataSet.reqpoints = res.data.mapPayment; // 👈 get just results
+      dataSet.payments = res.data.mapPayment; // 👈 get just results
+    };
+    const fetchPaymentEmp = async () => {
+      const res = await axios.get(baseUrl + "emp-api/payment-get?status=cancel", {
+        headers,
+      });
+
+      dataSet.payments = res.data.mapPayment; // 👈 get just results
+    };
+
+    // get payment data
+    const fetchAdminPaymentById = async (id) => {
+      const res = await axios.get(baseUrl + "admin-api/payment-find-id/" + id);
+      dataSet.findPayment = res.data.mapPayment;
+      dataSet.status = dataSet.findPayment.status;
+    };
+
+    //duplicate code
+    const fetchEmployerPaymentById = async (id) => {
+      const res = await axios.get(baseUrl + "emp-api/payment-find-id/" + id);
+      dataSet.findPayment = res.data.mapPayment;
     };
 
     // need to refactor this code to hook
@@ -245,7 +283,7 @@ async  setup() {
     // SELETED FILE TO UPLOAD
     const onBillFileChange = async (e) => {
       const seletedFile = e.target.files[0];
-      bill.value = await onUploadFile(seletedFile);
+      dataSet.bill = await onUploadFile(seletedFile);
     };
 
     // UPLOADE FILE
@@ -253,43 +291,66 @@ async  setup() {
       const fd = new FormData();
       fd.append("file", seletedFile);
       const res = await axios.post(baseUrl + "admin-api/uploadimage", fd);
-      return res.data.link; 
+      return res.data.link;
     };
 
     if (userType.type === "admin") {
-    await  fetchCountTotalAdmin();
-     await fetchPaymentAdmin();
+      await fetchCountTotalAdmin();
+      await fetchPaymentAdmin();
     }
-    if (userType.type === "employee" || userType.type === "employer")
-     await fetchCountTotalEmp();
+    if (userType.type === "employee" || userType.type === "employer"){
+      await fetchCountTotalEmp();
+      await fetchPaymentEmp()
+    }
+      
 
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn-success",
-        cancelButton: "btn-danger",
-      },
-      buttonsStyling: true,
-    });
+    const ApproveReq = async (status) => {
+      await axios.put(baseUrl + "admin-api/payment-update/", {
+        id: dataSet.id,
+        status: status,
+        detail: dataSet.detail,
+      });
+      dataSet.modalActive = !dataSet.modalActive;
+      if (userType.type === "admin") fetchPaymentAdmin();
+      if (userType.type === "employee" || userType.type === "employer")
+      await  fetchPaymentEmp();
+        windows.location.reload();
 
-
-
-    const sendReq =async () => {
-           modalActive.value = !modalActive.value;
-
-           await axios.post(baseUrl +'emp-api/payment-add',{
-            point: amount.value,
-            image: bill.value,
-           },{headers})
     };
-       const close = async () => {
-       modalActive.value = !modalActive.value;
 
-    }
+    const sendReq = async () => {
+      dataSet.modalActive = !dataSet.modalActive;
 
+      await axios.post(
+        baseUrl + "emp-api/payment-add",
+        {
+          point: dataSet.amount,
+          image: dataSet.bill,
+        },
+        { headers }
+      );
+      window.location.reload();
+    };
 
+    const showReceipt = async (id) => {
+      dataSet.modalActive = !dataSet.modalActive;
+      if (userType.type === "admin") await fetchAdminPaymentById(id);
+      if (userType.type === "employee" || userType.type === "employer")
+        await fetchEmployerPaymentById(id);
+      dataSet.amount = dataSet.findPayment.point;
+      dataSet.bill = dataSet.findPayment.image;
+      dataSet.id = id;
+      dataSet.isDisabled = !dataSet.isDisabled;
+    };
 
-
-
+    const modalAction = async () => {
+      dataSet.modalActive = !dataSet.modalActive;
+      dataSet.isDisabled = !dataSet.isDisabled;
+      setTimeout(() => {
+        (dataSet.id = ""), (dataSet.amount = ""), (dataSet.bill = "");
+        dataSet.status = "";
+      }, 300);
+    };
 
     // const reportListData = {
     //   labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
@@ -364,18 +425,16 @@ async  setup() {
     };
 
     return {
-      
       sendReq,
       ...toRefs(dataSet),
       monthly,
       yealy,
       weekly,
-      modalActive,
+      ApproveReq,
       onBillFileChange,
-      bill,
       baseUrl,
-      amount,
-      close,
+      modalAction,
+      showReceipt,
     };
   },
 };
@@ -398,7 +457,14 @@ async  setup() {
     border-radius: 5px;
     width: 60%;
     height: fit-content;
-
+    .cancel{
+      color: $alert-color;
+      text-transform: uppercase
+    }
+    .pending{
+       color: $primary-color;
+      text-transform: uppercase
+    }
     .payment {
       display: flex;
       padding: 15px;

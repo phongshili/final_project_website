@@ -55,7 +55,7 @@
     <customModal :modalActive="modalActive">
       <div class="modal-content">
         <div class="modal-detail">
-          <div class="image-input" @click="$refs.logoFile.click()">
+          <div class="image-input">
             <div class="modal-image-container">
               <img
                 v-if="!bill"
@@ -93,13 +93,13 @@
             <div class="spacer" v-if="$userInfo.type === 'admin' && status === 'pending'"></div>
                  <button
           class="button is-warning is-no"
-          @click="ApproveReq('reject')"
+          @click="ApproveReq('cancel')"
           v-if=" $userInfo.type === 'admin' && status === 'pending'" 
         >
           {{ $t("RejectText") }}
         </button>
              <div class="spacer"   v-if=" $userInfo.type === 'admin' && status === 'pending'" ></div>
-            <button @click="close" class="button is-danger">
+            <button @click="modalAction" class="button is-danger">
               {{ $t("CancelText") }}
             </button>
           </div>
@@ -194,13 +194,12 @@ export default {
           status: status,
           detail: dataSet.detail,
         });
-      dataSet.modalActive = !dataSet.modalActive;
-        if (userType.type === "admin") fetchPaymentAdmin();
-    if (userType.type === "employee" || userType.type === "employer")
-      fetchPaymentEmp();
+        dataSet.modalActive = !dataSet.modalActive;
+        await fetchPaymentAdmin();
+        windows.location.reload();
+  
 
     }
-
     
     if (userType.type === "admin") fetchPaymentAdmin();
     if (userType.type === "employee" || userType.type === "employer")
@@ -215,13 +214,16 @@ export default {
       dataSet.bill = dataSet.findPayment.image;
       dataSet.id = id
     };
-    const close = async () => {
+    const modalAction = async () => {
       dataSet.modalActive = !dataSet.modalActive;
-      dataSet.id =''
+            setTimeout(() =>{
+           (dataSet.id = ""), (dataSet.amount = ""), (dataSet.bill = "");
+      dataSet.status = "";
+      },500)
 
     }
 
-    return { showReceipt, ...toRefs(dataSet), baseUrl, ApproveReq ,close};
+    return { showReceipt, ...toRefs(dataSet), baseUrl, ApproveReq ,modalAction};
   },
 };
 </script>
