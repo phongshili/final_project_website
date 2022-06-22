@@ -73,7 +73,7 @@
                 <img v-else class="bill" :src="baseUrl + bill" alt="" />
               </div>
               <input
-              v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee' && id ===null"
+              v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee' && id ===''"
                 class="input is-primary"
                 style="display: none"
                 type="file"
@@ -82,7 +82,7 @@
                 ref="logoFile"
               />
               <input
-              v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee' && id ===null"
+              v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee' && id ===''"
                 class="input is-primary"
                 style="display: none"
                 type="text"
