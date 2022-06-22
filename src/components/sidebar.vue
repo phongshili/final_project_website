@@ -3,7 +3,7 @@
     <div class="sidebar">
       <div class="sidebar-header">
         <div class="profile">
-          <img src="../assets/jibjib_icon.png" alt="" />
+          <img :src="baseUrl+ $userInfo.image" alt="" />
         </div>
         <div class="detail">
           <div class="name" v-if="$userInfo.type === 'admin'">
@@ -151,7 +151,7 @@ export default {
     if (userType.type === "admin") fetchNotiAdmin();
 
     return {
-      ...toRefs(dataSet),
+      ...toRefs(dataSet),baseUrl
     };
   },
 };
@@ -196,9 +196,12 @@ export default {
         justify-content: center;
         margin-top: 20px;
         margin-bottom: 15px;
+        border-radius:50%;
         img {
           width: 150px;
           height: 150px;
+        border-radius:50%;
+
         }
       }
       .detail {
