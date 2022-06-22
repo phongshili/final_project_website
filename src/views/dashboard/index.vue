@@ -118,7 +118,7 @@
               </button>
               <div
                 class="spacer"
-                v-if="$userInfo.type === 'admin' && status !== 'pending'"
+          v-if="$userInfo.type === 'admin' || id ===''"
               ></div>
               <button
                 class="button is-warning is-no"
@@ -127,7 +127,7 @@
               >
                 {{ $t("RejectText") }}
               </button>
-              <div  v-if="$userInfo.type === 'employee' && status !== 'cancel' " class="spacer"></div>
+              <div  class="spacer" v-if="$userInfo.type === 'admin' "></div>
               <button  @click="modalAction" class="button is-danger">
                 {{ $t("CancelText") }}
               </button>
