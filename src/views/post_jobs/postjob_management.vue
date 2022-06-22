@@ -20,7 +20,7 @@
             <img
               v-else
               class="profile"
-              :src="baseUrl + '/resize-images/' + image"
+              :src="baseUrl + image"
               alt=""
             />
           </div>
@@ -48,7 +48,7 @@
             <img
               v-else
               class="personalIDCard"
-              :src="baseUrl + '/resize-images/' + backgroundImage"
+              :src="baseUrl  + backgroundImage"
               alt=""
             />
           </div>
@@ -630,7 +630,6 @@ export default {
     // get data when click select company
     const getCompanyData = async ()=>{
       await fetchEmployerByID();
-      console.log('hu')
     }
 
     if (route.params.id && userType.type === "admin") fetchPostByID();

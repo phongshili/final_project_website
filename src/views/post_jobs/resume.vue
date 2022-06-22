@@ -21,7 +21,7 @@
               <img
                 v-else
                 class="profile"
-                :src="baseUrl + '/resize-images/' + resume.image"
+                :src="baseUrl + resume.image"
                 alt=""
               />
             </div>
@@ -42,7 +42,7 @@
               <img
                 v-else
                 class="personalIDCard"
-                :src="baseUrl + '/resize-images/' + resume.image"
+                :src="baseUrl  + resume.image"
                 alt=""
               />
             </div>

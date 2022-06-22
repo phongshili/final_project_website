@@ -20,7 +20,7 @@
             <img
               v-else
               class="profile"
-              :src="baseUrl + 'resize-images/' + image"
+              :src="baseUrl  + image"
               alt=""
             />
           </div>
@@ -56,7 +56,7 @@
             <img
               v-else
               class="personalIDCard"
-              :src="baseUrl + 'resize-images/' + backgroundImage"
+              :src="baseUrl + backgroundImage"
               alt=""
             />
           </div>
@@ -490,7 +490,7 @@ export default {
       const fd = new FormData();
       fd.append("file", seletedFile);
       const res = await axios.post(baseUrl + "admin-api/uploadimage", fd);
-      return res.data.link.substring(14); // ❌ remove first 14 characters
+      return res.data.link
     };
 
     await fetchProvinces();

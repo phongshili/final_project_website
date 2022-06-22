@@ -58,6 +58,78 @@
         </div>
       </div>
 
+      <!-- custom modal  -->
+      <customModal :modalActive="modalActive">
+        <div class="modal-content">
+          <div class="modal-detail">
+            <div class="image-input" @click="$refs.logoFile.click()">
+              <div class="modal-image-container">
+                <img
+                  v-if="!bill"
+                  class="bill"
+                  src="@/assets/default.jpg"
+                  alt=""
+                />
+                <img
+                  v-else
+                  class="bill"
+                  :src="baseUrl  + bill"
+                  alt=""
+                />
+              </div>
+              <input
+                class="input is-primary"
+                style="display: none"
+                type="file"
+                @change="onBillFileChange"
+                placeholder="Primary input"
+                ref="logoFile"
+              />
+              <input
+              v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" 
+                class="input is-primary"
+                style="display: none"
+                type="text"
+                v-model="bill"
+                placeholder="Primary input"
+              />
+               <input
+               v-if="$userInfo.type === 'admin' && status === 'pending'" 
+              class="input is-primary"
+              type="text"
+              disabled
+              v-model="amount"
+              :placeholder="$t('AmountText')"
+            />
+            </div>
+            <div class="spacerH"></div>
+
+            <label class="modal-title">{{ $t("TopUpText") }}</label>
+            <div class="spacerH"></div>
+
+            <div class="amount-input">
+              <input
+                class="input is-primary"
+                type="text"
+                v-model="amount"
+                :placeholder="$t('AmountText')"
+              />
+            </div>
+            <div class="spacerH"></div>
+            <div class="btn-option-group">
+              <button @click="sendReq" class="button is-success">
+                {{ $t("SendText") }}
+              </button>
+              <div class="spacer"></div>
+              <button @click="close" class="button is-danger">
+                {{ $t("CancelText") }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </customModal>
+      <!-- end custom modal -->
+
       <div class="form-display">
         <div class="chart-container">
           <BarChart :chartData="weekly" />
@@ -75,14 +147,17 @@
           </div>
           <div
             class="payment body"
-            @click="acceptReq"
+            @click="sendReq"
             v-for="req in reqpoints"
             :key="req._id"
           >
             <div class="">{{ req.employeeName }}</div>
             <div class="">{{ req.point }} Points</div>
           </div>
-          <div class="payment body" v-if="$userInfo.type === 'admin' && reqpoints !==[]">
+          <div
+            class="payment body"
+            v-if="$userInfo.type === 'admin' && reqpoints === []"
+          >
             <div class="">No requests</div>
           </div>
         </div>
@@ -102,17 +177,30 @@ import {
   PieChart,
   LineChart,
 } from "vue-chart-3";
+
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 Chart.defaults.font.family = "Noto Sans Lao";
-import {reactive, toRefs } from "vue";
+import { reactive, toRefs, ref } from "vue";
 import axios from "axios";
 import store from "../../store";
-export default {
-  components: { DoughnutChart, BarChart, RadarChart, PieChart, LineChart },
-  setup() {
-    const { t } = useI18n();
+import customModal from "@/components/customModal.vue";
 
+export default {
+  components: {
+    DoughnutChart,
+    BarChart,
+    RadarChart,
+    PieChart,
+    LineChart,
+    customModal,
+  },
+async  setup() {
+    const { t } = useI18n();
+    const modalActive = ref(false);
+    const bill = ref();
+    const amount = ref();
+    const baseUrl = "http://127.0.0.1:4000/";
     const auth = store.useAuthStore();
     const userTypeStore = store.useAuthStore();
     const userType = JSON.parse(userTypeStore.getUserType);
@@ -154,29 +242,26 @@ export default {
       dataSet.countTotal = res.data; // 👈 get just results
     };
 
+    // SELETED FILE TO UPLOAD
+    const onBillFileChange = async (e) => {
+      const seletedFile = e.target.files[0];
+      bill.value = await onUploadFile(seletedFile);
+    };
+
+    // UPLOADE FILE
+    const onUploadFile = async (seletedFile) => {
+      const fd = new FormData();
+      fd.append("file", seletedFile);
+      const res = await axios.post(baseUrl + "admin-api/uploadimage", fd);
+      return res.data.link; 
+    };
+
     if (userType.type === "admin") {
-      fetchCountTotalAdmin();
-      fetchPaymentAdmin();
+    await  fetchCountTotalAdmin();
+     await fetchPaymentAdmin();
     }
     if (userType.type === "employee" || userType.type === "employer")
-      fetchCountTotalEmp();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+     await fetchCountTotalEmp();
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -185,67 +270,21 @@ export default {
       },
       buttonsStyling: true,
     });
-    const acceptReq = () => {
-      swalWithBootstrapButtons
-        .fire({
-          title: t("PaymentReqText"),
-          text: "Top-Up 90 Points",
-          showCancelButton: true,
-          confirmButtonText: t("AcceptButtonText"),
-          cancelButtonText: t("RejectButtonText"),
-          // reverseButtons: true,
-          imageUrl: "https://unsplash.it/400/200",
-          imageWidth: 400,
-          imageHeight: 200,
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Payment has been approve",
-              showConfirmButton: false,
-              timer: 1000,
-            });
-          } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
-            swalWithBootstrapButtons.fire({
-              icon: "warning",
-              input: "text",
-              title: "Somethings went wrong? :(",
-            });
-          }
-        });
-    };
-    const sendReq = () => {
-      swalWithBootstrapButtons
-        .fire({
-          title: "Top-Up",
-          showCancelButton: true,
-          confirmButtonText: "Send Request!",
-          cancelButtonColor: "#d33",
-          input: "text",
 
-          // reverseButtons: true,
-          imageUrl:
-            "http://127.0.0.1:4000/resize-images/0b114727-89f4-4d9e-88d8-31fbad96eee8.jpeg",
-          imageWidth: 400,
-          imageHeight: 200,
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Send Request Successed!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          }
-        });
+
+
+    const sendReq =async () => {
+           modalActive.value = !modalActive.value;
+
+           await axios.post(baseUrl +'emp-api/payment-add',{
+            point: amount.value,
+            image: bill.value,
+           },{headers})
     };
+       const close = async () => {
+       modalActive.value = !modalActive.value;
+
+    }
 
 
 
@@ -324,9 +363,20 @@ export default {
       ],
     };
 
-    
-
-    return { acceptReq, sendReq, ...toRefs(dataSet), monthly, yealy, weekly };
+    return {
+      
+      sendReq,
+      ...toRefs(dataSet),
+      monthly,
+      yealy,
+      weekly,
+      modalActive,
+      onBillFileChange,
+      bill,
+      baseUrl,
+      amount,
+      close,
+    };
   },
 };
 </script>

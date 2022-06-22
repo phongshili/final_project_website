@@ -93,6 +93,8 @@ const messages = {
         RePostText: "RE POST",
         SendText:"SEND",
         ConfirmButtonText:"CONFIRM",
+        CancelText:"CANCEL",
+
 
         
         //end button text
@@ -250,11 +252,11 @@ const messages = {
         RePostText: "ປະກາດຄືນໃໝ່",
         SendText:"ສົ່ງ",
         ConfirmButtonText:"ຢືນຢັນ",
+        CancelText:"ຍົກເລີກ",
         //end button text
 
         //form text
         ResetPassword : "ປ່ຽນລະຫັດຜ່ານ",
-
         FirstNameText: "ຊື່",
         LastNameText: "ນາມສະກຸນ",
         PosonalIDNoText: "ເລກບັດປະຈຳຕົວ",
