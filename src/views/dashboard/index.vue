@@ -57,7 +57,6 @@
           </div>
         </div>
       </div>
-      ss{{isDisabled}}
       <!-- custom modal  -->
       <customModal :modalActive="modalActive">
         <div class="modal-content">
