@@ -103,9 +103,10 @@
                 :placeholder="$t('AmountText')"
               />
             </div>
+
             <div class="spacerH"></div>
             <div class="btn-option-group">
-              <button  v-if="$userInfo.type === 'employee'|| $userInfo.type === 'employer'" @click="sendReq" class="button is-success">
+              <button  v-if="$userInfo.type === 'employee' && status !== 'cancel' " @click="sendReq" class="button is-success">
                 {{ $t("SendText") }}
               </button>
               <button
@@ -117,7 +118,7 @@
               </button>
               <div
                 class="spacer"
-                v-if="$userInfo.type === 'admin' && status === 'pending'"
+                v-if="$userInfo.type === 'admin' && status !== 'pending'"
               ></div>
               <button
                 class="button is-warning is-no"
@@ -126,8 +127,8 @@
               >
                 {{ $t("RejectText") }}
               </button>
-              <div class="spacer"></div>
-              <button @click="modalAction" class="button is-danger">
+              <div  v-if="$userInfo.type === 'employee' && status !== 'cancel' " class="spacer"></div>
+              <button  @click="modalAction" class="button is-danger">
                 {{ $t("CancelText") }}
               </button>
             </div>
@@ -342,6 +343,7 @@ export default {
       dataSet.amount = dataSet.findPayment.point;
       dataSet.bill = dataSet.findPayment.image;
       dataSet.id = id;
+      dataSet.status = dataSet.findPayment.status;
       
     };
 

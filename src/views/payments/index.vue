@@ -196,7 +196,7 @@ export default {
         });
         dataSet.modalActive = !dataSet.modalActive;
         await fetchPaymentAdmin();
-        windows.location.reload();
+        window.location.reload();
   
 
     }
