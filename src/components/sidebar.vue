@@ -2,8 +2,11 @@
   <div class="sideBar_container">
     <div class="sidebar">
       <div class="sidebar-header">
-        <div class="profile">
+        <div v-if="$userInfo.image" class="profile">
           <img :src="baseUrl+ $userInfo.image" alt="" />
+        </div>
+        <div v-else class="profile">
+          <img src="../assets/jibjib_icon.png" alt="" />
         </div>
         <div class="detail">
           <div class="name" v-if="$userInfo.type === 'admin'">
