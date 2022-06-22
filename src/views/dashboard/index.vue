@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-
+      ss{{isDisabled}}
       <!-- custom modal  -->
       <customModal :modalActive="modalActive">
         <div class="modal-content">
@@ -315,6 +315,8 @@ export default {
       if (userType.type === "employee" || userType.type === "employer")
       await  fetchPaymentEmp();
         windows.location.reload();
+               dataSet.isDisabled = false;
+
 
     };
 
@@ -334,18 +336,20 @@ export default {
 
     const showReceipt = async (id) => {
       dataSet.modalActive = !dataSet.modalActive;
+      dataSet.isDisabled = true;
       if (userType.type === "admin") await fetchAdminPaymentById(id);
       if (userType.type === "employee" || userType.type === "employer")
         await fetchEmployerPaymentById(id);
       dataSet.amount = dataSet.findPayment.point;
       dataSet.bill = dataSet.findPayment.image;
       dataSet.id = id;
-      dataSet.isDisabled = !dataSet.isDisabled;
+      
     };
 
     const modalAction = async () => {
       dataSet.modalActive = !dataSet.modalActive;
-      dataSet.isDisabled = !dataSet.isDisabled;
+        dataSet.isDisabled = false;
+
       setTimeout(() => {
         (dataSet.id = ""), (dataSet.amount = ""), (dataSet.bill = "");
         dataSet.status = "";
