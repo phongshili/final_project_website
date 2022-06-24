@@ -32,12 +32,12 @@
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
             <th class="tb-medium">{{ $t("PositionText") }}</th>
             <th class="tb-medium">{{ $t("LocationText") }}</th>
-            <th v-if="$userInfo.type === 'admin'" class="tb-medium tb-right">
+            <th v-if="userInfo.type === 'admin'" class="tb-medium tb-right">
               {{ $t("CompanyNameText") }}
             </th>
    
 
-            <th class="tb-medium">{{ $t("EmailText") }}</th>
+            <!-- <th class="tb-medium">{{ $t("EmailText") }}</th> -->
             <th class="tb-small">{{ $t("ApplicationText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
             <th class="tb-small tb-center">{{ $t("PostDateText") }}</th>
@@ -61,13 +61,13 @@
             <td class="tb-medium">
               <span>{{ job.provinceName }}</span>
             </td>
-            <td v-if="$userInfo.type === 'admin'" class="tb-right">
+            <td v-if="userInfo.type === 'admin'" class="tb-right">
               <span> {{ job.companyName }}</span>
             </td>
     
-            <td class="tb-medium">
+            <!-- <td class="tb-medium">
               <span>{{ job.email }}</span>
-            </td>
+            </td> -->
             <td class="tb-small tb-center">
               <span>{{job.totalJobApp}}</span>
             </td>
@@ -77,7 +77,7 @@
             <td class="tb-small">
               <span> {{ job.startDate }}</span>
             </td>
-            <td class="tb-small" v-if="$userInfo.type === 'admin'">
+            <td class="tb-small" v-if="userInfo.type === 'admin'">
               <div class="tools">
                 <i  @click="$router.push({ name: 'JobPostManagement',params: {id:job._id}})" class="fa-solid fa-pen-to-square edit-tool"></i
                 ><i  @click="deletePost(job._id)" class="fa-solid fa-xmark delete-tool"></i>
@@ -86,7 +86,7 @@
             <td
               class="tb-large"
               v-if="
-                $userInfo.type === 'employee' || $userInfo.type === 'employer'
+                userInfo.type === 'employee' || userInfo.type === 'employer'
               "
             >
               <div class="tools">
@@ -118,14 +118,15 @@ import axios from "axios";
 import { useI18n } from "vue-i18n";
 import Swal from "sweetalert2";
 import store from "../../store";
+import useGetUser from "../../hooks/useGetUser";
 
 export default {
   components: { filterButton },
-  setup() {
+ async setup() {
     const { t } = useI18n();
     const auth = store.useAuthStore();
-    const userTypeStore = store.useAuthStore();
-    const userType = JSON.parse(userTypeStore.getUserType);
+    const userInfo = await useGetUser.getUserInfo()  
+
     let token = auth.getToken;
     const dataSet = reactive({
       items: [
@@ -169,13 +170,13 @@ export default {
     };
     // need to refactor this code to hook
     const deletePost = async (id) => {
-      if(userType.type ==="admin"){
+      if(userInfo.type ==="admin"){
         await axios.delete(
         "http://127.0.0.1:4000/admin-api/postjob-delete/" + id
       );
       fetchJobPostAdmin();
       }
-            if(userType.type ==="employee"){
+            if(userInfo.type ==="employee"){
         await axios.delete(
         "http://127.0.0.1:4000/emp-api/postjob-delete" + id
       );
@@ -183,13 +184,14 @@ export default {
       }
     };
 
-    if (userType.type === "admin") fetchJobPostAdmin();
-    if (userType.type === "employee" || userType.type === "employer")
+    if (userInfo.type === "admin") fetchJobPostAdmin();
+    if (userInfo.type === "employee" || userInfo.type === "employer")
       fetchJobPostEmp();
 
     return {
       ...toRefs(dataSet),
       deletePost,
+      userInfo
     };
   },
 };

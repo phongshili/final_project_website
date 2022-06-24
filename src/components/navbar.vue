@@ -14,17 +14,17 @@
       <div class="option-list" :class="{ 'is-Active': isActive }">
         <div class="profile">
           <img src="../assets/jibjib_icon.png" alt="" />
-          <div class="name" v-if="$userInfo.type === 'admin'">
-            {{ $userInfo.name + ' ' + $userInfo.lastname }}
+          <div class="name" v-if="userInfo.type === 'admin'">
+            {{ userInfo.name + ' ' + userInfo.lastname }}
           </div>
-          <div class="name" v-else>{{ $userInfo.companyName }}</div>
+          <div class="name" v-else>{{ userInfo.companyName }}</div>
         </div>
         <div class="line"></div>
-        <div class="dropdown-item" @click="$router.push({ name: 'Profile' })" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" >
+        <div class="dropdown-item" @click="$router.push({ name: 'Profile' })" v-if="userInfo.type === 'employee' || userInfo.type === 'employer'" >
           <i class="fa-solid fa-address-card"></i>
           <p>{{ $t("ProfileText") }}</p>
         </div>
-        <div class="dropdown-item" v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'" @click="$router.push({ name: 'ChangePassword' })" >
+        <div class="dropdown-item" v-if="userInfo.type === 'employee' || userInfo.type === 'employer'" @click="$router.push({ name: 'ChangePassword' })" >
           <i class="fa-solid fa-lock"></i>
           <p>{{ $t("ChangePasswordText") }}</p>
         </div>
@@ -60,18 +60,21 @@
 </template>
 <script>
 import { useAuthStore, useLanguageSwitcher } from "../store";
-import { ref, defineComponent } from "vue";
-export default defineComponent({
-  setup: () => {
+import { ref,  } from "vue";
+import useGetUser from "../hooks/useGetUser";
+
+export default {
+  async setup() {
     let isActive = ref(false);
     const store = useAuthStore();
     const switcher = useLanguageSwitcher()
+    const userInfo = await useGetUser.getUserInfo()
     const is_Dropdown = () => {
       isActive.value = !isActive.value;
     };
-    return { store,switcher, isActive, is_Dropdown };
+    return { store,switcher, isActive, is_Dropdown ,userInfo};
   },
-});
+};
 </script>
 <style lang="scss" scoped>
 .navbar {

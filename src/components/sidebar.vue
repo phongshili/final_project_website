@@ -2,38 +2,38 @@
   <div class="sideBar_container">
     <div class="sidebar">
       <div class="sidebar-header">
-        <div v-if="$userInfo.image" class="profile">
-          <img :src="baseUrl+ $userInfo.image" alt="" />
+        <div v-if="userInfo.image" class="profile">
+          <img :src="baseUrl+ userInfo.image" alt="" />
         </div>
         <div v-else class="profile">
           <img src="../assets/jibjib_icon.png" alt="" />
         </div>
         <div class="detail">
-          <div class="name" v-if="$userInfo.type === 'admin'">
-            {{ $userInfo.name }}
+          <div class="name" v-if="userInfo.type === 'admin'">
+            {{ userInfo.name }}
           </div>
-          <div class="name" v-else>{{ $userInfo.companyName }}</div>
+          <div class="name" v-else>{{ userInfo.companyName }}</div>
           <div
             class="line"
             v-if="
-              $userInfo.type === 'employee' || $userInfo.type === 'employer'
+              userInfo.type === 'employee' || userInfo.type === 'employer'
             "
           ></div>
           <div
             class="role"
             v-if="
-              $userInfo.type === 'employee' || $userInfo.type === 'employer'
+              userInfo.type === 'employee' || userInfo.type === 'employer'
             "
           >
-            {{ $t("CurrentPointText") }} : {{ $userInfo.point }}
+            {{ $t("CurrentPointText") }} : {{ userInfo.point }}
           </div>
           <div
             class="role"
             v-if="
-              $userInfo.type === 'employee' || $userInfo.type === 'employer'
+              userInfo.type === 'employee' || userInfo.type === 'employer'
             "
           >
-            {{ $t("StatusText") }} : {{ $userInfo.status }}
+            {{ $t("StatusText") }} : {{ userInfo.status }}
           </div>
         </div>
       </div>
@@ -55,7 +55,7 @@
             </div>
           </router-link>
         </div>
-        <div class="items" v-if="$userInfo.type === 'admin'">
+        <div class="items" v-if="userInfo.type === 'admin'">
           <router-link to="/employers">
             <div class="item">
               <i class="fa-solid fa-user-pen"></i
@@ -67,7 +67,7 @@
           </router-link>
         </div>
 
-        <div class="items" v-if="$userInfo.type === 'admin'">
+        <div class="items" v-if="userInfo.type === 'admin'">
           <router-link to="/jobseekers">
             <div class="item">
               <i class="fa-solid fa-user-tag"></i
@@ -79,7 +79,7 @@
           </router-link>
         </div>
 
-        <div class="items" v-if="$userInfo.type === 'admin'">
+        <div class="items" v-if="userInfo.type === 'admin'">
           <router-link to="/jobpositions">
             <div class="item">
               <i class="fa-solid fa-briefcase"></i
@@ -100,7 +100,7 @@
         </div>
         <div
           class="items"
-          v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee'"
+          v-if="userInfo.type === 'employer' || userInfo.type === 'employee'"
         >
           <router-link to="/contactUs">
             <div class="item">
@@ -119,14 +119,16 @@ import { reactive, toRefs } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import store from "../store";
+import useGetUser from "../hooks/useGetUser";
 
 export default {
-  setup() {
+ async setup() {
     const { t } = useI18n();
     const baseUrl = "http://127.0.0.1:4000/";
+
+    const userInfo = await useGetUser.getUserInfo()  
+    
     const auth = store.useAuthStore();
-    const userTypeStore = store.useAuthStore();
-    const userType = JSON.parse(userTypeStore.getUserType);
     let token = auth.getToken;
     const headers = {
       "Content-Type": "application/json",
@@ -135,6 +137,8 @@ export default {
     const dataSet = reactive({
       noti: [],
     });
+
+    
     const fetchNoti = async () => {
       const res = await axios.get(baseUrl + "emp-api/payment-noti-payment", {
         headers,
@@ -149,12 +153,12 @@ export default {
 
       dataSet.noti = res.data; // 👈 get just results
     };
-    if (userType.type === "employee" || userType.type === "employer")
+    if (userInfo.type === "employee" || userInfo.type === "employer")
       fetchNoti();
-    if (userType.type === "admin") fetchNotiAdmin();
+    if (userInfo.type === "admin") fetchNotiAdmin();
 
     return {
-      ...toRefs(dataSet),baseUrl
+      ...toRefs(dataSet),baseUrl,userInfo
     };
   },
 };

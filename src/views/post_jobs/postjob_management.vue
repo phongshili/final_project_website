@@ -85,9 +85,9 @@
         </div>
         <!--end position dropdown -->
         <br />
-        <div class="spacer" v-if="$userInfo.type === 'admin'"></div>
+        <div class="spacer" v-if="userInfo.type === 'admin'"></div>
         <!-- company dropdown -->
-        <div class="input-group" v-if="$userInfo.type === 'admin'">
+        <div class="input-group" v-if="userInfo.type === 'admin'">
           <label for="user" class="text-input"
             >{{ $t("CompanyNameText") }}
             <p class="required">*</p></label
@@ -109,9 +109,9 @@
         </div>
         <!--end company dropdown -->
       </div>
-      <div class="spacer" v-if="$userInfo.type === 'admin'"></div>
+      <div class="spacer" v-if="userInfo.type === 'admin'"></div>
 
-      <div class="input-form" v-if="$userInfo.type === 'admin'">
+      <div class="input-form" v-if="userInfo.type === 'admin'">
         <div class="input-group">
           <label for="user" class="text-input"
             >{{ $t("ProvinceText") }}
@@ -126,8 +126,8 @@
           />
         </div>
 
-        <div class="spacer" v-if="$userInfo.type === 'admin'"></div>
-        <div class="input-group" v-if="$userInfo.type === 'admin'">
+        <div class="spacer" v-if="userInfo.type === 'admin'"></div>
+        <div class="input-group" v-if="userInfo.type === 'admin'">
           <label for="user" class="text-input"
             >{{ $t("DistrictText") }}
             <p class="required">*</p></label
@@ -372,20 +372,25 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import moment from "moment";
 import store from "../../store";
+import useGetUser from "../../hooks/useGetUser";
+
 
 export default {
-  setup() {
+ async setup() {
+    
+    const { t } = useI18n();
+
+    const baseUrl = "http://127.0.0.1:4000/";
+      const route = useRoute();
+    const router = useRouter();
+    const auth = store.useAuthStore();
+    const userInfo = await useGetUser.getUserInfo()  
     const startDate = ref(new Date());
     const endDate = ref(new Date());
     endDate.value.setMonth(startDate.value.getMonth() + 1);
 
-    const baseUrl = "http://127.0.0.1:4000/";
-    const { t } = useI18n();
-    const route = useRoute();
-    const router = useRouter();
-    const auth = store.useAuthStore();
-    const userTypeStore = store.useAuthStore();
-    const userType = JSON.parse(userTypeStore.getUserType);
+  
+
     let token = auth.getToken;
     const headers = {
       "Content-Type": "application/json",
@@ -542,7 +547,7 @@ export default {
     };
 
     const addPostJob = async () => {
-      if (userType.type === "admin")
+      if (userInfo.type === "admin")
         await axios.post(baseUrl + "admin-api/postjob-add", {
           startDate: moment(startDate.value).locale("lo").format("YYYY-MM-DD"),
           endDate: moment(endDate.value).locale("lo").format("YYYY-MM-DD"),
@@ -560,7 +565,7 @@ export default {
           positionId: dataSet.position,
           employeeId: dataSet.employer,
         });
-      if (userType.type === "employee" || userType.type === "employer")
+      if (userInfo.type === "employee" || userInfo.type === "employer")
         await axios.post(
           baseUrl + "emp-api/postjob-add",
           {
@@ -588,7 +593,7 @@ export default {
     };
 
     const updatePost = async (status) => {
-      if (userType.type === "admin")
+      if (userInfo.type === "admin")
         await axios.put(baseUrl + "admin-api/postjob-update", {
           id: dataSet.id,
           startDate: dataSet.startDate,
@@ -608,7 +613,7 @@ export default {
           positionId: dataSet.position,
           employeeId: dataSet.employer,
         });
-      if (userType.type === "employee" || userType.type === "employer")
+      if (userInfo.type === "employee" || userInfo.type === "employer")
         await axios.put(baseUrl + "emp-api/postjob-update", {
           id: dataSet.id,
           image: dataSet.backgroundImage,
@@ -632,18 +637,18 @@ export default {
       await fetchEmployerByID();
     }
 
-    if (route.params.id && userType.type === "admin") fetchPostByID();
-    if (userType.type === "admin") {
+    if (route.params.id && userInfo.type === "admin") fetchPostByID();
+    if (userInfo.type === "admin") {
       fetchEmployer();
     }
 
     if (
-      (route.params.id && userType.type === "employee") ||
-      userType.type === "employer"
+      (route.params.id && userInfo.type === "employee") ||
+      userInfo.type === "employer"
     ) {
       fetchPostEmployerByID();
     }
-    if (userType.type === "employee" || userType.type === "employer") {
+    if (userInfo.type === "employee" || userInfo.type === "employer") {
       fetchEmployerInfoByID();
     }
 
@@ -657,6 +662,7 @@ export default {
       onCoverFileChange,
       getCompanyData,
       baseUrl,
+      userInfo,
       startDate,
       endDate,
     };

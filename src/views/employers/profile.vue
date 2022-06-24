@@ -199,7 +199,7 @@
           />
         </div>
         <div class="spacer"></div>
-        <div v-if="$userInfo.type === 'admin'" class="input-group">
+        <div v-if="userInfo.type === 'admin'" class="input-group">
           <label for="user" class="text-input">{{ $t("PointText") }} </label>
           <input
             class="input is-primary"
@@ -227,7 +227,7 @@
       </div>
       <div
         class="input-form"
-        v-if="!$route.params.id && $userInfo.type === 'admin'"
+        v-if="!$route.params.id && userInfo.type === 'admin'"
       >
         <div class="input-group">
           <label for="user" class="text-input"
@@ -259,21 +259,21 @@
         <button
           class="button is-success"
           @click="addEmployer"
-          v-if="!$route.params.id && $userInfo.type === 'admin'"
+          v-if="!$route.params.id && userInfo.type === 'admin'"
         >
           {{ $t("AddEmployerText") }}
         </button>
         <button
           class="button is-success"
           @click="updateEmployer('approve')"
-          v-if="$route.params.id && $userInfo.type === 'admin'"
+          v-if="$route.params.id && userInfo.type === 'admin'"
         >
           {{ $t("ApproveText") }}
         </button>
         <button
           class="button is-link"
           @click="empUpdateProfile"
-          v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"
+          v-if="userInfo.type === 'employee' || userInfo.type === 'employer'"
         >
           {{ $t("EditButtonText") }}
         </button>
@@ -281,7 +281,7 @@
         <button
           class="button is-warning is-no"
           @click="updateEmployer('reject')"
-          v-if="$route.params.id && $userInfo.type === 'admin'"
+          v-if="$route.params.id && userInfo.type === 'admin'"
         >
           {{ $t("RejectText") }}
         </button>
@@ -300,6 +300,8 @@ import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import store from "../../store";
+import useGetUser from "../../hooks/useGetUser";
+
 
 export default {
   async setup() {
@@ -308,8 +310,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const auth = store.useAuthStore();
-    const userTypeStore = store.useAuthStore();
-    const userType = JSON.parse(userTypeStore.getUserType);
+    const userInfo = await useGetUser.getUserInfo()  
     let token = auth.getToken;
     const headers = {
       "Content-Type": "application/json",
@@ -497,10 +498,10 @@ export default {
 
     await fetchDistricts();
 
-    if (route.params.id && userType.type === "admin") await fetchEmployerByID();
+    if (route.params.id && userInfo.type === "admin") await fetchEmployerByID();
 
     // if login by employer fetch profile
-    if (userType.type === "employee" || userType.type === "employer")
+    if (userInfo.type === "employee" || userInfo.type === "employer")
       await fetchEmployerProfile();
     return {
       ...toRefs(dataSet),
@@ -511,6 +512,7 @@ export default {
       empUpdateProfile,
       updateEmployer,
       setDistrict,
+      userInfo
     };
   },
 };

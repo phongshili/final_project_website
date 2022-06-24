@@ -81,7 +81,7 @@
                 {{ $t("GenderText") }} : {{ resume.gender || "-" }}
               </p>
               <div class="spacerH"></div>
-              <p>{{ $t("BirthDateText") }} : {{ resume.birthDate || "-" }}</p>
+              <p>{{ $t("BirthDateText") }} : {{dateTimeFormat || "-" }}</p>
               <div class="spacerH"></div>
               <p>{{ $t("TelText") }} : {{ resume.tel || "-" }}</p>
               <div class="spacerH"></div>
@@ -172,6 +172,7 @@ import axios from "axios";
 import { useI18n } from "vue-i18n";
 import store from "../../store";
 import { useRoute, useRouter } from "vue-router";
+import moment from 'moment'
 export default {
   components: { filterButton },
   setup() {
@@ -190,6 +191,7 @@ export default {
     const dataSet = reactive({
       resume: [],
       comment: "",
+      dateTimeFormat:''
     });
     // need to refactor this code to hook
     const fetchResume = async () => {
@@ -201,6 +203,7 @@ export default {
       );
 
       dataSet.resume = res.data.mapJobApplication; // 👈 get just results
+      dataSet.dateTimeFormat = await dateTimeFormator(dataSet.resume.birthDate)
     };
     // need to refactor this code to hook
     //duplicate code
@@ -214,6 +217,11 @@ export default {
 
       dataSet.resume = res.data.mapSeeker; // 👈 get just results
     };
+
+    const dateTimeFormator = async (dateTime) => {
+     return moment(dateTime).format('MM-DD-YYYY')
+    }
+
 
     const updateStatus = async (status) => {
       if((userType.type === "admin" && status ==='reject')){
@@ -237,7 +245,7 @@ export default {
     if (userType.type === "employee" || userType.type === "employer")
       fetchResume();
 
-    return { ...toRefs(dataSet), updateStatus, baseUrl };
+    return { ...toRefs(dataSet), updateStatus, baseUrl};
   },
 };
 </script>

@@ -11,15 +11,15 @@
             <div class="box-count">{{ countTotal.totalPost }}</div>
           </div>
         </div>
-        <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
-        <div class="box-detail" v-if="$userInfo.type === 'admin'">
+        <div class="spacer left" v-if="userInfo.type === 'admin'"></div>
+        <div class="box-detail" v-if="userInfo.type === 'admin'">
           <div class="box-body">
             <div class="box-title">{{ $t("TotalEmployersText") }}</div>
             <div class="box-count">{{ countTotal.totalEmp }}</div>
           </div>
         </div>
-        <div class="spacer left" v-if="$userInfo.type === 'admin'"></div>
-        <div class="box-detail" v-if="$userInfo.type === 'admin'">
+        <div class="spacer left" v-if="userInfo.type === 'admin'"></div>
+        <div class="box-detail" v-if="userInfo.type === 'admin'">
           <div class="box-body">
             <div class="box-title">{{ $t("TotalJobSeekr") }}</div>
             <div class="box-count">{{ countTotal.totalSeeker }}</div>
@@ -45,11 +45,11 @@
         </div>
         <div
           class="spacer left"
-          v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"
+          v-if="userInfo.type === 'employee' || userInfo.type === 'employer'"
         ></div>
         <div
           class="box-detail"
-          v-if="$userInfo.type === 'employee' || $userInfo.type === 'employer'"
+          v-if="userInfo.type === 'employee' || userInfo.type === 'employer'"
           @click="modalAction"
         >
           <div class="box-body">
@@ -72,7 +72,7 @@
                 <img v-else class="bill" :src="baseUrl + bill" alt="" />
               </div>
               <input
-              v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee' && id ===''"
+              v-if="userInfo.type === 'employer' || userInfo.type === 'employee' && id ===''"
                 class="input is-primary"
                 style="display: none"
                 type="file"
@@ -81,7 +81,7 @@
                 ref="logoFile"
               />
               <input
-              v-if="$userInfo.type === 'employer' || $userInfo.type === 'employee' && id ===''"
+              v-if="userInfo.type === 'employer' || userInfo.type === 'employee' && id ===''"
                 class="input is-primary"
                 style="display: none"
                 type="text"
@@ -106,11 +106,11 @@
 
             <div class="spacerH"></div>
             <div class="btn-option-group">
-              <button  v-if="$userInfo.type === 'employee' && status !== 'cancel' " @click="sendReq" class="button is-success">
+              <button  v-if="userInfo.type === 'employee' && status !== 'cancel' " @click="sendReq" class="button is-success">
                 {{ $t("SendText") }}
               </button>
               <button
-                v-if="$userInfo.type === 'admin' && status === 'pending'"
+                v-if="userInfo.type === 'admin' && status === 'pending'"
                 @click="ApproveReq('confirmed')"
                 class="button is-success"
               >
@@ -118,16 +118,16 @@
               </button>
               <div
                 class="spacer"
-          v-if="$userInfo.type === 'admin' || id ===''"
+          v-if="userInfo.type === 'admin' || id ===''"
               ></div>
               <button
                 class="button is-warning is-no"
                 @click="ApproveReq('cancel')"
-                v-if="$userInfo.type === 'admin' && status === 'pending'"
+                v-if="userInfo.type === 'admin' && status === 'pending'"
               >
                 {{ $t("RejectText") }}
               </button>
-              <div  class="spacer" v-if="$userInfo.type === 'admin' "></div>
+              <div  class="spacer" v-if="userInfo.type === 'admin' "></div>
               <button  @click="modalAction" class="button is-danger">
                 {{ $t("CancelText") }}
               </button>
@@ -158,8 +158,8 @@
             v-for="payment in payments"
             :key="payment._id"
           >
-            <div v-if="$userInfo.type === 'admin'" class="">{{ payment.employeeName }}</div>
-            <div v-if="$userInfo.type === 'employee'|| $userInfo.type === 'employer'" class="">{{ payment.createdAt }}</div>
+            <div v-if="userInfo.type === 'admin'" class="">{{ payment.employeeName }}</div>
+            <div v-if="userInfo.type === 'employee'|| userInfo.type === 'employer'" class="">{{ payment.createdAt }}</div>
 
 
             <div class="">{{ payment.point }} Points</div>
@@ -170,7 +170,7 @@
           </div>
           <div
             class="payment body"
-            v-if="$userInfo.type === 'admin' && payments === []"
+            v-if="userInfo.type === 'admin' && payments === []"
           >
             <div class="">No requests</div>
           </div>
@@ -194,10 +194,12 @@ import {
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 Chart.defaults.font.family = "Noto Sans Lao";
-import { reactive, toRefs, ref } from "vue";
+import { reactive, toRefs } from "vue";
 import axios from "axios";
 import store from "../../store";
 import customModal from "@/components/customModal.vue";
+import useGetUser from "../../hooks/useGetUser";
+
 
 export default {
   components: {
@@ -213,8 +215,10 @@ export default {
 
     const baseUrl = "http://127.0.0.1:4000/";
     const auth = store.useAuthStore();
-    const userTypeStore = store.useAuthStore();
-    const userType = JSON.parse(userTypeStore.getUserType);
+ 
+
+    const userInfo = await useGetUser.getUserInfo()  
+
     let token = auth.getToken;
     const dataSet = reactive({
       countTotal: {},
@@ -294,11 +298,11 @@ export default {
       return res.data.link;
     };
 
-    if (userType.type === "admin") {
+    if (userInfo.type === "admin") {
       await fetchCountTotalAdmin();
       await fetchPaymentAdmin();
     }
-    if (userType.type === "employee" || userType.type === "employer"){
+    if (userInfo.type === "employee" || userInfo.type === "employer"){
       await fetchCountTotalEmp();
       await fetchPaymentEmp()
     }
@@ -311,8 +315,8 @@ export default {
         detail: dataSet.detail,
       });
       dataSet.modalActive = !dataSet.modalActive;
-      if (userType.type === "admin") fetchPaymentAdmin();
-      if (userType.type === "employee" || userType.type === "employer")
+      if (userInfo.type === "admin") fetchPaymentAdmin();
+      if (userInfo.type === "employee" || userInfo.type === "employer")
       await  fetchPaymentEmp();
         windows.location.reload();
                dataSet.isDisabled = false;
@@ -337,8 +341,8 @@ export default {
     const showReceipt = async (id) => {
       dataSet.modalActive = !dataSet.modalActive;
       dataSet.isDisabled = true;
-      if (userType.type === "admin") await fetchAdminPaymentById(id);
-      if (userType.type === "employee" || userType.type === "employer")
+      if (userInfo.type === "admin") await fetchAdminPaymentById(id);
+      if (userInfo.type === "employee" || userInfo.type === "employer")
         await fetchEmployerPaymentById(id);
       dataSet.amount = dataSet.findPayment.point;
       dataSet.bill = dataSet.findPayment.image;
@@ -440,6 +444,7 @@ export default {
       baseUrl,
       modalAction,
       showReceipt,
+      userInfo
     };
   },
 };

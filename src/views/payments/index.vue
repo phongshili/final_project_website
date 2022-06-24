@@ -16,7 +16,7 @@
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
-            <th v-if="$userInfo.type === 'admin'" class="tb-medium">
+            <th v-if="userInfo.type === 'admin'" class="tb-medium">
               {{ $t("CompanyNameText") }}
             </th>
             <th class="tb-small">{{ $t("AmountText") }}</th>
@@ -33,7 +33,7 @@
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
-            <td v-if="$userInfo.type === 'admin'" class="tb-small">
+            <td v-if="userInfo.type === 'admin'" class="tb-small">
               <span>{{ payment.employeeName }}</span>
             </td>
             <td class="tb-small">
@@ -87,18 +87,18 @@
           </div>
           <div class="spacerH"></div>
           <div class="btn-option-group">
-            <button v-if="$userInfo.type === 'admin' && status === 'pending'"  @click="ApproveReq('confirmed')" class="button is-success">
+            <button v-if="userInfo.type === 'admin' && status === 'pending'"  @click="ApproveReq('confirmed')" class="button is-success">
               {{ $t("ApproveText") }}
             </button>
-            <div class="spacer" v-if="$userInfo.type === 'admin' && status === 'pending'"></div>
+            <div class="spacer" v-if="userInfo.type === 'admin' && status === 'pending'"></div>
                  <button
           class="button is-warning is-no"
           @click="ApproveReq('cancel')"
-          v-if=" $userInfo.type === 'admin' && status === 'pending'" 
+          v-if=" userInfo.type === 'admin' && status === 'pending'" 
         >
           {{ $t("RejectText") }}
         </button>
-             <div class="spacer"   v-if=" $userInfo.type === 'admin' && status === 'pending'" ></div>
+             <div class="spacer"   v-if=" userInfo.type === 'admin' && status === 'pending'" ></div>
             <button @click="modalAction" class="button is-danger">
               {{ $t("CancelText") }}
             </button>
@@ -111,24 +111,25 @@
 </template>
 <script>
 import filterButton from "../../components/filter.vue";
-import { ref, reactive, toRefs } from "vue";
+import { reactive, toRefs } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import store from "../../store";
 import customModal from "@/components/customModal.vue";
+import useGetUser from "../../hooks/useGetUser";
+
 
 export default {
   components: {
     filterButton,
     customModal,
   },
-  setup() {
+ async setup() {
     const { t } = useI18n();
     const auth = store.useAuthStore();
-    const userTypeStore = store.useAuthStore();
     const baseUrl = "http://127.0.0.1:4000/";
+    const userInfo = await useGetUser.getUserInfo()  
 
-    const userType = JSON.parse(userTypeStore.getUserType);
     let token = auth.getToken;
     const dataSet = reactive({
       items: [
@@ -201,14 +202,14 @@ export default {
 
     }
     
-    if (userType.type === "admin") fetchPaymentAdmin();
-    if (userType.type === "employee" || userType.type === "employer")
+    if (userInfo.type === "admin") fetchPaymentAdmin();
+    if (userInfo.type === "employee" || userInfo.type === "employer")
       fetchPaymentEmp();
 
     const showReceipt = async (id) => {
       dataSet.modalActive = !dataSet.modalActive;
-      if (userType.type === "admin") await fetchAdminPaymentById(id);
-      if (userType.type === "employee" || userType.type === "employer")
+      if (userInfo.type === "admin") await fetchAdminPaymentById(id);
+      if (userInfo.type === "employee" || userInfo.type === "employer")
         await fetchEmployerPaymentById(id);
       dataSet.amount = dataSet.findPayment.point;
       dataSet.bill = dataSet.findPayment.image;
@@ -223,7 +224,7 @@ export default {
 
     }
 
-    return { showReceipt, ...toRefs(dataSet), baseUrl, ApproveReq ,modalAction};
+    return { showReceipt, ...toRefs(dataSet), baseUrl, ApproveReq ,modalAction,userInfo};
   },
 };
 </script>

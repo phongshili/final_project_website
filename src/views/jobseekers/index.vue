@@ -31,7 +31,7 @@
             <th class="tb-small">{{ $t("StatusText") }}</th>
             <th
               v-if="
-                $userInfo.type === 'employee' || $userInfo.type === 'employer'
+                userInfo.type === 'employee' || userInfo.type === 'employer'
               "
               class="tb-small tb-center"
             >
@@ -67,7 +67,7 @@
             </td>
             <td
               v-if="
-                $userInfo.type === 'employee' || $userInfo.type === 'employer'
+                userInfo.type === 'employee' || userInfo.type === 'employer'
               "
               class="tb-small"
             >
@@ -86,16 +86,17 @@ import axios from "axios";
 import { useI18n } from "vue-i18n";
 import store from "../../store";
 import { useRoute } from "vue-router";
+import useGetUser from "../../hooks/useGetUser";
+
 
 export default {
   components: { filterButton },
-  setup() {
+ async setup() {
     const baseUrl = "http://127.0.0.1:4000/";
     const { t } = useI18n();
     const route = useRoute();
     const auth = store.useAuthStore();
-    const userTypeStore = store.useAuthStore();
-    const userType = JSON.parse(userTypeStore.getUserType);
+    const userInfo = await useGetUser.getUserInfo()  
     let token = auth.getToken;
     const headers = {
       "Content-Type": "application/json",
@@ -139,11 +140,11 @@ export default {
       dataSet.seekers = res.data.mapJobApplication; // 👈 get just results
     };
 
-    if (userType.type === "admin" && !route.params.id) fetchSeekers();
-    if (userType.type === "employee" || userType.type === "employer")
+    if (userInfo.type === "admin" && !route.params.id) fetchSeekers();
+    if (userInfo.type === "employee" || userInfo.type === "employer")
       fetchSeekerEmp();
 
-    return { ...toRefs(dataSet) };
+    return { ...toRefs(dataSet),userInfo };
   },
 };
 </script>

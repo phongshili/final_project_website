@@ -20,16 +20,16 @@ export const useLanguageSwitcher = defineStore({
   }
 })
 
-export const useAuthStore = defineStore({
+export  const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
     accessToken: localStorage.getItem('accessToken') || null,
-    userType: localStorage.getItem('userType') || "null"
+    userStatus : localStorage.getItem('userStatus' )|| null
   }),
   getters: {
     getToken: (state) => state.accessToken,
-    getUserType: (state) => state.userType,
     isAuth: (state) => state.accessToken !== null,
+    getUserStatus : (state) => state.userStatus
   },
   actions: {
     async authLogin(email: String, password: String) {
@@ -62,9 +62,8 @@ export const useAuthStore = defineStore({
          )
          userRole = resUserTypeEmp.data.findEmpId
         }
-        const userType = JSON.stringify(userRole);
-        localStorage.setItem('userType', userType);
         localStorage.setItem('accessToken', token);
+        localStorage.setItem('userStatus',type)
         location.reload();
       } catch (error) {
         console.log(error)
@@ -72,7 +71,7 @@ export const useAuthStore = defineStore({
     },
     async logOut() {
      localStorage.removeItem("accessToken");
-     localStorage.removeItem("userType");
+     localStorage.removeItem("userStatus");
       router.push({ name: "Login" });
       location.reload();
 
