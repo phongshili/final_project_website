@@ -301,6 +301,8 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import store from "../../store";
 import useGetUser from "../../hooks/useGetUser";
+import {useReload} from "../../store/reload"
+
 
 
 export default {
@@ -310,7 +312,9 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const auth = store.useAuthStore();
-    const userInfo = await useGetUser.getUserInfo()  
+    const userInfo = await useGetUser.getUserInfo()
+    const reload = useReload();
+
     let token = auth.getToken;
     const headers = {
       "Content-Type": "application/json",
@@ -473,7 +477,10 @@ export default {
         },
         { headers }
       );
+      await reload.setReload(true);
+
       router.go(-1);
+      
     };
 
     // SELETED FILE TO UPLOAD

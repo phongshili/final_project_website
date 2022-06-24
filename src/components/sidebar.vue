@@ -115,28 +115,37 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs,watch } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import store from "../store";
 import useGetUser from "../hooks/useGetUser";
+import {useReload} from "../store/reload"
+
 
 export default {
  async setup() {
     const { t } = useI18n();
-    const baseUrl = "http://127.0.0.1:4000/";
-
-    const userInfo = await useGetUser.getUserInfo()  
-    
+    const baseUrl = "http://127.0.0.1:4000/";    
     const auth = store.useAuthStore();
     let token = auth.getToken;
+    const reload = useReload();
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,
     };
     const dataSet = reactive({
       noti: [],
+      userInfo  : []
     });
+
+       watch(
+      () => reload.getIsReload,
+      async () => {
+        await fetchUserInfo()
+      }
+    );
+
 
     
     const fetchNoti = async () => {
@@ -153,12 +162,21 @@ export default {
 
       dataSet.noti = res.data; // 👈 get just results
     };
-    if (userInfo.type === "employee" || userInfo.type === "employer")
+
+    
+    const fetchUserInfo = async () => {
+      dataSet.userInfo = await useGetUser.getUserInfo()
+      reload.setReload(false);
+    }
+
+
+    await fetchUserInfo()
+    if (dataSet.userInfo.type === "employee" || dataSet.userInfo.type === "employer")
       fetchNoti();
-    if (userInfo.type === "admin") fetchNotiAdmin();
+    if (dataSet.userInfo.type === "admin") fetchNotiAdmin();
 
     return {
-      ...toRefs(dataSet),baseUrl,userInfo
+      ...toRefs(dataSet),baseUrl
     };
   },
 };

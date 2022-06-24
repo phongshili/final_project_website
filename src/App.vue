@@ -1,5 +1,3 @@
-
-
 <template>
 <Suspense>
   <div id="app">

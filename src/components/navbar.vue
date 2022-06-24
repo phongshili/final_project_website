@@ -13,7 +13,12 @@
       </div>
       <div class="option-list" :class="{ 'is-Active': isActive }">
         <div class="profile">
+         <div v-if="userInfo.image" class="profile">
+          <img :src="baseUrl+ userInfo.image" alt="" />
+        </div>
+        <div v-else class="profile">
           <img src="../assets/jibjib_icon.png" alt="" />
+        </div>
           <div class="name" v-if="userInfo.type === 'admin'">
             {{ userInfo.name + ' ' + userInfo.lastname }}
           </div>
@@ -60,19 +65,41 @@
 </template>
 <script>
 import { useAuthStore, useLanguageSwitcher } from "../store";
-import { ref,  } from "vue";
+import { ref,reactive, toRefs,watch} from "vue";
 import useGetUser from "../hooks/useGetUser";
+import {useReload} from "../store/reload"
+
 
 export default {
   async setup() {
     let isActive = ref(false);
+    const baseUrl = "http://127.0.0.1:4000/";
+    const reload = useReload();
     const store = useAuthStore();
     const switcher = useLanguageSwitcher()
-    const userInfo = await useGetUser.getUserInfo()
+    const dataSet = reactive({
+     userInfo  : []
+    })
+
+    watch(
+      () => reload.getIsReload,
+      async () => {
+        await fetchUserInfo()
+      }
+    );
+
+    const fetchUserInfo = async () => {
+      dataSet.userInfo = await useGetUser.getUserInfo()
+      reload.setReload(false);
+    }
+    await fetchUserInfo()
+
+   
+
     const is_Dropdown = () => {
       isActive.value = !isActive.value;
     };
-    return { store,switcher, isActive, is_Dropdown ,userInfo};
+    return { store,switcher, isActive, is_Dropdown ,baseUrl,...toRefs(dataSet)};
   },
 };
 </script>
@@ -140,6 +167,19 @@ export default {
       top: 50px;
       &.is-Active {
         display: block;
+      }
+      .profile {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 15px;
+        border-radius:50%;
+        img {
+          width: 150px;
+          height: 150px;
+        border-radius:50%;
+
+        }
       }
       .line {
         background: $shadow-color;
