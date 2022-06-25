@@ -648,7 +648,7 @@ export default {
     ) {
       fetchPostEmployerByID();
     }
-    if (userInfo.type === "employee" || userInfo.type === "employer") {
+    if (!route.params.id && userInfo.type === "employee" || userInfo.type === "employer") {
       fetchEmployerInfoByID();
     }
 

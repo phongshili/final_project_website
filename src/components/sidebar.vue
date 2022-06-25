@@ -3,7 +3,7 @@
     <div class="sidebar">
       <div class="sidebar-header">
         <div v-if="userInfo.image" class="profile">
-          <img :src="baseUrl+ userInfo.image" alt="" />
+          <img :src="baseUrl + userInfo.image" alt="" />
         </div>
         <div v-else class="profile">
           <img src="../assets/jibjib_icon.png" alt="" />
@@ -15,23 +15,17 @@
           <div class="name" v-else>{{ userInfo.companyName }}</div>
           <div
             class="line"
-            v-if="
-              userInfo.type === 'employee' || userInfo.type === 'employer'
-            "
+            v-if="userInfo.type === 'employee' || userInfo.type === 'employer'"
           ></div>
           <div
             class="role"
-            v-if="
-              userInfo.type === 'employee' || userInfo.type === 'employer'
-            "
+            v-if="userInfo.type === 'employee' || userInfo.type === 'employer'"
           >
             {{ $t("CurrentPointText") }} : {{ userInfo.point }}
           </div>
           <div
             class="role"
-            v-if="
-              userInfo.type === 'employee' || userInfo.type === 'employer'
-            "
+            v-if="userInfo.type === 'employee' || userInfo.type === 'employer'"
           >
             {{ $t("StatusText") }} : {{ userInfo.status }}
           </div>
@@ -93,7 +87,7 @@
               <i class="fa-solid fa-credit-card"></i>
               <span>{{ $t("PaymentsHistoryText") }}</span>
             </div>
-            <span v-if="noti.notiPay !== 0  " class="count">{{
+            <span v-if="noti.notiPay !== 0" class="count">{{
               noti.notiPay || noti.notiPay
             }}</span>
           </router-link>
@@ -115,18 +109,17 @@
 </template>
 
 <script>
-import { reactive, toRefs,watch } from "vue";
+import { reactive, toRefs, watch } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import store from "../store";
 import useGetUser from "../hooks/useGetUser";
-import {useReload} from "../store/reload"
-
+import { useReload } from "../store/reload";
 
 export default {
- async setup() {
+  async setup() {
     const { t } = useI18n();
-    const baseUrl = "http://127.0.0.1:4000/";    
+    const baseUrl = "http://127.0.0.1:4000/";
     const auth = store.useAuthStore();
     let token = auth.getToken;
     const reload = useReload();
@@ -136,18 +129,18 @@ export default {
     };
     const dataSet = reactive({
       noti: [],
-      userInfo  : []
+      userInfo: [],
     });
 
-       watch(
+    watch(
       () => reload.getIsReload,
       async () => {
-        await fetchUserInfo()
+        if (reload.getIsReload === true) {
+          await fetchUserInfo();
+        }
       }
     );
 
-
-    
     const fetchNoti = async () => {
       const res = await axios.get(baseUrl + "emp-api/payment-noti-payment", {
         headers,
@@ -163,20 +156,22 @@ export default {
       dataSet.noti = res.data; // 👈 get just results
     };
 
-    
     const fetchUserInfo = async () => {
-      dataSet.userInfo = await useGetUser.getUserInfo()
+      dataSet.userInfo = await useGetUser.getUserInfo();
       reload.setReload(false);
-    }
+    };
 
-
-    await fetchUserInfo()
-    if (dataSet.userInfo.type === "employee" || dataSet.userInfo.type === "employer")
+    await fetchUserInfo();
+    if (
+      dataSet.userInfo.type === "employee" ||
+      dataSet.userInfo.type === "employer"
+    )
       fetchNoti();
     if (dataSet.userInfo.type === "admin") fetchNotiAdmin();
 
     return {
-      ...toRefs(dataSet),baseUrl
+      ...toRefs(dataSet),
+      baseUrl,
     };
   },
 };
@@ -221,12 +216,11 @@ export default {
         justify-content: center;
         margin-top: 20px;
         margin-bottom: 15px;
-        border-radius:50%;
+        border-radius: 50%;
         img {
           width: 150px;
           height: 150px;
-        border-radius:50%;
-
+          border-radius: 50%;
         }
       }
       .detail {
