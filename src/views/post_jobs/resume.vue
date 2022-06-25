@@ -34,7 +34,7 @@
             >
             <div class="img-container">
               <img
-                v-if="!resume.image"
+                v-if="!resume.imageCard"
                 class="personalIDCard"
                 src="../../assets/default1.jpg"
                 alt=""
@@ -42,7 +42,7 @@
               <img
                 v-else
                 class="personalIDCard"
-                :src="baseUrl + resume.image"
+                :src="baseUrl + resume.imageCard"
                 alt=""
               />
             </div>
