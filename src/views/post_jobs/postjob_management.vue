@@ -17,12 +17,7 @@
               src="../../assets/default.jpg"
               alt=""
             />
-            <img
-              v-else
-              class="profile"
-              :src="baseUrl + image"
-              alt=""
-            />
+            <img v-else class="profile" :src="baseUrl + image" alt="" />
           </div>
           <input
             class="input is-primary"
@@ -48,7 +43,7 @@
             <img
               v-else
               class="personalIDCard"
-              :src="baseUrl  + backgroundImage"
+              :src="baseUrl + backgroundImage"
               alt=""
             />
           </div>
@@ -93,9 +88,13 @@
             <p class="required">*</p></label
           >
           <div class="input-area">
-            <div class="select"  >
-              <select class="dropdown" @click="getCompanyData" v-model="employer">
-                <option 
+            <div class="select">
+              <select
+                class="dropdown"
+                @click="getCompanyData"
+                v-model="employer"
+              >
+                <option
                   selected
                   v-for="(employer, index) in fetchEmployer"
                   :key="index"
@@ -334,11 +333,11 @@
         <button
           class="button is-link"
           @click="updatePost('online')"
-          v-if="$route.params.id &&  status !== 'expired'"
+          v-if="$route.params.id && status !== 'expired'"
         >
           {{ $t("EditButtonText") }}
         </button>
-   
+
         <button
           @click="addPostJob"
           class="button is-success"
@@ -347,8 +346,10 @@
           {{ $t("RePostText") }}
         </button>
 
-      
-        <div class="spacer"  v-if="$route.params.id && status === 'online'"></div>
+        <div
+          class="spacer"
+          v-if="$route.params.id && status === 'online'"
+        ></div>
         <button
           @click="updatePost('offline')"
           class="button is-warning is-no"
@@ -356,7 +357,7 @@
         >
           {{ $t("OfflineButtonText") }}
         </button>
-          <div class="spacer"></div>
+        <div class="spacer"></div>
         <button @click="$router.go(-1)" class="button is-danger is-left">
           {{ $t("BackText") }}
         </button>
@@ -375,23 +376,20 @@ import store from "../../store";
 import useGetUser from "../../hooks/useGetUser";
 import { useLoading } from "../../store/loading";
 
-
 export default {
- async setup() {
-    
+  async setup() {
     const { t } = useI18n();
 
     const baseUrl = "http://127.0.0.1:4000/";
-      const route = useRoute();
+    const route = useRoute();
     const router = useRouter();
     const auth = store.useAuthStore();
-    const userInfo = await useGetUser.getUserInfo()  
+    const userInfo = await useGetUser.getUserInfo();
     const startDate = ref(new Date());
     const endDate = ref(new Date());
     endDate.value.setMonth(startDate.value.getMonth() + 1);
 
     const loading = useLoading();
-  
 
     let token = auth.getToken;
     const headers = {
@@ -444,30 +442,29 @@ export default {
     };
 
     const fetchPosition = async () => {
-      await  loading.setloading(true);
+      await loading.setloading(true);
 
       const res = await axios.get(baseUrl + "admin-api/position-get");
       dataSet.fetchPosition = res.data.getPosition;
       if (!route.params.id) dataSet.position = dataSet.fetchPosition[0]._id;
-                   setTimeout(() => {
+      setTimeout(() => {
         loading.setloading(false);
-      },2000)
+      }, 2000);
     };
 
     const fetchEmployer = async () => {
-      await  loading.setloading(true);
+      await loading.setloading(true);
       const res = await axios.get(baseUrl + "admin-api/employee-get");
       dataSet.fetchEmployer = res.data.mapEmp; // 👈 get just results
       if (!route.params.id) dataSet.employer = dataSet.fetchEmployer[0]._id;
       if (!route.params.id) fetchEmployerByID();
-                setTimeout(() => {
+      setTimeout(() => {
         loading.setloading(false);
-      },2000)
-      
+      }, 2000);
     };
     // need to refactor this code to hook
     const fetchEmployerByID = async () => {
-      await  loading.setloading(true);
+      await loading.setloading(true);
 
       const res = await axios.get(
         baseUrl + "admin-api/employee-find-id/" + dataSet.employer
@@ -482,14 +479,13 @@ export default {
       dataSet.provinceId = employer.provinceId;
       (dataSet.district = employer.districtName),
         (dataSet.districtId = employer.districtId);
-                  setTimeout(() => {
+      setTimeout(() => {
         loading.setloading(false);
-      },2000)
+      }, 2000);
     };
 
     const fetchPostByID = async () => {
-            
-      await  loading.setloading(true);
+      await loading.setloading(true);
 
       const res = await axios.get(
         baseUrl + "admin-api/postjob-find-id/" + route.params.id
@@ -510,16 +506,16 @@ export default {
       dataSet.endDate = post.endDate;
       dataSet.province = post.provinceName;
       dataSet.provinceId = post.provinceId;
-      dataSet.district = post.districtName,
-      dataSet.districtId = post.districtId;
+      (dataSet.district = post.districtName),
+        (dataSet.districtId = post.districtId);
       dataSet.image = post.logo;
       dataSet.backgroundImage = post.image;
       dataSet.aboutUs = post.aboutUs;
       dataSet.email = post.email;
       dataSet.tel = post.tel;
-                setTimeout(() => {
+      setTimeout(() => {
         loading.setloading(false);
-      },2000)
+      }, 2000);
     };
 
     // employer function
@@ -528,8 +524,7 @@ export default {
     // duplicate code
 
     const fetchEmployerInfoByID = async () => {
-             
-      await  loading.setloading(true);
+      await loading.setloading(true);
 
       const res = await axios.get(baseUrl + "emp-api/employee-find-id", {
         headers,
@@ -544,9 +539,9 @@ export default {
       dataSet.provinceId = employer.provinceId;
       (dataSet.district = employer.districtName),
         (dataSet.districtId = employer.districtId);
-                  setTimeout(() => {
+      setTimeout(() => {
         loading.setloading(false);
-      },2000)
+      }, 2000);
     };
 
     const fetchPostEmployerByID = async () => {
@@ -576,8 +571,7 @@ export default {
       dataSet.districtId = post.districtId;
       setTimeout(() => {
         loading.setloading(false);
-      },2000)
-
+      }, 2000);
     };
 
     const addPostJob = async () => {
@@ -623,9 +617,9 @@ export default {
           },
           { headers }
         );
-          setTimeout(() => {
+      setTimeout(() => {
         loading.setloading(false);
-      },2000)
+      }, 2000);
       router.go(-1);
     };
 
@@ -669,15 +663,15 @@ export default {
           districtId: dataSet.districtId,
           positionId: dataSet.position,
         });
-                  setTimeout(() => {
+      setTimeout(() => {
         loading.setloading(false);
-      },2000)
+      }, 2000);
       router.go(-1);
     };
     // get data when click select company
-    const getCompanyData = async ()=>{
+    const getCompanyData = async () => {
       await fetchEmployerByID();
-    }
+    };
 
     if (route.params.id && userInfo.type === "admin") fetchPostByID();
     if (userInfo.type === "admin") {
@@ -690,7 +684,10 @@ export default {
     ) {
       fetchPostEmployerByID();
     }
-    if (!route.params.id && userInfo.type === "employee" || userInfo.type === "employer") {
+    if (
+      (!route.params.id && userInfo.type === "employee") ||
+      userInfo.type === "employer"
+    ) {
       fetchEmployerInfoByID();
     }
 

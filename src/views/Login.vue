@@ -5,10 +5,7 @@
       <div class="text-title subtitle">{{ $t("LoginTitleText") }}</div>
       <div class="logo">
         <div class="logo-image">
-          <img
-            src="../assets/jibjib_icon.png"
-            alt=""
-          />
+          <img src="../assets/jibjib_icon.png" alt="" />
         </div>
         <div class="text-title">
           Job <br />
@@ -93,6 +90,7 @@
 <script >
 import { ref } from "vue-demi";
 import { useAuthStore, useLanguageSwitcher } from "../store";
+import { useLoading } from "../store/loading";
 
 export default {
   setup() {
@@ -100,8 +98,14 @@ export default {
     let password = ref();
     const store = useAuthStore();
     const storeSwitcher = useLanguageSwitcher();
+    const loading = useLoading();
+
     const login = async () => {
+      await loading.setloading(true);
       await store.authLogin(email.value, password.value);
+      setTimeout(() => {
+        loading.setloading(false);
+      }, 2000);
     };
     return { email, password, login, storeSwitcher };
   },
