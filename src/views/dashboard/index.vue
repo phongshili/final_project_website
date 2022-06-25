@@ -61,7 +61,7 @@
       <customModal :modalActive="modalActive">
         <div class="modal-content">
           <div class="modal-detail">
-            <div  class="image-input" @click="$refs.logoFile.click()">
+            <div class="image-input" @click="$refs.logoFile.click()">
               <div class="modal-image-container">
                 <img
                   v-if="!bill"
@@ -72,7 +72,10 @@
                 <img v-else class="bill" :src="baseUrl + bill" alt="" />
               </div>
               <input
-              v-if="userInfo.type === 'employer' || userInfo.type === 'employee' && id ===''"
+                v-if="
+                  userInfo.type === 'employer' ||
+                  (userInfo.type === 'employee' && id === '')
+                "
                 class="input is-primary"
                 style="display: none"
                 type="file"
@@ -81,7 +84,10 @@
                 ref="logoFile"
               />
               <input
-              v-if="userInfo.type === 'employer' || userInfo.type === 'employee' && id ===''"
+                v-if="
+                  userInfo.type === 'employer' ||
+                  (userInfo.type === 'employee' && id === '')
+                "
                 class="input is-primary"
                 style="display: none"
                 type="text"
@@ -105,8 +111,15 @@
             </div>
 
             <div class="spacerH"></div>
+            <label v-if="status ==='cancel'" class='comment' for="">{{$t('CommentText')}} : {{detail}}</label>
+            <div  v-if="status ==='cancel'" class="spacerH"></div>
+
             <div class="btn-option-group">
-              <button  v-if="userInfo.type === 'employee' && status !== 'cancel' " @click="sendReq" class="button is-success">
+              <button
+                v-if="userInfo.type === 'employee' && status !== 'cancel'"
+                @click="sendReq"
+                class="button is-success"
+              >
                 {{ $t("SendText") }}
               </button>
               <button
@@ -118,17 +131,17 @@
               </button>
               <div
                 class="spacer"
-          v-if="userInfo.type === 'admin' || id ===''"
+                v-if="userInfo.type === 'admin' || id === ''"
               ></div>
               <button
                 class="button is-warning is-no"
-                @click="ApproveReq('cancel')"
+                @click="rejectModalAction"
                 v-if="userInfo.type === 'admin' && status === 'pending'"
               >
                 {{ $t("RejectText") }}
               </button>
-              <div  class="spacer" v-if="userInfo.type === 'admin' "></div>
-              <button  @click="modalAction" class="button is-danger">
+              <div class="spacer" v-if="userInfo.type === 'admin'"></div>
+              <button @click="modalAction" class="button is-danger">
                 {{ $t("CancelText") }}
               </button>
             </div>
@@ -136,6 +149,38 @@
         </div>
       </customModal>
       <!-- end custom modal -->
+      <customModal :modalActive="rejectModal">
+      <div class="modal-content">
+        <div class="modal-detail">
+          <div class="amount-input">
+            <input
+              class="input is-primary"
+              type="text"
+              v-model="detail"
+              :placeholder="$t('DetailText')"
+            />
+          </div>
+          <div class="spacerH"></div>
+          <div class="btn-option-group">
+            <button
+              class="button is-warning is-no"
+              @click="ApproveReq('cancel')"
+              v-if="userInfo.type === 'admin' && status === 'pending'"
+            >
+              {{ $t("RejectText") }}
+            </button>
+            <div
+              class="spacer"
+              v-if="userInfo.type === 'admin' && status === 'pending'"
+            ></div>
+            <button @click="rejectModal = false" class="button is-danger">
+              {{ $t("CancelText") }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </customModal>
+    <!-- end custom modal -->
 
       <div class="form-display">
         <div class="chart-container">
@@ -158,15 +203,25 @@
             v-for="payment in payments"
             :key="payment._id"
           >
-            <div v-if="userInfo.type === 'admin'" class="">{{ payment.employeeName }}</div>
-            <div v-if="userInfo.type === 'employee'|| userInfo.type === 'employer'" class="">{{ payment.createdAt }}</div>
-
+            <div v-if="userInfo.type === 'admin'" class="">
+              {{ payment.employeeName }}
+            </div>
+            <div
+              v-if="
+                userInfo.type === 'employee' || userInfo.type === 'employer'
+              "
+              class=""
+            >
+              {{ payment.createdAt }}
+            </div>
 
             <div class="">{{ payment.point }} Points</div>
-            <div v-if="payment.status === 'cancel'" class="cancel">{{ payment.status }}</div>
-            <div v-if="payment.status === 'pending'" class="pending">{{ payment.status }}</div>
-
-
+            <div v-if="payment.status === 'cancel'" class="cancel">
+              {{ payment.status }}
+            </div>
+            <div v-if="payment.status === 'pending'" class="pending">
+              {{ payment.status }}
+            </div>
           </div>
           <div
             class="payment body"
@@ -183,13 +238,7 @@
 </template>
 <script>
 import { useI18n } from "vue-i18n";
-import {
-  DoughnutChart,
-  BarChart,
-  RadarChart,
-  PieChart,
-  LineChart,
-} from "vue-chart-3";
+import { BarChart } from "vue-chart-3";
 
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
@@ -199,15 +248,11 @@ import axios from "axios";
 import store from "../../store";
 import customModal from "@/components/customModal.vue";
 import useGetUser from "../../hooks/useGetUser";
-
+import Swal from "sweetalert2";
 
 export default {
   components: {
-    DoughnutChart,
     BarChart,
-    RadarChart,
-    PieChart,
-    LineChart,
     customModal,
   },
   async setup() {
@@ -215,9 +260,8 @@ export default {
 
     const baseUrl = "http://127.0.0.1:4000/";
     const auth = store.useAuthStore();
- 
 
-    const userInfo = await useGetUser.getUserInfo()  
+    const userInfo = await useGetUser.getUserInfo();
 
     let token = auth.getToken;
     const dataSet = reactive({
@@ -229,7 +273,10 @@ export default {
       id: "",
       findPayment: [],
       status: "",
-      isDisabled: false
+      isDisabled: false,
+      rejectModal: false,
+
+      detail: "",
     });
 
     const headers = {
@@ -238,26 +285,35 @@ export default {
     };
     // need to refactor this code to hook
     const fetchCountTotalAdmin = async () => {
+
       const res = await axios.get(
         "http://127.0.0.1:4000/admin-api/admin-count-total"
       );
 
       dataSet.countTotal = res.data; // 👈 get just results
+  
     };
     // need to refactor this code to hook
     const fetchPaymentAdmin = async () => {
+
       const res = await axios.get(
         "http://127.0.0.1:4000/admin-api/payment-get?status=pending"
       );
 
       dataSet.payments = res.data.mapPayment; // 👈 get just results
+
     };
     const fetchPaymentEmp = async () => {
-      const res = await axios.get(baseUrl + "emp-api/payment-get?status=cancel", {
-        headers,
-      });
+
+      const res = await axios.get(
+        baseUrl + "emp-api/payment-get?status=cancel",
+        {
+          headers,
+        }
+      );
 
       dataSet.payments = res.data.mapPayment; // 👈 get just results
+
     };
 
     // get payment data
@@ -265,12 +321,18 @@ export default {
       const res = await axios.get(baseUrl + "admin-api/payment-find-id/" + id);
       dataSet.findPayment = res.data.mapPayment;
       dataSet.status = dataSet.findPayment.status;
+      dataSet.detail = dataSet.findPayment.detail;
+
     };
 
     //duplicate code
     const fetchEmployerPaymentById = async (id) => {
+
       const res = await axios.get(baseUrl + "emp-api/payment-find-id/" + id);
       dataSet.findPayment = res.data.mapPayment;
+      dataSet.detail = dataSet.findPayment.detail;
+
+
     };
 
     // need to refactor this code to hook
@@ -282,7 +344,12 @@ export default {
         }
       );
       dataSet.countTotal = res.data; // 👈 get just results
+        setTimeout(() => {
+        loading.setloading(false);
+      }, 2000);
     };
+
+
 
     // SELETED FILE TO UPLOAD
     const onBillFileChange = async (e) => {
@@ -302,11 +369,10 @@ export default {
       await fetchCountTotalAdmin();
       await fetchPaymentAdmin();
     }
-    if (userInfo.type === "employee" || userInfo.type === "employer"){
+    if (userInfo.type === "employee" || userInfo.type === "employer") {
       await fetchCountTotalEmp();
-      await fetchPaymentEmp()
+      await fetchPaymentEmp();
     }
-      
 
     const ApproveReq = async (status) => {
       await axios.put(baseUrl + "admin-api/payment-update/", {
@@ -314,14 +380,22 @@ export default {
         status: status,
         detail: dataSet.detail,
       });
+      console.log(status);
       dataSet.modalActive = !dataSet.modalActive;
+      dataSet.rejectModal = false
+
+        await Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: t('SuccessText'),
+          showConfirmButton: false,
+          timer: 1500,
+        });
       if (userInfo.type === "admin") fetchPaymentAdmin();
       if (userInfo.type === "employee" || userInfo.type === "employer")
-      await  fetchPaymentEmp();
-        windows.location.reload();
-               dataSet.isDisabled = false;
-
-
+        await fetchPaymentEmp();
+      window.location.reload();
+      dataSet.isDisabled = false;
     };
 
     const sendReq = async () => {
@@ -335,6 +409,13 @@ export default {
         },
         { headers }
       );
+      await Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: t('SuccessText'),
+        showConfirmButton: false,
+        timer: 1500,
+      });
       window.location.reload();
     };
 
@@ -348,17 +429,20 @@ export default {
       dataSet.bill = dataSet.findPayment.image;
       dataSet.id = id;
       dataSet.status = dataSet.findPayment.status;
-      
     };
 
     const modalAction = async () => {
       dataSet.modalActive = !dataSet.modalActive;
-        dataSet.isDisabled = false;
+      dataSet.isDisabled = false;
 
       setTimeout(() => {
         (dataSet.id = ""), (dataSet.amount = ""), (dataSet.bill = "");
         dataSet.status = "";
       }, 300);
+    };
+          const rejectModalAction = async () => {
+      dataSet.rejectModal = !dataSet.rejectModal;
+
     };
 
     // const reportListData = {
@@ -444,7 +528,8 @@ export default {
       baseUrl,
       modalAction,
       showReceipt,
-      userInfo
+      userInfo,
+      rejectModalAction
     };
   },
 };
@@ -467,13 +552,13 @@ export default {
     border-radius: 5px;
     width: 60%;
     height: fit-content;
-    .cancel{
+    .cancel {
       color: $alert-color;
-      text-transform: uppercase
+      text-transform: uppercase;
     }
-    .pending{
-       color: $primary-color;
-      text-transform: uppercase
+    .pending {
+      color: $primary-color;
+      text-transform: uppercase;
     }
     .payment {
       display: flex;

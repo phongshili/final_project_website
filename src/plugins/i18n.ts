@@ -143,6 +143,7 @@ const messages = {
         AboutUsText: "About Us",
         FacebookText: "Facebook",
         FacebookLinkText: "Facebook Link",
+        CommentText : "Comment", 
 
         OldPasswordText: "Old Password",
         NewPasswordText: "New Password",
@@ -154,6 +155,7 @@ const messages = {
 
         FormSentOTPText:"Sent OTP",
         TelHintText:"Please Enter Your Phone Number",
+        SuccessText:'Success'
 
         //end form text
 
@@ -297,6 +299,7 @@ const messages = {
         AboutUsText: "ກຽວກັບພວກເຮົາ",
         FacebookText: "Facebook",
         FacebookLinkText: "Facebook ລີ່ງ",
+        CommentText: 'ໝາຍເຫດ',
 
         OldPasswordText: "ລະຫັດຜ່ານເກົ່າ",
         NewPasswordText: "ລະຫັດຜ່ານໃໝ່",
@@ -307,6 +310,8 @@ const messages = {
         yearlyText:"ປະຈຳປິ",
         FormSentOTPText:"ສົ່ງລະຫັດ OTP",
         TelHintText:"ກະລູນາປ້ອນເບີໂທ",
+        SuccessText:'ສຳເລັດ'
+
 
 
 

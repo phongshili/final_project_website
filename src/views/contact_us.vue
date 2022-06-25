@@ -14,6 +14,7 @@
 <script>
 import {useReload} from "../store/reload"
 import {ref, reactive, toRefs} from "vue"
+import Swal from 'sweetalert2'
 export default {
   name: "Home",
 
@@ -27,6 +28,14 @@ export default {
       await reload.setReload(true)
       dataSet.name = 'phong'
       dataSet.isReloaded = reload.getIsReload
+
+    await  Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Your work has been saved',
+  showConfirmButton: false,
+  timer: 1500
+})
       console.log(dataSet.isReloaded)
 
       // await reload.setReload(false)

@@ -63,12 +63,7 @@
                 src="@/assets/default.jpg"
                 alt=""
               />
-              <img
-                v-else
-                class="bill"
-                :src="baseUrl  + bill"
-                alt=""
-              />
+              <img v-else class="bill" :src="baseUrl + bill" alt="" />
             </div>
           </div>
           <div class="spacerH"></div>
@@ -86,20 +81,65 @@
             />
           </div>
           <div class="spacerH"></div>
+              <label v-if="status ==='cancel'" class='comment' for="">{{$t('CommentText')}} : {{detail}}</label>
+            <div  v-if="status ==='cancel'" class="spacerH"></div>
+
           <div class="btn-option-group">
-            <button v-if="userInfo.type === 'admin' && status === 'pending'"  @click="ApproveReq('confirmed')" class="button is-success">
+            <button
+              v-if="userInfo.type === 'admin' && status === 'pending'"
+              @click="ApproveReq('confirmed')"
+              class="button is-success"
+            >
               {{ $t("ApproveText") }}
             </button>
-            <div class="spacer" v-if="userInfo.type === 'admin' && status === 'pending'"></div>
-                 <button
-          class="button is-warning is-no"
-          @click="ApproveReq('cancel')"
-          v-if=" userInfo.type === 'admin' && status === 'pending'" 
-        >
-          {{ $t("RejectText") }}
-        </button>
-             <div class="spacer"   v-if=" userInfo.type === 'admin' && status === 'pending'" ></div>
+            <div
+              class="spacer"
+              v-if="userInfo.type === 'admin' && status === 'pending'"
+            ></div>
+            <button
+              class="button is-warning is-no"
+              @click="rejectModalAction"
+              v-if="userInfo.type === 'admin' && status === 'pending'"
+            >
+              {{ $t("RejectText") }}
+            </button>
+            <div
+              class="spacer"
+              v-if="userInfo.type === 'admin' && status === 'pending'"
+            ></div>
             <button @click="modalAction" class="button is-danger">
+              {{ $t("CancelText") }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </customModal>
+    <!-- end custom modal -->
+    <customModal :modalActive="rejectModal">
+      <div class="modal-content">
+        <div class="modal-detail">
+          <div class="amount-input">
+            <input
+              class="input is-primary"
+              type="text"
+              v-model="detail"
+              :placeholder="$t('DetailText')"
+            />
+          </div>
+          <div class="spacerH"></div>
+          <div class="btn-option-group">
+            <button
+              class="button is-warning is-no"
+              @click="ApproveReq('cancel')"
+              v-if="userInfo.type === 'admin' && status === 'pending'"
+            >
+              {{ $t("RejectText") }}
+            </button>
+            <div
+              class="spacer"
+              v-if="userInfo.type === 'admin' && status === 'pending'"
+            ></div>
+            <button @click="rejectModal = false" class="button is-danger">
               {{ $t("CancelText") }}
             </button>
           </div>
@@ -117,18 +157,18 @@ import { useI18n } from "vue-i18n";
 import store from "../../store";
 import customModal from "@/components/customModal.vue";
 import useGetUser from "../../hooks/useGetUser";
-
+import Swal from "sweetalert2";
 
 export default {
   components: {
     filterButton,
     customModal,
   },
- async setup() {
+  async setup() {
     const { t } = useI18n();
     const auth = store.useAuthStore();
     const baseUrl = "http://127.0.0.1:4000/";
-    const userInfo = await useGetUser.getUserInfo()  
+    const userInfo = await useGetUser.getUserInfo();
 
     let token = auth.getToken;
     const dataSet = reactive({
@@ -154,9 +194,10 @@ export default {
       amount: "",
       bill: "",
       modalActive: false,
-      detail:'',
-      id:'',
-      status:''
+      rejectModal: false,
+      detail: "",
+      id: "",
+      status: "",
     });
     const headers = {
       "Content-Type": "application/json",
@@ -164,55 +205,53 @@ export default {
     };
     // need to refactor this code to hook
     const fetchPaymentAdmin = async () => {
-
-      const res = await axios.get(baseUrl+"admin-api/payment-get");
+      const res = await axios.get(baseUrl + "admin-api/payment-get");
 
       dataSet.payments = res.data.mapPayment; // 👈 get just results
-
     };
     // need to refactor this code to hook
     const fetchPaymentEmp = async () => {
       const res = await axios.get(baseUrl + "emp-api/payment-get", {
         headers,
       });
-      
-      dataSet.payments = res.data.mapPayment; // 👈 get just results
 
+      dataSet.payments = res.data.mapPayment; // 👈 get just results
     };
 
     const fetchAdminPaymentById = async (id) => {
-
       const res = await axios.get(baseUrl + "admin-api/payment-find-id/" + id);
 
       dataSet.findPayment = res.data.mapPayment;
-       dataSet.status =  dataSet.findPayment.status;
-
+      dataSet.status = dataSet.findPayment.status;
+      dataSet.detail = dataSet.findPayment.detail;
     };
 
     //duplicate code
     const fetchEmployerPaymentById = async (id) => {
-
-      
       const res = await axios.get(baseUrl + "emp-api/payment-find-id/" + id);
       dataSet.findPayment = res.data.mapPayment;
-
     };
 
     const ApproveReq = async (status) => {
+      await axios.put(baseUrl + "admin-api/payment-update/", {
+        id: dataSet.id,
+        status: status,
+        detail: dataSet.detail,
+      });
+      dataSet.modalActive = !dataSet.modalActive;
+      dataSet.rejectModal = false
+      await Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: t("SuccessText"),
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      await fetchPaymentAdmin();
 
-        await axios.put(baseUrl + "admin-api/payment-update/",{
-          id:dataSet.id,
-          status: status,
-          detail: dataSet.detail,
-        });
-        dataSet.modalActive = !dataSet.modalActive;
-        await fetchPaymentAdmin();
+      window.location.reload();
+    };
 
-        window.location.reload();
-  
-
-    }
-    
     if (userInfo.type === "admin") fetchPaymentAdmin();
     if (userInfo.type === "employee" || userInfo.type === "employer")
       fetchPaymentEmp();
@@ -224,18 +263,29 @@ export default {
         await fetchEmployerPaymentById(id);
       dataSet.amount = dataSet.findPayment.point;
       dataSet.bill = dataSet.findPayment.image;
-      dataSet.id = id
+      dataSet.id = id;
     };
     const modalAction = async () => {
       dataSet.modalActive = !dataSet.modalActive;
-            setTimeout(() =>{
-           (dataSet.id = ""), (dataSet.amount = ""), (dataSet.bill = "");
-      dataSet.status = "";
-      },500)
+      setTimeout(() => {
+        (dataSet.id = ""), (dataSet.amount = ""), (dataSet.bill = "");
+        dataSet.status = "";
+      }, 500);
+    };
+    const rejectModalAction = async () => {
+      dataSet.rejectModal = !dataSet.rejectModal;
 
-    }
+    };
 
-    return { showReceipt, ...toRefs(dataSet), baseUrl, ApproveReq ,modalAction,userInfo};
+    return {
+      showReceipt,
+      ...toRefs(dataSet),
+      baseUrl,
+      ApproveReq,
+      modalAction,
+      userInfo,
+      rejectModalAction
+    };
   },
 };
 </script>

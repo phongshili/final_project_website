@@ -140,7 +140,7 @@ export default {
         }
       }
     );
-
+    // change to hook to reload data when data has been update 
     const fetchNoti = async () => {
       const res = await axios.get(baseUrl + "emp-api/payment-noti-payment", {
         headers,
@@ -148,6 +148,7 @@ export default {
 
       dataSet.noti = res.data; // 👈 get just results
     };
+    // change to hook to reload data when data has been update 
     const fetchNotiAdmin = async () => {
       const res = await axios.get(baseUrl + "admin-api/employee-noti", {
         headers,
