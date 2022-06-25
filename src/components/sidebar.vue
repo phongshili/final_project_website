@@ -15,19 +15,25 @@
           <div class="name" v-else>{{ userInfo.companyName }}</div>
           <div
             class="line"
-            v-if="userInfo.type === 'employee' || userInfo.type === 'employer'"
+            v-if="userInfo.type === 'employee'"
           ></div>
           <div
             class="role"
-            v-if="userInfo.type === 'employee' || userInfo.type === 'employer'"
+            v-if="userInfo.type === 'employee'"
           >
             {{ $t("CurrentPointText") }} : {{ userInfo.point }}
           </div>
           <div
-            class="role"
-            v-if="userInfo.type === 'employee' || userInfo.type === 'employer'"
+            class="role is-uppercase"
+            v-if="userInfo.type === 'employee'"
           >
             {{ $t("StatusText") }} : {{ userInfo.status }}
+          </div>
+           <div
+            class="role"
+            v-if="userInfo.type === 'employee' && userInfo.status==='reject'"
+          >
+            {{ $t("CommentText") }} : {{ userInfo.comment }}
           </div>
         </div>
       </div>

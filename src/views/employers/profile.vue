@@ -275,7 +275,7 @@
         <div class="spacer"></div>
         <button
           class="button is-warning is-no"
-          @click="updateEmployer('reject')"
+          @click="rejectModalAction"
           v-if="$route.params.id && userInfo.type === 'admin'"
         >
           {{ $t("RejectText") }}
@@ -286,6 +286,35 @@
         </button>
       </div>
     </div>
+    <!-- end custom modal -->
+    <customModal :modalActive="rejectModal">
+      <div class="modal-content">
+        <div class="modal-detail">
+          <div class="amount-input">
+            <input
+              class="input is-primary"
+              type="text"
+              v-model="comment"
+              :placeholder="$t('DetailText')"
+            />
+          </div>
+          <div class="spacerH"></div>
+          <div class="btn-option-group">
+            <button
+              class="button is-warning is-no"
+              @click="updateEmployer('reject')"
+            >
+              {{ $t("RejectText") }}
+            </button>
+            <div class="spacer"></div>
+            <button @click="rejectModal = false" class="button is-danger">
+              {{ $t("CancelText") }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </customModal>
+    <!-- end custom modal -->
   </div>
 </template>
 
@@ -298,8 +327,12 @@ import store from "../../store";
 import useGetUser from "../../hooks/useGetUser";
 import { useReload } from "../../store/reload";
 import { useLoading } from "../../store/loading";
+import customModal from "@/components/customModal.vue";
 
 export default {
+  components: {
+    customModal,
+  },
   async setup() {
     const baseUrl = "http://127.0.0.1:4000/";
     const { t } = useI18n();
@@ -336,6 +369,8 @@ export default {
       provinceID: "5eb8cb58f2913809f730ce9c", //set default for province to vientian capital
       districtID: "5ec5f96ecc249b11cae0404e", // set default for district to chanthabuly
       profile: [],
+      rejectModal: false,
+      comment: "",
     });
 
     // // watch if provinceID has changed do something
@@ -451,7 +486,7 @@ export default {
       }, 2000);
       router.go(-1);
     };
-    const updateEmployer = async (rejectStaus) => {
+    const updateEmployer = async (status) => {
       await loading.setloading(true);
 
       await axios.put(baseUrl + "admin-api/employee-update", {
@@ -465,9 +500,12 @@ export default {
         districtId: dataSet.districtID,
         email: dataSet.email,
         tel: dataSet.tel,
-        status: rejectStaus,
+        status: status,
         point: dataSet.point,
+        comment: status === "approve" ? null : dataSet.comment,
       });
+      dataSet.rejectModal = false;
+
       setTimeout(() => {
         loading.setloading(false);
       }, 2000);
@@ -499,6 +537,10 @@ export default {
       }, 2000);
 
       router.go(-1);
+    };
+
+    const rejectModalAction = async () => {
+      dataSet.rejectModal = !dataSet.rejectModal;
     };
 
     // SELETED FILE TO UPLOAD
@@ -538,6 +580,7 @@ export default {
       updateEmployer,
       setDistrict,
       userInfo,
+      rejectModalAction,
     };
   },
 };
