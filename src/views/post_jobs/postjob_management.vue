@@ -375,6 +375,8 @@ import moment from "moment";
 import store from "../../store";
 import useGetUser from "../../hooks/useGetUser";
 import { useLoading } from "../../store/loading";
+import { useReload } from "../../store/reload";
+
 
 export default {
   async setup() {
@@ -388,6 +390,7 @@ export default {
     const startDate = ref(new Date());
     const endDate = ref(new Date());
     endDate.value.setMonth(startDate.value.getMonth() + 1);
+    const reload = useReload();
 
     const loading = useLoading();
 
@@ -617,6 +620,8 @@ export default {
           },
           { headers }
         );
+      await reload.setReload(true);
+
       setTimeout(() => {
         loading.setloading(false);
       }, 2000);
