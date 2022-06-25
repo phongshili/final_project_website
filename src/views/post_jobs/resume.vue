@@ -42,7 +42,7 @@
               <img
                 v-else
                 class="personalIDCard"
-                :src="baseUrl  + resume.image"
+                :src="baseUrl + resume.image"
                 alt=""
               />
             </div>
@@ -81,7 +81,7 @@
                 {{ $t("GenderText") }} : {{ resume.gender || "-" }}
               </p>
               <div class="spacerH"></div>
-              <p>{{ $t("BirthDateText") }} : {{dateTimeFormat || "-" }}</p>
+              <p>{{ $t("BirthDateText") }} : {{ dateTimeFormat || "-" }}</p>
               <div class="spacerH"></div>
               <p>{{ $t("TelText") }} : {{ resume.tel || "-" }}</p>
               <div class="spacerH"></div>
@@ -172,18 +172,22 @@ import axios from "axios";
 import { useI18n } from "vue-i18n";
 import store from "../../store";
 import { useRoute, useRouter } from "vue-router";
-import moment from 'moment'
+import moment from "moment";
+import useGetUser from "../../hooks/useGetUser";
+import { useLoading } from "../../store/loading";
+
 export default {
   components: { filterButton },
-  setup() {
+  async setup() {
     const { t } = useI18n();
     const baseUrl = "http://127.0.0.1:4000/";
     const auth = store.useAuthStore();
     let token = auth.getToken;
     const route = useRoute();
     const router = useRouter();
-    const userTypeStore = store.useAuthStore();
-    const userType = JSON.parse(userTypeStore.getUserType);
+    const userInfo = await useGetUser.getUserInfo();
+    const loading = useLoading();
+
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,
@@ -191,10 +195,17 @@ export default {
     const dataSet = reactive({
       resume: [],
       comment: "",
-      dateTimeFormat:''
+      dateTimeFormat: "",
     });
+
+    // format date function
+    const dateTimeFormator = async (dateTime) => {
+      return moment(dateTime).format("MM-DD-YYYY");
+    };
+
     // need to refactor this code to hook
     const fetchResume = async () => {
+      await loading.setloading(true);
       const res = await axios.get(
         baseUrl + "emp-api/jobapplication-find-id/" + route.params.id,
         {
@@ -203,11 +214,15 @@ export default {
       );
 
       dataSet.resume = res.data.mapJobApplication; // 👈 get just results
-      dataSet.dateTimeFormat = await dateTimeFormator(dataSet.resume.birthDate)
+      dataSet.dateTimeFormat = await dateTimeFormator(dataSet.resume.birthDate);
+      setTimeout(() => {
+        loading.setloading(false);
+      }, 2000);
     };
     // need to refactor this code to hook
     //duplicate code
     const fetchResumeEmployer = async () => {
+      await loading.setloading(true);
       const res = await axios.get(
         baseUrl + "admin-api/seeker-find-id/" + route.params.id,
         {
@@ -216,42 +231,43 @@ export default {
       );
 
       dataSet.resume = res.data.mapSeeker; // 👈 get just results
+      setTimeout(() => {
+        loading.setloading(false);
+      }, 2000);
     };
 
-    const dateTimeFormator = async (dateTime) => {
-     return moment(dateTime).format('MM-DD-YYYY')
-    }
-
-
     const updateStatus = async (status) => {
-      if((userType.type === "admin" && status ==='reject')){
-        alert(status)
+      await loading.setloading(true);
+      if (userInfo.type === "admin" && status === "reject") {
+        alert(status);
       }
-      if (userType.type === "employee" || userType.type === "employer")
+      if (userInfo.type === "employee" || userInfo.type === "employer")
         await axios.put(baseUrl + "emp-api/jobapplication-update", {
           id: dataSet.resume._id,
           jobStatus: status,
         });
-      if (userType.type === "admin" && route.params.id)
+      if (userInfo.type === "admin" && route.params.id)
         await axios.put(baseUrl + "admin-api/seeker-update", {
           id: dataSet.resume._id,
           status: status,
           comment: dataSet.comment,
         });
+      setTimeout(() => {
+        loading.setloading(false);
+      }, 2000);
       router.go(-1);
     };
 
-    if (userType.type === "admin" && route.params.id) fetchResumeEmployer();
-    if (userType.type === "employee" || userType.type === "employer")
+    if (userInfo.type === "admin" && route.params.id) fetchResumeEmployer();
+    if (userInfo.type === "employee" || userInfo.type === "employer")
       fetchResume();
 
-    return { ...toRefs(dataSet), updateStatus, baseUrl};
+    return { ...toRefs(dataSet), updateStatus, baseUrl };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .text-input {
   font-size: $subtitle;
   font-weight: 600;

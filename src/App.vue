@@ -2,6 +2,7 @@
 <Suspense>
   <div id="app">
     <div class="content">
+    <loading v-if="loading.getIsLoading" />
       <div class="navBar" v-if="auth">
         <navBar />
       </div>
@@ -21,6 +22,7 @@ import navBar from "./components/navbar.vue";
 import {useAuthStore} from "./store"
 import {ref} from 'vue';
 import loading from "./components/loading.vue"
+import {useLoading} from "./store/loading"
 export default {
   name: "app",
   components: {
@@ -30,8 +32,11 @@ export default {
   },
   setup(){
     const store = useAuthStore()
+    const loading = useLoading();
+
+    
     let auth = ref(store.accessToken)
-    return {auth}
+    return {auth,loading}
   }
 
 };

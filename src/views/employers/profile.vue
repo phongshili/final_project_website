@@ -302,6 +302,8 @@ import { useI18n } from "vue-i18n";
 import store from "../../store";
 import useGetUser from "../../hooks/useGetUser";
 import {useReload} from "../../store/reload"
+import { useLoading } from "../../store/loading";
+
 
 
 
@@ -314,7 +316,7 @@ export default {
     const auth = store.useAuthStore();
     const userInfo = await useGetUser.getUserInfo()
     const reload = useReload();
-
+    const loading = useLoading();
     let token = auth.getToken;
     const headers = {
       "Content-Type": "application/json",
@@ -355,6 +357,8 @@ export default {
 
     // need to refactor this code to hook
     const fetchEmployerByID = async () => {
+      await  loading.setloading(true);
+
       const res = await axios.get(
         baseUrl + "admin-api/employee-find-id/" + route.params.id
       );
@@ -375,11 +379,16 @@ export default {
       dataSet.email = dataSet.profile.email;
       dataSet.tel = dataSet.profile.tel;
       dataSet.type = dataSet.profile.type;
+                      setTimeout(() => {
+        loading.setloading(false);
+      },2000)
     };
 
     // employer fetch profile data
 
     const fetchEmployerProfile = async () => {
+      await  loading.setloading(true);
+
       const res = await axios.get(baseUrl + "emp-api/employee-find-id", {
         headers,
       });
@@ -400,10 +409,14 @@ export default {
       dataSet.email = dataSet.profile.email;
       dataSet.tel = dataSet.profile.tel;
       dataSet.type = dataSet.profile.type;
+                   setTimeout(() => {
+        loading.setloading(false);
+      },2000)
     };
 
     // fetch province 
     const fetchProvinces = async () => {
+      
       const res = await axios.get(baseUrl + "admin-api/province-get");
       dataSet.provinceArray = await res.data.provinces;
       dataSet.provinceID = dataSet.provinceArray[0]._id;
@@ -427,6 +440,8 @@ export default {
     };
 
     const addEmployer = async () => {
+      await  loading.setloading(true);
+
       await axios.post(baseUrl + "admin-api/employee-add", {
         companyName: dataSet.companyName,
         contractName: dataSet.contractName,
@@ -439,10 +454,14 @@ export default {
         tel: dataSet.tel,
         password: dataSet.password,
         point: dataSet.point,
-      });
+      });             setTimeout(() => {
+        loading.setloading(false);
+      },2000)
       router.go(-1);
     };
     const updateEmployer = async (rejectStaus) => {
+      await  loading.setloading(true);
+
       await axios.put(baseUrl + "admin-api/employee-update", {
         id: dataSet.userTypeId,
         companyName: dataSet.companyName,
@@ -457,11 +476,16 @@ export default {
         status: rejectStaus,
         point: dataSet.point,
       });
+                   setTimeout(() => {
+        loading.setloading(false);
+      },2000)
       router.go(-1);
     };
 
     // employer role update their profile
     const empUpdateProfile = async () => {
+      await  loading.setloading(true);
+
       await axios.put(
         baseUrl + "emp-api/employee-update",
         {
@@ -478,6 +502,9 @@ export default {
         { headers }
       );
       await reload.setReload(true);
+                   setTimeout(() => {
+        loading.setloading(false);
+      },2000)
 
       router.go(-1);
       

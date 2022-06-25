@@ -373,6 +373,7 @@ import { useI18n } from "vue-i18n";
 import moment from "moment";
 import store from "../../store";
 import useGetUser from "../../hooks/useGetUser";
+import { useLoading } from "../../store/loading";
 
 
 export default {
@@ -389,6 +390,7 @@ export default {
     const endDate = ref(new Date());
     endDate.value.setMonth(startDate.value.getMonth() + 1);
 
+    const loading = useLoading();
   
 
     let token = auth.getToken;
@@ -442,19 +444,31 @@ export default {
     };
 
     const fetchPosition = async () => {
+      await  loading.setloading(true);
+
       const res = await axios.get(baseUrl + "admin-api/position-get");
       dataSet.fetchPosition = res.data.getPosition;
       if (!route.params.id) dataSet.position = dataSet.fetchPosition[0]._id;
+                   setTimeout(() => {
+        loading.setloading(false);
+      },2000)
     };
 
     const fetchEmployer = async () => {
+      await  loading.setloading(true);
       const res = await axios.get(baseUrl + "admin-api/employee-get");
       dataSet.fetchEmployer = res.data.mapEmp; // 👈 get just results
       if (!route.params.id) dataSet.employer = dataSet.fetchEmployer[0]._id;
       if (!route.params.id) fetchEmployerByID();
+                setTimeout(() => {
+        loading.setloading(false);
+      },2000)
+      
     };
     // need to refactor this code to hook
     const fetchEmployerByID = async () => {
+      await  loading.setloading(true);
+
       const res = await axios.get(
         baseUrl + "admin-api/employee-find-id/" + dataSet.employer
       );
@@ -468,9 +482,15 @@ export default {
       dataSet.provinceId = employer.provinceId;
       (dataSet.district = employer.districtName),
         (dataSet.districtId = employer.districtId);
+                  setTimeout(() => {
+        loading.setloading(false);
+      },2000)
     };
 
     const fetchPostByID = async () => {
+            
+      await  loading.setloading(true);
+
       const res = await axios.get(
         baseUrl + "admin-api/postjob-find-id/" + route.params.id
       );
@@ -497,6 +517,9 @@ export default {
       dataSet.aboutUs = post.aboutUs;
       dataSet.email = post.email;
       dataSet.tel = post.tel;
+                setTimeout(() => {
+        loading.setloading(false);
+      },2000)
     };
 
     // employer function
@@ -505,6 +528,9 @@ export default {
     // duplicate code
 
     const fetchEmployerInfoByID = async () => {
+             
+      await  loading.setloading(true);
+
       const res = await axios.get(baseUrl + "emp-api/employee-find-id", {
         headers,
       });
@@ -518,9 +544,13 @@ export default {
       dataSet.provinceId = employer.provinceId;
       (dataSet.district = employer.districtName),
         (dataSet.districtId = employer.districtId);
+                  setTimeout(() => {
+        loading.setloading(false);
+      },2000)
     };
 
     const fetchPostEmployerByID = async () => {
+      await loading.setloading(true);
       const res = await axios.get(
         baseUrl + "emp-api/postjob-find-id/" + route.params.id
       );
@@ -544,9 +574,14 @@ export default {
       dataSet.provinceId = post.provinceId;
       dataSet.district = post.districtName;
       dataSet.districtId = post.districtId;
+      setTimeout(() => {
+        loading.setloading(false);
+      },2000)
+
     };
 
     const addPostJob = async () => {
+      await loading.setloading(true);
       if (userInfo.type === "admin")
         await axios.post(baseUrl + "admin-api/postjob-add", {
           startDate: moment(startDate.value).locale("lo").format("YYYY-MM-DD"),
@@ -588,11 +623,15 @@ export default {
           },
           { headers }
         );
-
+          setTimeout(() => {
+        loading.setloading(false);
+      },2000)
       router.go(-1);
     };
 
     const updatePost = async (status) => {
+      await loading.setloading(true);
+
       if (userInfo.type === "admin")
         await axios.put(baseUrl + "admin-api/postjob-update", {
           id: dataSet.id,
@@ -630,6 +669,9 @@ export default {
           districtId: dataSet.districtId,
           positionId: dataSet.position,
         });
+                  setTimeout(() => {
+        loading.setloading(false);
+      },2000)
       router.go(-1);
     };
     // get data when click select company

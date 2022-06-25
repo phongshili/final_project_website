@@ -67,7 +67,7 @@
           </label>
         </div>
 
-        <div class="dropdown-item" @click="store.logOut">
+        <div class="dropdown-item" @click="logOut">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
           <p>{{ $t("LogOutText") }}</p>
         </div>
@@ -80,12 +80,15 @@ import { useAuthStore, useLanguageSwitcher } from "../store";
 import { ref, reactive, toRefs, watch } from "vue";
 import useGetUser from "../hooks/useGetUser";
 import { useReload } from "../store/reload";
+import { useLoading } from "../store/loading";
 
 export default {
   async setup() {
     let isActive = ref(false);
     const baseUrl = "http://127.0.0.1:4000/";
     const reload = useReload();
+    const loading = useLoading();
+
     const store = useAuthStore();
     const switcher = useLanguageSwitcher();
     const dataSet = reactive({
@@ -110,6 +113,15 @@ export default {
     const is_Dropdown = () => {
       isActive.value = !isActive.value;
     };
+
+    const logOut = async () => {
+      await loading.setloading(true);
+      await store.logOut();
+
+      setTimeout(() => {
+        loading.setloading(false);
+      }, 20000);
+    };
     return {
       store,
       switcher,
@@ -117,6 +129,7 @@ export default {
       is_Dropdown,
       baseUrl,
       ...toRefs(dataSet),
+      logOut,
     };
   },
 };

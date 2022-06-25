@@ -164,32 +164,42 @@ export default {
     };
     // need to refactor this code to hook
     const fetchPaymentAdmin = async () => {
+
       const res = await axios.get(baseUrl+"admin-api/payment-get");
 
       dataSet.payments = res.data.mapPayment; // 👈 get just results
+
     };
     // need to refactor this code to hook
     const fetchPaymentEmp = async () => {
       const res = await axios.get(baseUrl + "emp-api/payment-get", {
         headers,
       });
-
+      
       dataSet.payments = res.data.mapPayment; // 👈 get just results
+
     };
 
     const fetchAdminPaymentById = async (id) => {
+
       const res = await axios.get(baseUrl + "admin-api/payment-find-id/" + id);
+
       dataSet.findPayment = res.data.mapPayment;
        dataSet.status =  dataSet.findPayment.status;
+
     };
 
     //duplicate code
     const fetchEmployerPaymentById = async (id) => {
+
+      
       const res = await axios.get(baseUrl + "emp-api/payment-find-id/" + id);
       dataSet.findPayment = res.data.mapPayment;
+
     };
 
     const ApproveReq = async (status) => {
+
         await axios.put(baseUrl + "admin-api/payment-update/",{
           id:dataSet.id,
           status: status,
@@ -197,6 +207,7 @@ export default {
         });
         dataSet.modalActive = !dataSet.modalActive;
         await fetchPaymentAdmin();
+
         window.location.reload();
   
 
