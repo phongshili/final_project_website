@@ -39,11 +39,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-          
-            v-for="(emp, index) in employers"
-            :key="index"
-          >
+          <tr v-for="(emp, index) in employers" :key="index">
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
@@ -64,8 +60,16 @@
             </td>
             <td class="tb-small">
               <div class="tools">
-                <i class="fa-solid fa-pen-to-square edit-tool"   @click="$router.push({ name: 'Profile', params: { id: emp._id } })" ></i
-                ><i class="fa-solid fa-xmark delete-tool" @click="deleteEmployer(emp.userTypeId)"></i>
+                <i
+                  class="fa-solid fa-pen-to-square edit-tool"
+                  @click="
+                    $router.push({ name: 'Profile', params: { id: emp._id } })
+                  "
+                ></i
+                ><i
+                  class="fa-solid fa-xmark delete-tool"
+                  @click="deleteEmployer(emp.userTypeId)"
+                ></i>
               </div>
             </td>
           </tr>
@@ -79,6 +83,8 @@ import filterButton from "../../components/filter.vue";
 import { reactive, toRefs } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
+import Swal from "sweetalert2";
+
 export default {
   components: { filterButton },
   setup() {
@@ -112,8 +118,28 @@ export default {
     };
     // need to refactor this code to hook
     const deleteEmployer = async (id) => {
-      await axios.delete("http://127.0.0.1:4000/admin-api/employee-delete/" + id);
-      fetchEmployer();
+      await Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: t("SuccessText"),
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.delete(
+            "http://127.0.0.1:4000/admin-api/employee-delete/" + id
+          );
+          await fetchEmployer();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: t("SuccessText"),
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
     };
     fetchEmployer();
 

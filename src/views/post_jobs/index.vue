@@ -35,7 +35,6 @@
             <th v-if="userInfo.type === 'admin'" class="tb-medium tb-right">
               {{ $t("CompanyNameText") }}
             </th>
-   
 
             <!-- <th class="tb-medium">{{ $t("EmailText") }}</th> -->
             <th class="tb-small">{{ $t("ApplicationText") }}</th>
@@ -45,11 +44,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-           
-            v-for="(job, index) in jobposts"
-            :key="index"
-          >
+          <tr v-for="(job, index) in jobposts" :key="index">
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
@@ -64,12 +59,12 @@
             <td v-if="userInfo.type === 'admin'" class="tb-right">
               <span> {{ job.companyName }}</span>
             </td>
-    
+
             <!-- <td class="tb-medium">
               <span>{{ job.email }}</span>
             </td> -->
             <td class="tb-small tb-center">
-              <span>{{job.totalJobApp}}</span>
+              <span>{{ job.totalJobApp }}</span>
             </td>
             <td class="tb-small">
               <span style="text-transform: uppercase">{{ job.status }}</span>
@@ -79,8 +74,19 @@
             </td>
             <td class="tb-small" v-if="userInfo.type === 'admin'">
               <div class="tools">
-                <i  @click="$router.push({ name: 'JobPostManagement',params: {id:job._id}})" class="fa-solid fa-pen-to-square edit-tool"></i
-                ><i  @click="deletePost(job._id)" class="fa-solid fa-xmark delete-tool"></i>
+                <i
+                  @click="
+                    $router.push({
+                      name: 'JobPostManagement',
+                      params: { id: job._id },
+                    })
+                  "
+                  class="fa-solid fa-pen-to-square edit-tool"
+                ></i
+                ><i
+                  @click="deletePost(job._id)"
+                  class="fa-solid fa-xmark delete-tool"
+                ></i>
               </div>
             </td>
             <td
@@ -92,14 +98,25 @@
               <div class="tools">
                 <button
                   class="button apply-btn"
-                  @click="$router.push({ name: 'JobseekersIndex',params: {id:job._id}})"
+                  @click="
+                    $router.push({
+                      name: 'JobseekersIndex',
+                      params: { id: job._id },
+                    })
+                  "
                 >
                   {{ $t("ApplymentButtonText") }}
                 </button>
                 <div class="spacer s"></div>
                 <button
-                    @click="$router.push({ name: 'JobPostManagement',params: {id:job._id}})"
-                 class="button is-link">
+                  @click="
+                    $router.push({
+                      name: 'JobPostManagement',
+                      params: { id: job._id },
+                    })
+                  "
+                  class="button is-link"
+                >
                   {{ $t("EditButtonText") }}
                 </button>
               </div>
@@ -113,7 +130,7 @@
 
 <script>
 import filterButton from "../../components/filter.vue";
-import { reactive, toRefs,  } from "vue";
+import { reactive, toRefs } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import Swal from "sweetalert2";
@@ -122,10 +139,10 @@ import useGetUser from "../../hooks/useGetUser";
 
 export default {
   components: { filterButton },
- async setup() {
+  async setup() {
     const { t } = useI18n();
     const auth = store.useAuthStore();
-    const userInfo = await useGetUser.getUserInfo()  
+    const userInfo = await useGetUser.getUserInfo();
 
     let token = auth.getToken;
     const dataSet = reactive({
@@ -170,18 +187,36 @@ export default {
     };
     // need to refactor this code to hook
     const deletePost = async (id) => {
-      if(userInfo.type ==="admin"){
-        await axios.delete(
-        "http://127.0.0.1:4000/admin-api/postjob-delete/" + id
-      );
-      fetchJobPostAdmin();
-      }
-            if(userInfo.type ==="employee"){
-        await axios.delete(
-        "http://127.0.0.1:4000/emp-api/postjob-delete" + id
-      );
-      fetchJobPostEmp();
-      }
+      await Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: t("SuccessText"),
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          if (userInfo.type === "admin") {
+            await axios.delete(
+              "http://127.0.0.1:4000/admin-api/postjob-delete/" + id
+            );
+            fetchJobPostAdmin();
+          }
+          if (userInfo.type === "employee") {
+            await axios.delete(
+              "http://127.0.0.1:4000/emp-api/postjob-delete" + id
+            );
+            fetchJobPostEmp();
+          }
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: t("SuccessText"),
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
     };
 
     if (userInfo.type === "admin") fetchJobPostAdmin();
@@ -191,7 +226,7 @@ export default {
     return {
       ...toRefs(dataSet),
       deletePost,
-      userInfo
+      userInfo,
     };
   },
 };

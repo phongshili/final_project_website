@@ -50,9 +50,9 @@
               <span>{{ index + 1 }}</span>
             </td>
             <td class="tb-small">
-              <span style="text-transform: uppercase;">{{position.name}}</span>
+              <span style="text-transform: uppercase">{{ position.name }}</span>
             </td>
-            <td class="tb-small ">
+            <td class="tb-small">
               <span>{{ position.totalPostJob }}</span>
             </td>
             <td class="tb-small">
@@ -76,13 +76,18 @@
 <script>
 import { reactive, toRefs, computed } from "vue";
 import axios from "axios";
+import { useI18n } from "vue-i18n";
+import Swal from "sweetalert2";
+
 export default {
   setup() {
+    const { t } = useI18n();
+
     const dataSet = reactive({
       positions: [],
       position_id: "",
       position: "",
-      filterPosition: computed(()=> filtterData())
+      filterPosition: computed(() => filtterData()),
     });
     // need to refactor this code to hook
     const fetchPositions = async () => {
@@ -107,8 +112,16 @@ export default {
       await axios.post("http://127.0.0.1:4000/admin-api/position-add", {
         name: dataSet.position.toLowerCase(),
       });
+
       await clearInput();
       await fetchPositions();
+      await Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: t("SuccessText"),
+        showConfirmButton: false,
+        timer: 1500,
+      });
     };
     // need to refactor this code to hook
     const updatePosition = async (id) => {
@@ -116,26 +129,52 @@ export default {
         id: id,
         name: dataSet.position.toLowerCase(),
       });
+
       await clearInput();
       await fetchPositions();
+      await Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: t("SuccessText"),
+        showConfirmButton: false,
+        timer: 1500,
+      });
     };
     // need to refactor this code to hook
     const deletePosition = async (id) => {
-      await axios.delete(
-        "http://127.0.0.1:4000/admin-api/position-delete/" + id
-      );
-            await fetchPositions();
+      await Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: t("SuccessText"),
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.delete(
+            "http://127.0.0.1:4000/admin-api/position-delete/" + id
+          );
+          await fetchPositions();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: t("SuccessText"),
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
     };
-    
-    const filtterData = ()=>{
-     if(dataSet.position !== null){
-        return dataSet.positions.filter((el)=>{
-        return el.name.match(dataSet.position)
-      })
-     }else{
-       return dataSet.positions
-     }
-    }
+
+    const filtterData = () => {
+      if (dataSet.position !== null) {
+        return dataSet.positions.filter((el) => {
+          return el.name.match(dataSet.position);
+        });
+      } else {
+        return dataSet.positions;
+      }
+    };
     return {
       ...toRefs(dataSet),
       newPosition,
