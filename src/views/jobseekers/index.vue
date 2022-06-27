@@ -10,6 +10,7 @@
           <input
             class="input is-small"
             type="text"
+            v-model="name"
             :placeholder="$t('SearchText')"
           />
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -44,7 +45,7 @@
             @click="
               $router.push({ name: 'Resume', params: { id: seeker._id } })
             "
-            v-for="(seeker, index) in seekers"
+            v-for="(seeker, index) in filterSeekers"
             :key="index"
           >
             <td class="tb-ss tb-center">
@@ -81,7 +82,7 @@
 </template>
 <script>
 import filterButton from "../../components/filter.vue";
-import {  reactive, toRefs } from "vue";
+import {  reactive, toRefs ,computed} from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import store from "../../store";
@@ -120,7 +121,10 @@ export default {
           name: t("RejectText"),
         },
       ],
+      name:'',
       seekers: [],
+      filterSeekers: computed(() => filtterData()),
+
     });
     // need to refactor this code to hook
     const fetchSeekers = async () => {
@@ -138,6 +142,16 @@ export default {
       );
 
       dataSet.seekers = res.data.mapJobApplication; // 👈 get just results
+    };
+
+      const filtterData = () => {
+      if (dataSet.name !== null) {
+        return dataSet.seekers.filter((el) => {
+          return el.name.match(dataSet.name);
+        });
+      } else {
+        return dataSet.seekers;
+      }
     };
 
     if (userInfo.type === "admin" && !route.params.id) fetchSeekers();

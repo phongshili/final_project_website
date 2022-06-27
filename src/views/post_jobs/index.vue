@@ -10,6 +10,7 @@
           <input
             class="input is-small"
             type="text"
+            v-model="position"
             :placeholder="$t('SearchText')"
           />
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -44,7 +45,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(job, index) in jobposts" :key="index">
+          <tr v-for="(job, index) in filterPosition" :key="index">
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
@@ -130,7 +131,7 @@
 
 <script>
 import filterButton from "../../components/filter.vue";
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs,computed } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import Swal from "sweetalert2";
@@ -164,6 +165,9 @@ export default {
         },
       ],
       jobposts: [],
+      position: "",
+      filterPosition: computed(() => filtterData()),
+
     });
     const headers = {
       "Content-Type": "application/json",
@@ -217,6 +221,16 @@ export default {
           });
         }
       });
+    };
+
+        const filtterData = () => {
+      if (dataSet.position !== null) {
+        return dataSet.jobposts.filter((el) => {
+          return el.positionName.match(dataSet.position);
+        });
+      } else {
+        return dataSet.jobposts;
+      }
     };
 
     if (userInfo.type === "admin") fetchJobPostAdmin();

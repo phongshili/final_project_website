@@ -10,6 +10,7 @@
           <input
             class="input is-small"
             type="text"
+            v-model="name"
             :placeholder="$t('SearchText')"
           />
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -39,7 +40,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(emp, index) in employers" :key="index">
+          <tr v-for="(emp, index) in filterEmployer" :key="index">
             <td class="tb-ss tb-center">
               <span>{{ index + 1 }}</span>
             </td>
@@ -80,7 +81,7 @@
 </template>
 <script>
 import filterButton from "../../components/filter.vue";
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs,computed } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import Swal from "sweetalert2";
@@ -107,7 +108,10 @@ export default {
           name: t("ExpiredText"),
         },
       ],
-      employers: [{}],
+      employers: [],
+      filterEmployer: computed(() => filtterData()),
+      name:'',
+
     });
     // need to refactor this code to hook
     const fetchEmployer = async () => {
@@ -140,6 +144,16 @@ export default {
           });
         }
       });
+    };
+
+      const filtterData = () => {
+      if (dataSet.name !== null) {
+        return dataSet.employers.filter((el) => {
+          return el.companyName.match(dataSet.name);
+        });
+      } else {
+        return dataSet.employers;
+      }
     };
     fetchEmployer();
 
