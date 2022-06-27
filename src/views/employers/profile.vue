@@ -137,7 +137,7 @@
             <p class="required">*</p></label
           >
           <div class="input-area">
-            <div class="select" @click="setDistrict">
+            <div class="select" @change="setDistrict">
               <select class="dropdown" v-model="provinceID">
                 <option
                   selected

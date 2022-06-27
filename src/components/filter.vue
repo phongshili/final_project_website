@@ -1,46 +1,32 @@
 <template>
-    <div
-      class="dropdown"
-      @click="isDropDown"
-      :class="{ 'is-active': isActive }"
-    >
-      <div class="dropdown-trigger">
-        <button
-          class="button"
-          aria-haspopup="true"
-          aria-controls="dropdown-menu3"
-        >
-          <div class="filterText">
-            <span><i class="fa-solid fa-filter"></i><label>Filter By</label></span>
-            <span class="icon is-small">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
-            </span>
-          </div>
-        </button>
-      </div>
-      <div class="dropdown-menu" id="dropdown-menu3" role="menu">
-        <div class="dropdown-content">
-          <a
-            href="#"
-            class="dropdown-item"
-            v-for="item in items"
-            :key="item.id"
-          >
-            {{ item.name }}
-          </a>
+  <div class="input-form">
+    <div class="input-group">
+      <div class="input-area">
+        <div class="select" >
+          <select class="dropdown" @change="getData" v-model="filteringBy">
+            <option value="">Select All</option>
+            <option
+              selected
+              v-for="item in items"
+              :key="item.value"
+              :value="item.value"
+            >
+              {{ item.name }}
+            </option>
+          </select>
         </div>
       </div>
+    </div>
   </div>
 </template>
 <script>
 export default {
   data: () => ({
-    isActive: false,
     filteringBy: "",
   }),
   methods: {
-    isDropDown() {
-      this.isActive = !this.isActive;
+    getData() {
+      this.$emit("getData", this.filteringBy);
     },
   },
   props: {
@@ -48,18 +34,11 @@ export default {
       type: [Array, Object],
     },
   },
-
 };
 </script>
 
 <style lang="scss" scoped>
-.filterText{
-    display:flex;
-    label{
-        padding-left: 10px;
-    }
-}
-button {
-  margin-right: 10px;
+.input-form{
+  padding-right: 10px;
 }
 </style>

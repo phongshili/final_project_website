@@ -155,9 +155,14 @@ const messages = {
 
         FormSentOTPText:"Sent OTP",
         TelHintText:"Please Enter Your Phone Number",
-        SuccessText:'Success'
+        SuccessText:'Success',
 
         //end form text
+
+        // report text 
+        ReportPositionText: "Positions Report",
+        ReportPostJobText: "PostJobs Report"
+
 
     },
     la: {
@@ -310,12 +315,16 @@ const messages = {
         yearlyText:"ປະຈຳປິ",
         FormSentOTPText:"ສົ່ງລະຫັດ OTP",
         TelHintText:"ກະລູນາປ້ອນເບີໂທ",
-        SuccessText:'ສຳເລັດ'
+        SuccessText:'ສຳເລັດ',
 
 
 
 
         //end form text
+
+        // report text 
+        ReportPositionText: "ລາຍງານຕຳແໜງວຽກ",
+        ReportPostJobText: "ລາຍງານປະກາດວຽກ"
 
 
 
