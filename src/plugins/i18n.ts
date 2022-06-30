@@ -66,7 +66,10 @@ const messages = {
         PaymentDateText: "Payment Date",
         ApplicationText : "Appliaction",
         FullNameText: 'Full Name',
-
+        
+        SelectAllText : "Select All",
+        MonthText : "Month",
+        YearText :'Year',
         //end of table menu
 
         // button text
@@ -161,7 +164,13 @@ const messages = {
 
         // report text 
         ReportPositionText: "Positions Report",
-        ReportPostJobText: "PostJobs Report"
+        ReportPostJobText: "PostJobs Report",
+        ReportPaymentText: "Payment Report",
+
+        DateText : 'Date',
+
+        first:"Lao People's Democratic Republic",
+        second:'Peace Independence Democracy Unity Prosperity',
 
 
     },
@@ -216,7 +225,7 @@ const messages = {
         PositionText: "ຕຳແໜ່ງ",
         LocationText: "ແຂວງ",
         
-        CompanyNameText: "ຊື່ບໍລິສັດ",
+        CompanyNameText: "ບໍລິສັດ",
         TelText: "ເບີໂທ",
         EmailText: "ອີເມວ",
         StatusText: "ສະຖານະ",
@@ -232,6 +241,10 @@ const messages = {
         SearchText : 'ຄົ້ນຫາ',
         AddPositionInputText: 'ເພີ່ມຕຳແໜ່ງວຽກ',
         UpdatePositionInputText:'ແກ້ໄຂ',
+
+        SelectAllText : "ເລືອກທັງໝົດ",
+        MonthText : "ເດຶອນ",
+        YearText :'ປີ',
 
 
         //end of table menu
@@ -324,7 +337,12 @@ const messages = {
 
         // report text 
         ReportPositionText: "ລາຍງານຕຳແໜງວຽກ",
-        ReportPostJobText: "ລາຍງານປະກາດວຽກ"
+        ReportPostJobText: "ລາຍງານປະກາດວຽກ",
+
+        DateText : 'ວັນທີ',
+
+        first:'ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ',
+        second:'ສັນຕິພາບ ເອກະລາດ ປະຊາທິປະໄຕ ເອກະພາບ ວັດທະນາຖາວອນ',
 
 
 

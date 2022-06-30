@@ -162,7 +162,7 @@ const routes = [
 
   },
   {
-    path: '/contactus',
+    path: '/contactus/:status?',
     name: 'ConstactUs',
 
     component: ConstactUs,

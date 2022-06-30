@@ -184,7 +184,7 @@
 
       <div class="form-display">
         <div class="chart-container">
-          <BarChart :chartData="weekly" />
+          <BarChart :chartData="monthly" />
         </div>
         <div class="spacer left"></div>
         <div class="payment-container">
@@ -445,34 +445,7 @@ export default {
 
     };
 
-    // const reportListData = {
-    //   labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-    //   datasets: [
-    //     {
-    //       label: t('weeklyText'),
-    //       data: [2, 4, 10, 7],
-    //       backgroundColor: [
-    //         "#5ADBFF",
-    //       ],
-    //     },
-    //     {
-    //       label: t('monthlyText'),
-    //       data: [23, 25, 20, 30, 20,15, 26, 30, 30, 22,10, 18, 19, 30, 35],
-    //       backgroundColor: [
-    //         "#3C6997",
-
-    //       ],
-    //     },
-    //     {
-    //       label: t('yearlyText'),
-    //       data: [353],
-    //       backgroundColor: [
-    //         "#094074",
-
-    //       ],
-    //     },
-    //   ],
-    // };
+    
     const weekly = {
       labels: ["Week 1", "Week 2", "Week 3", "Week 4 "],
       datasets: [
@@ -501,7 +474,7 @@ export default {
       datasets: [
         {
           label: t("monthlyText"),
-          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          data: [1, 0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
           backgroundColor: ["#3C6997"],
         },
       ],

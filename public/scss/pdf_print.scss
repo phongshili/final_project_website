@@ -1,0 +1,35 @@
+.printPdf {
+    .pdfHeader {
+      margin-bottom: 20px;
+      .header {
+        text-align: center;
+        font-size: 24px;
+      }
+  
+      .reportTitle {
+        text-align: center;
+        font-size: 26px;
+        margin: 10px 0 10px 0;
+        font-weight: 600;
+      }
+      .line {
+        border-bottom: 2px solid $shadow-color;
+      }
+      .reportBody {
+        margin: 20px 0 20px 0;
+        display: flex;
+        justify-content: space-between;
+        .name {
+          font-weight: 600;
+        }
+        .logo {
+          text-align: end;
+          img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 5px;
+          }
+        }
+      }
+    }
+  }

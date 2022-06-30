@@ -4,7 +4,7 @@
       <div class="input-area">
         <div class="select" >
           <select class="dropdown" @change="getData" v-model="filteringBy">
-            <option value="">Select All</option>
+            <option value="">{{$t('SelectAllText')}}</option>
             <option
               selected
               v-for="item in items"
