@@ -3,9 +3,19 @@
     <div class="container-header">
       <label>{{ $t("PostJobsText") }}</label>
     </div>
-    <div class="filter">
+    <div class="filter" :class="{ fix_width: isReported }">
       <div class="filter-menu">
-        <filterButton :items="items"></filterButton>
+        <filterButton
+          @getData="filterByStatus"
+          v-model="status"
+          :items="items"
+        ></filterButton>
+
+        <filterButton @getData="formatData" :items="reportItems"></filterButton>
+
+        <div class="datePicker">
+          <Datepicker v-model="dateTime" />
+        </div>
         <div class="input-group">
           <input
             class="input is-small"
@@ -23,10 +33,43 @@
         >
           {{ $t("PostJobText") }}
         </button>
-        <button class="button is-link">{{ $t("ExportText") }}</button>
+        <button @click="printPDF" class="button is-link">
+          {{ $t("ExportText") }}
+        </button>
       </div>
     </div>
-    <div class="table-box">
+
+    <div class="printPdf" id="printPDF">
+
+    <div class="pdfHeader" v-if="isReported">
+        <div class="header">
+          <label for="">{{ $t("first") }}</label>
+          <br />
+          <label for="">{{ $t("second") }}</label>
+        </div>
+        <div class="reportTitle">
+          {{ $t("ReportPostJobText") }}
+        </div>
+        <div class="line"></div>
+        <div class="reportBody">
+          <div class="detail">
+            <label class="name" for=""
+              >{{ $t("CompanyNameText") }} : {{ userInfo.companyName }}</label
+            >
+            <br />
+            <label for="">{{ $t("TelText") }} : {{ userInfo.tel }}</label>
+            <br />
+            <label for="">{{ $t("EmailText") }} : {{ userInfo.email }}</label>
+          </div>
+          <div class="logo">
+            <img :src="baseUrl+ userInfo.image" alt="" />
+            <p for="">{{ $t("DateText") }} : {{ today }}</p>
+          </div>
+        </div>
+        <div class="line"></div>
+
+      </div>
+    <div class="table-box" :class="{ fix_width: isReported }">
       <table>
         <thead>
           <tr>
@@ -41,7 +84,7 @@
             <th class="tb-small">{{ $t("ApplicationText") }}</th>
             <th class="tb-small">{{ $t("StatusText") }}</th>
             <th class="tb-small tb-center">{{ $t("PostDateText") }}</th>
-            <th class="tb-small tb-center">{{ $t("OptionsText") }}</th>
+            <th v-if="!isReported" class="tb-small tb-center">{{ $t("OptionsText") }}</th>
           </tr>
         </thead>
         <tbody>
@@ -73,7 +116,7 @@
             <td class="tb-small">
               <span> {{ job.startDate }}</span>
             </td>
-            <td class="tb-small" v-if="userInfo.type === 'admin'">
+            <td class="tb-small" v-if="userInfo.type === 'admin' && !isReported">
               <div class="tools">
                 <i
                   @click="
@@ -93,7 +136,7 @@
             <td
               class="tb-large"
               v-if="
-                userInfo.type === 'employee' || userInfo.type === 'employer'
+                userInfo.type === 'employee' && !isReported
               "
             >
               <div class="tools">
@@ -126,22 +169,28 @@
         </tbody>
       </table>
     </div>
+    </div>
   </div>
 </template>
 
 <script>
 import filterButton from "../../components/filter.vue";
-import { reactive, toRefs,computed } from "vue";
+import { reactive, toRefs, computed } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import Swal from "sweetalert2";
 import store from "../../store";
 import useGetUser from "../../hooks/useGetUser";
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
+import moment from "moment";
+import printJS from "print-js";
 
 export default {
-  components: { filterButton },
+  components: { filterButton,Datepicker },
   async setup() {
     const { t } = useI18n();
+    const baseUrl = "http://127.0.0.1:4000/";
     const auth = store.useAuthStore();
     const userInfo = await useGetUser.getUserInfo();
 
@@ -155,7 +204,7 @@ export default {
         },
         {
           id: 2,
-          value: "office",
+          value: "offline",
           name: t("OfflineText"),
         },
         {
@@ -164,10 +213,27 @@ export default {
           name: t("ExpiredText"),
         },
       ],
+      reportItems: [
+        {
+          id: 1,
+          value: "month",
+          name: t("MonthText"),
+        },
+        {
+          id: 2,
+          value: "year",
+          name: t("YearText"),
+        },
+      ],
       jobposts: [],
       position: "",
       filterPosition: computed(() => filtterData()),
-
+          isReported: false,
+              dateTime: new Date(),
+      status: "",
+      year: "",
+      month: "",
+      today: moment(new Date()).locale("lo").format("DD-MM-YYYY"),
     });
     const headers = {
       "Content-Type": "application/json",
@@ -176,14 +242,24 @@ export default {
     // need to refactor this code to hook
     const fetchJobPostAdmin = async () => {
       const res = await axios.get(
-        "http://127.0.0.1:4000/admin-api/postjob-get"
+        "http://127.0.0.1:4000/admin-api/postjob-get?status=" +
+          dataSet.status +
+          "&filterYear=" +
+          dataSet.year +
+          "&filterMonth=" +
+          dataSet.month,
       );
 
       dataSet.jobposts = res.data.mapPostJob; // 👈 get just results
     };
     // need to refactor this code to hook
     const fetchJobPostEmp = async () => {
-      const res = await axios.get("http://127.0.0.1:4000/emp-api/postjob-get", {
+      const res = await axios.get("http://127.0.0.1:4000/emp-api/postjob-get?status=" +
+          dataSet.status +
+          "&filterYear=" +
+          dataSet.year +
+          "&filterMonth=" +
+          dataSet.month, {
         headers,
       });
 
@@ -223,13 +299,60 @@ export default {
       });
     };
 
-        const filtterData = () => {
+    const filtterData = () => {
       if (dataSet.position !== null) {
         return dataSet.jobposts.filter((el) => {
           return el.positionName.match(dataSet.position);
         });
       } else {
         return dataSet.jobposts;
+      }
+    };
+    const openReport = async () => {
+      dataSet.isReported = !dataSet.isReported;
+    };
+    const printPDF = async () => {
+      await openReport();
+
+      printJS({
+        printable: "printPDF",
+        type: "html",
+        targetStyles: ["*"],
+        targetStyle: ["*"],
+      });
+      await openReport();
+    };
+
+    const filterByStatus = async (value) => {
+      dataSet.status = value;
+      if (userInfo.type === "admin") fetchJobPostAdmin();
+      if (userInfo.type === "employee" || userInfo.type === "employer")
+        fetchJobPostEmp();
+    };
+
+    const formatData = async (event) => {
+      if (event === "month") {
+        const month = moment(dataSet.dateTime)
+          .locale("lo")
+          .format("YYYY-MM-DD")
+          .substring(0, 7);
+        dataSet.month = month;
+        dataSet.year = "";
+
+        await fetchJobPostEmp();
+      } else if (event === "year") {
+        const year = moment(dataSet.dateTime)
+          .locale("lo")
+          .format("YYYY-MM-DD")
+          .substring(0, 4);
+        dataSet.year = year;
+        dataSet.month = "";
+
+        await fetchJobPostEmp();
+      } else {
+        dataSet.year = "";
+        dataSet.month = "";
+        await fetchJobPostEmp();
       }
     };
 
@@ -241,6 +364,10 @@ export default {
       ...toRefs(dataSet),
       deletePost,
       userInfo,
+         printPDF,
+      filterByStatus,
+      formatData,
+      baseUrl
     };
   },
 };
