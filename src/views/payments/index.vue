@@ -85,6 +85,9 @@
               <span>{{ payment.date || payment.createdAt }}</span>
             </td>
           </tr>
+          <tr  v-if=" payments.length ===0">
+            {{$t('isEmpty')}}
+          </tr>
         </tbody>
       </table>
     </div>

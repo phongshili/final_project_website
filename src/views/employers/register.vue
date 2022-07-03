@@ -160,7 +160,7 @@ export default {
         password: dataSet.password,
         companyName: dataSet.companyName.toLowerCase(),
         contractName: dataSet.contractName.toLowerCase(),
-        districtId: dataSet.districtId,
+        districtId: dataSet.districtID,
         tel: dataSet.tel,
       });
       const token = res.data.Token;

@@ -183,9 +183,9 @@
     <!-- end custom modal -->
 
       <div class="form-display">
-        <div class="chart-container">
+        <!-- <div class="chart-container">
           <BarChart :chartData="monthly" />
-        </div>
+        </div> -->
         <div class="spacer left"></div>
         <div class="payment-container">
           <div class="payment">
@@ -225,9 +225,9 @@
           </div>
           <div
             class="payment body"
-            v-if="userInfo.type === 'admin' && payments === []"
+            v-if=" payments.length ===0"
           >
-            <div class="">No requests</div>
+            <div class="">{{$t('isEmpty')}}</div>
           </div>
         </div>
       </div>

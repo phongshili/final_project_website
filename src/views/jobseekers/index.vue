@@ -113,6 +113,8 @@
                 <span> {{ seeker.createdAt }}</span>
               </td>
             </tr>
+                 <tr  v-if=" filterSeekers.length ===0">
+            {{$t('isEmpty')}}</tr>
           </tbody>
         </table>
       </div>

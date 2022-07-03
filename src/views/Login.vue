@@ -39,7 +39,7 @@
           </p>
           <div class="spacer s"></div>
 
-          <p>{{ $t("OrText") }}</p>
+          <label>{{ $t("OrText") }}</label>
           <div class="spacer s"></div>
           <p
             @click="

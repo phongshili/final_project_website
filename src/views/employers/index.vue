@@ -104,6 +104,8 @@
               </div>
             </td>
           </tr>
+            <tr  v-if=" filterEmployer.length ===0">
+            {{$t('isEmpty')}}</tr>
         </tbody>
       </table>
     </div>

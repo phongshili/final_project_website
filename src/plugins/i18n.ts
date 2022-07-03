@@ -159,7 +159,7 @@ const messages = {
         FormSentOTPText: "Sent OTP",
         TelHintText: "Please Enter Your Phone Number",
         SuccessText: 'Success',
-
+        isEmpty:'No Result',
         //end form text
 
         // report text 
@@ -343,6 +343,7 @@ const messages = {
         FormSentOTPText: "ສົ່ງລະຫັດ OTP",
         TelHintText: "ກະລູນາປ້ອນເບີໂທ",
         SuccessText: 'ສຳເລັດ',
+        isEmpty:'ບໍ່ພົບຂໍ້ມູນ',
 
 
 
