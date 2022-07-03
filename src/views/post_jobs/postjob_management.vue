@@ -456,18 +456,14 @@ export default {
     };
 
     const fetchEmployer = async () => {
-      await loading.setloading(true);
       const res = await axios.get(baseUrl + "admin-api/employee-get");
       dataSet.fetchEmployer = res.data.mapEmp; // 👈 get just results
       if (!route.params.id) dataSet.employer = dataSet.fetchEmployer[0]._id;
       if (!route.params.id) fetchEmployerByID();
-      setTimeout(() => {
-        loading.setloading(false);
-      }, 2000);
+
     };
     // need to refactor this code to hook
     const fetchEmployerByID = async () => {
-      await loading.setloading(true);
 
       const res = await axios.get(
         baseUrl + "admin-api/employee-find-id/" + dataSet.employer
@@ -482,9 +478,7 @@ export default {
       dataSet.provinceId = employer.provinceId;
       (dataSet.district = employer.districtName),
         (dataSet.districtId = employer.districtId);
-      setTimeout(() => {
-        loading.setloading(false);
-      }, 2000);
+
     };
 
     const fetchPostByID = async () => {

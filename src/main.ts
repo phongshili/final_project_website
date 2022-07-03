@@ -28,4 +28,7 @@ const i18n = createI18n({
 
 
 
+
+
+
 app.use(router).use(i18n).mount('#app')

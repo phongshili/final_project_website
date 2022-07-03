@@ -75,7 +75,7 @@
     </div>
   </div>
 </template>
-<script>
+<script >
 import { useAuthStore, useLanguageSwitcher } from "../store";
 import { ref, reactive, toRefs, watch } from "vue";
 import useGetUser from "../hooks/useGetUser";
