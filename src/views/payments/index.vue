@@ -5,13 +5,50 @@
     </div>
     <div class="filter is-small-tb">
       <div class="filter-menu">
-        <filterButton :items="items"></filterButton>
+         <filterButton
+          @getData="filterByStatus"
+          v-model="status"
+          :items="items"
+        ></filterButton>
+          <filterButton   @getData="formatData" :items="reportItems"></filterButton>
+
+        <div  class="datePicker">
+          <Datepicker v-model="dateTime" />
+        </div>
       </div>
       <div class="btn-menu">
-        <button class="button is-link">{{ $t("ExportText") }}</button>
+        <button  @click="printPDF"  class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
-    <div class="table-box is-small-tb">
+       <div class="printPdf" id="printPDF" :class="{ fix_width: isReported }">
+      <div class="pdfHeader" v-if="isReported">
+        <div class="header">
+          <label for="">{{ $t("first") }}</label>
+          <br />
+          <label for="">{{ $t("second") }}</label>
+        </div>
+        <div class="reportTitle">
+          {{ $t("ReportPostJobText") }}
+        </div>
+        <div class="line"></div>
+        <div class="reportBody">
+          <div class="detail">
+            <label class="name" v-if="userInfo.type === 'employee'"
+              >{{ $t("CompanyNameText") }} : {{ userInfo.companyName }}</label
+            >
+            <br />
+            <label for="">{{ $t("TelText") }} : {{ userInfo.tel }}</label>
+            <br />
+            <label for="">{{ $t("EmailText") }} : {{ userInfo.email }}</label>
+          </div>
+          <div class="logo">
+            <img :src="baseUrl + userInfo.image" alt="" />
+            <p for="">{{ $t("DateText") }} : {{ today }}</p>
+          </div>
+        </div>
+        <div class="line"></div>
+      </div>
+    <div class="table-box is-small-tb" :class="{ fix_width: isReported }">
       <table>
         <thead>
           <tr>
@@ -51,6 +88,7 @@
         </tbody>
       </table>
     </div>
+       </div>
     <!-- custom modal  -->
     <customModal :modalActive="modalActive">
       <div class="modal-content">
@@ -158,11 +196,16 @@ import store from "../../store";
 import customModal from "@/components/customModal.vue";
 import useGetUser from "../../hooks/useGetUser";
 import Swal from "sweetalert2";
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
+import moment from "moment";
+import printJS from "print-js";
 
 export default {
   components: {
     filterButton,
     customModal,
+    Datepicker
   },
   async setup() {
     const { t } = useI18n();
@@ -189,6 +232,18 @@ export default {
           name: t("RejectText"),
         },
       ],
+         reportItems: [
+        {
+          id: 1,
+          value: "month",
+          name: t("MonthText"),
+        },
+        {
+          id: 2,
+          value: "year",
+          name: t("YearText"),
+        },
+      ],
       payments: [],
       findPayment: [],
       amount: "",
@@ -197,7 +252,12 @@ export default {
       rejectModal: false,
       detail: "",
       id: "",
+      isReported: false,
+      dateTime: new Date(),
       status: "",
+      year: "",
+      month: "",
+      today: moment(new Date()).locale("lo").format("DD-MM-YYYY"),
     });
     const headers = {
       "Content-Type": "application/json",
@@ -205,13 +265,23 @@ export default {
     };
     // need to refactor this code to hook
     const fetchPaymentAdmin = async () => {
-      const res = await axios.get(baseUrl + "admin-api/payment-get");
+      const res = await axios.get(baseUrl + "admin-api/payment-get?status=" +
+          dataSet.status +
+          "&filterYear=" +
+          dataSet.year +
+          "&filterMonth=" +
+          dataSet.month);
 
       dataSet.payments = res.data.mapPayment; // 👈 get just results
     };
     // need to refactor this code to hook
     const fetchPaymentEmp = async () => {
-      const res = await axios.get(baseUrl + "emp-api/payment-get", {
+      const res = await axios.get(baseUrl + "emp-api/payment-get?status=" +
+          dataSet.status +
+          "&filterYear=" +
+          dataSet.year +
+          "&filterMonth=" +
+          dataSet.month, {
         headers,
       });
 
@@ -277,6 +347,57 @@ export default {
 
     };
 
+    const openReport = async () => {
+      dataSet.isReported = !dataSet.isReported;
+    };
+    const printPDF = async () => {
+      await openReport();
+
+      printJS({
+        printable: "printPDF",
+        type: "html",
+        targetStyles: ["*"],
+        targetStyle: ["*"],
+      });
+      await openReport();
+    };
+
+    const filterByStatus = async (value) => {
+      dataSet.status = value;
+      if (userInfo.type === "admin")await fetchPaymentAdmin();
+      if (userInfo.type === "employee" || userInfo.type === "employer")
+      await  fetchPaymentEmp();
+    };
+
+    const formatData = async (event) => {
+      if (event === "month") {
+        const month = moment(dataSet.dateTime)
+          .locale("lo")
+          .format("YYYY-MM-DD")
+          .substring(0, 7);
+        dataSet.month = month;
+        dataSet.year = "";
+
+          if (userInfo.type === "admin") await fetchPaymentAdmin();
+          if (userInfo.type === "employee" || userInfo.type === "employer") await fetchPaymentEmp()
+      } else if (event === "year") {
+        const year = moment(dataSet.dateTime)
+          .locale("lo")
+          .format("YYYY-MM-DD")
+          .substring(0, 4);
+        dataSet.year = year;
+        dataSet.month = "";
+
+          if (userInfo.type === "admin") await fetchPaymentAdmin();
+          if (userInfo.type === "employee" || userInfo.type === "employer") await fetchPaymentEmp()
+      } else {
+        dataSet.year = "";
+        dataSet.month = "";
+          if (userInfo.type === "admin") await fetchPaymentAdmin();
+          if (userInfo.type === "employee" || userInfo.type === "employer") await fetchPaymentEmp()
+      }
+    };
+
     return {
       showReceipt,
       ...toRefs(dataSet),
@@ -284,7 +405,11 @@ export default {
       ApproveReq,
       modalAction,
       userInfo,
-      rejectModalAction
+      rejectModalAction,
+        printPDF,
+      filterByStatus,
+      formatData,
+      baseUrl,
     };
   },
 };

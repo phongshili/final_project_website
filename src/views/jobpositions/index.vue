@@ -31,17 +31,46 @@
         <button class="button is-success" @click="addPosition" v-else>
           {{ $t("AddPositionText") }}
         </button>
-        <button class="button is-link">{{ $t("ExportText") }}</button>
+        <button @click='printPDF' class="button is-link">{{ $t("ExportText") }}</button>
       </div>
     </div>
-    <div class="table-box is-small-tb">
+
+            <div class="printPdf" id="printPDF">
+      <div class="pdfHeader" v-if="isReported" >
+        <div class="header">
+          <label for="">{{ $t("first") }}</label>
+          <br />
+          <label for="">{{ $t("second") }}</label>
+        </div>
+        <div class="reportTitle">
+          {{ $t("ReportPostJobText") }}
+        </div>
+        <div class="line"></div>
+        <div class="reportBody">
+          <div class="detail">
+            <label class="name" v-if="userInfo.type === 'employee'"
+              >{{ $t("CompanyNameText") }} : {{ userInfo.companyName }}</label
+            >
+            <br />
+            <label for="">{{ $t("TelText") }} : {{ userInfo.tel }}</label>
+            <br />
+            <label for="">{{ $t("EmailText") }} : {{ userInfo.email }}</label>
+          </div>
+          <div class="logo">
+            <img :src="baseUrl + userInfo.image" alt="" />
+            <p for="">{{ $t("DateText") }} : {{ today }}</p>
+          </div>
+        </div>
+        <div class="line"></div>
+      </div>
+    <div class="table-box is-small-tb" :class="{ fix_width: isReported }">
       <table>
         <thead>
           <tr>
             <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
             <th class="tb-medium">{{ $t("PositionText") }}</th>
             <th class="tb-small">{{ $t("TotalPositionPosted") }}</th>
-            <th class="tb-small tb-center">{{ $t("OptionsText") }}</th>
+            <th v-if="!isReported" class="tb-small tb-center">{{ $t("OptionsText") }}</th>
           </tr>
         </thead>
         <tbody>
@@ -55,7 +84,7 @@
             <td class="tb-small">
               <span>{{ position.totalPostJob }}</span>
             </td>
-            <td class="tb-small">
+            <td class="tb-small" v-if="!isReported">
               <div class="tools">
                 <i
                   class="fa-solid fa-pen-to-square edit-tool"
@@ -71,6 +100,7 @@
         </tbody>
       </table>
     </div>
+            </div>
   </div>
 </template>
 <script>
@@ -78,16 +108,22 @@ import { reactive, toRefs, computed } from "vue";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import Swal from "sweetalert2";
-
+import moment from "moment";
+import printJS from "print-js";
+import useGetUser from "../../hooks/useGetUser";
 export default {
-  setup() {
+ async setup() {
     const { t } = useI18n();
-
+        const baseUrl = "http://127.0.0.1:4000/";
+    const userInfo = await useGetUser.getUserInfo();
     const dataSet = reactive({
       positions: [],
       position_id: "",
       position: "",
       filterPosition: computed(() => filtterData()),
+      isReported: false,
+      today: moment(new Date()).locale("lo").format("DD-MM-YYYY"),
+
     });
     // need to refactor this code to hook
     const fetchPositions = async () => {
@@ -165,6 +201,21 @@ export default {
         }
       });
     };
+        const openReport = async () => {
+      dataSet.isReported = !dataSet.isReported;
+    };
+    const printPDF = async () => {
+      await openReport();
+
+      printJS({
+        printable: "printPDF",
+        type: "html",
+        targetStyles: ["*"],
+        targetStyle: ["*"],
+      });
+      await openReport();
+    };
+
 
     const filtterData = () => {
       if (dataSet.position !== null) {
@@ -178,11 +229,13 @@ export default {
     return {
       ...toRefs(dataSet),
       newPosition,
-      fetchPositions,
       clearInput,
       addPosition,
       updatePosition,
       deletePosition,
+      userInfo,
+      baseUrl,
+      printPDF
     };
   },
 };

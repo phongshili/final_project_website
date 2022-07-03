@@ -27,6 +27,7 @@ export default {
   methods: {
     getData() {
       this.$emit("getData", this.filteringBy);
+
     },
   },
   props: {

@@ -40,8 +40,7 @@
     </div>
 
     <div class="printPdf" id="printPDF">
-
-    <div class="pdfHeader" v-if="isReported">
+      <div class="pdfHeader" v-if="isReported">
         <div class="header">
           <label for="">{{ $t("first") }}</label>
           <br />
@@ -53,7 +52,7 @@
         <div class="line"></div>
         <div class="reportBody">
           <div class="detail">
-            <label class="name" for=""
+            <label class="name" v-if="userInfo.type === 'employee'"
               >{{ $t("CompanyNameText") }} : {{ userInfo.companyName }}</label
             >
             <br />
@@ -62,113 +61,115 @@
             <label for="">{{ $t("EmailText") }} : {{ userInfo.email }}</label>
           </div>
           <div class="logo">
-            <img :src="baseUrl+ userInfo.image" alt="" />
+            <img :src="baseUrl + userInfo.image" alt="" />
             <p for="">{{ $t("DateText") }} : {{ today }}</p>
           </div>
         </div>
         <div class="line"></div>
-
       </div>
-    <div class="table-box" :class="{ fix_width: isReported }">
-      <table>
-        <thead>
-          <tr>
-            <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
-            <th class="tb-medium">{{ $t("PositionText") }}</th>
-            <th class="tb-medium">{{ $t("LocationText") }}</th>
-            <th v-if="userInfo.type === 'admin'" class="tb-medium tb-right">
-              {{ $t("CompanyNameText") }}
-            </th>
+      <div class="table-box" :class="{ fix_width: isReported }">
+        <table>
+          <thead>
+            <tr>
+              <th class="tb-ss tb-center">{{ $t("NoText") }}</th>
+              <th class="tb-medium">{{ $t("PositionText") }}</th>
+              <th class="tb-medium">{{ $t("LocationText") }}</th>
+              <th v-if="userInfo.type === 'admin'" class="tb-medium tb-right">
+                {{ $t("CompanyNameText") }}
+              </th>
 
-            <!-- <th class="tb-medium">{{ $t("EmailText") }}</th> -->
-            <th class="tb-small">{{ $t("ApplicationText") }}</th>
-            <th class="tb-small">{{ $t("StatusText") }}</th>
-            <th class="tb-small tb-center">{{ $t("PostDateText") }}</th>
-            <th v-if="!isReported" class="tb-small tb-center">{{ $t("OptionsText") }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(job, index) in filterPosition" :key="index">
-            <td class="tb-ss tb-center">
-              <span>{{ index + 1 }}</span>
-            </td>
-            <td class="tb-medium">
-              <span style="text-transform: uppercase">{{
-                job.positionName
-              }}</span>
-            </td>
-            <td class="tb-medium">
-              <span>{{ job.provinceName }}</span>
-            </td>
-            <td v-if="userInfo.type === 'admin'" class="tb-right">
-              <span> {{ job.companyName }}</span>
-            </td>
+              <!-- <th class="tb-medium">{{ $t("EmailText") }}</th> -->
+              <th class="tb-small">{{ $t("ApplicationText") }}</th>
+              <th class="tb-small">{{ $t("StatusText") }}</th>
+              <th class="tb-small tb-center">{{ $t("PostDateText") }}</th>
+              <th v-if="!isReported" class="tb-small tb-center">
+                {{ $t("OptionsText") }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(job, index) in filterPosition" :key="index">
+              <td class="tb-ss tb-center">
+                <span>{{ index + 1 }}</span>
+              </td>
+              <td class="tb-medium">
+                <span style="text-transform: uppercase">{{
+                  job.positionName
+                }}</span>
+              </td>
+              <td class="tb-medium">
+                <span>{{ job.provinceName }}</span>
+              </td>
+              <td v-if="userInfo.type === 'admin'" class="tb-right">
+                <span> {{ job.companyName }}</span>
+              </td>
 
-            <!-- <td class="tb-medium">
+              <!-- <td class="tb-medium">
               <span>{{ job.email }}</span>
             </td> -->
-            <td class="tb-small tb-center">
-              <span>{{ job.totalJobApp }}</span>
-            </td>
-            <td class="tb-small">
-              <span style="text-transform: uppercase">{{ job.status }}</span>
-            </td>
-            <td class="tb-small">
-              <span> {{ job.startDate }}</span>
-            </td>
-            <td class="tb-small" v-if="userInfo.type === 'admin' && !isReported">
-              <div class="tools">
-                <i
-                  @click="
-                    $router.push({
-                      name: 'JobPostManagement',
-                      params: { id: job._id },
-                    })
-                  "
-                  class="fa-solid fa-pen-to-square edit-tool"
-                ></i
-                ><i
-                  @click="deletePost(job._id)"
-                  class="fa-solid fa-xmark delete-tool"
-                ></i>
-              </div>
-            </td>
-            <td
-              class="tb-large"
-              v-if="
-                userInfo.type === 'employee' && !isReported
-              "
-            >
-              <div class="tools">
-                <button
-                  class="button apply-btn"
-                  @click="
-                    $router.push({
-                      name: 'JobseekersIndex',
-                      params: { id: job._id },
-                    })
-                  "
-                >
-                  {{ $t("ApplymentButtonText") }}
-                </button>
-                <div class="spacer s"></div>
-                <button
-                  @click="
-                    $router.push({
-                      name: 'JobPostManagement',
-                      params: { id: job._id },
-                    })
-                  "
-                  class="button is-link"
-                >
-                  {{ $t("EditButtonText") }}
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+              <td class="tb-small tb-center">
+                <span>{{ job.totalJobApp }}</span>
+              </td>
+              <td class="tb-small">
+                <span style="text-transform: uppercase">{{ job.status }}</span>
+              </td>
+              <td class="tb-small">
+                <span> {{ job.startDate }}</span>
+              </td>
+              <td
+                class="tb-small"
+                v-if="userInfo.type === 'admin' && !isReported"
+              >
+                <div class="tools">
+                  <i
+                    @click="
+                      $router.push({
+                        name: 'JobPostManagement',
+                        params: { id: job._id },
+                      })
+                    "
+                    class="fa-solid fa-pen-to-square edit-tool"
+                  ></i
+                  ><i
+                    @click="deletePost(job._id)"
+                    class="fa-solid fa-xmark delete-tool"
+                  ></i>
+                </div>
+              </td>
+              <td
+                class="tb-large"
+                v-if="userInfo.type === 'employee' && !isReported"
+              >
+                <div class="tools">
+                  <button
+                    class="button apply-btn"
+                    @click="
+                      $router.push({
+                        name: 'JobseekersIndex',
+                        params: { id: job._id },
+                      })
+                    "
+                  >
+                    {{ $t("ApplymentButtonText") }}
+                  </button>
+                  <div class="spacer s"></div>
+                  <button
+                    @click="
+                      $router.push({
+                        name: 'JobPostManagement',
+                        params: { id: job._id },
+                      })
+                    "
+                    class="button is-link"
+                  >
+                    {{ $t("EditButtonText") }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -187,7 +188,7 @@ import moment from "moment";
 import printJS from "print-js";
 
 export default {
-  components: { filterButton,Datepicker },
+  components: { filterButton, Datepicker },
   async setup() {
     const { t } = useI18n();
     const baseUrl = "http://127.0.0.1:4000/";
@@ -228,8 +229,8 @@ export default {
       jobposts: [],
       position: "",
       filterPosition: computed(() => filtterData()),
-          isReported: false,
-              dateTime: new Date(),
+      isReported: false,
+      dateTime: new Date(),
       status: "",
       year: "",
       month: "",
@@ -247,21 +248,24 @@ export default {
           "&filterYear=" +
           dataSet.year +
           "&filterMonth=" +
-          dataSet.month,
+          dataSet.month
       );
 
       dataSet.jobposts = res.data.mapPostJob; // 👈 get just results
     };
     // need to refactor this code to hook
     const fetchJobPostEmp = async () => {
-      const res = await axios.get("http://127.0.0.1:4000/emp-api/postjob-get?status=" +
+      const res = await axios.get(
+        "http://127.0.0.1:4000/emp-api/postjob-get?status=" +
           dataSet.status +
           "&filterYear=" +
           dataSet.year +
           "&filterMonth=" +
-          dataSet.month, {
-        headers,
-      });
+          dataSet.month,
+        {
+          headers,
+        }
+      );
 
       dataSet.jobposts = res.data.mapPostJob; // 👈 get just results
     };
@@ -325,9 +329,9 @@ export default {
 
     const filterByStatus = async (value) => {
       dataSet.status = value;
-      if (userInfo.type === "admin") fetchJobPostAdmin();
+      if (userInfo.type === "admin")await fetchJobPostAdmin();
       if (userInfo.type === "employee" || userInfo.type === "employer")
-        fetchJobPostEmp();
+      await  fetchJobPostEmp();
     };
 
     const formatData = async (event) => {
@@ -356,18 +360,18 @@ export default {
       }
     };
 
-    if (userInfo.type === "admin") fetchJobPostAdmin();
+    if (userInfo.type === "admin")await fetchJobPostAdmin();
     if (userInfo.type === "employee" || userInfo.type === "employer")
-      fetchJobPostEmp();
+     await fetchJobPostEmp();
 
     return {
       ...toRefs(dataSet),
       deletePost,
       userInfo,
-         printPDF,
+      printPDF,
       filterByStatus,
       formatData,
-      baseUrl
+      baseUrl,
     };
   },
 };
