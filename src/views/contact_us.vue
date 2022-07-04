@@ -3,7 +3,8 @@
     <div class="header">
       {{ $t("TeamText") }}
     </div>
-    <div class="content_body">
+    <div class="box">
+      <div class="content_body">
       <div class="our-team">
         <div class="picture">
           <img
@@ -105,6 +106,7 @@
           </li>
         </ul>
       </div>
+    </div>
     </div>
   </div>
 </template>

@@ -53,6 +53,9 @@
               <i class="fa-solid fa-newspaper"></i
               ><span>{{ $t("PostJobsText") }}</span>
             </div>
+             <span v-if="noti.jobAppPending !== 0 && userInfo.type === 'employee'" class="count">{{
+              noti.jobAppPending 
+            }}</span>
           </router-link>
         </div>
         <div class="items" v-if="userInfo.type === 'admin'">
