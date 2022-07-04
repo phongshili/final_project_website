@@ -5,7 +5,7 @@
     </div>
     <div class="filter" :class="{ fix_width: isReported }">
       <div class="filter-menu">
-         <button @click="$router.go(-1)" class="button is-danger">
+         <button v-if="userInfo.type === 'employee'" @click="$router.go(-1)" class="button is-danger">
           {{ $t("BackText") }}
         </button>
         <div class="spacer s"></div>
