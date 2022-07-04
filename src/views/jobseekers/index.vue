@@ -71,7 +71,7 @@
               <th class="tb-large">{{ $t("EmailText") }}</th>
               <th class="tb-small">{{ $t("StatusText") }}</th>
               <th
-                v-if="userInfo.type === 'employee' && !isReported"
+                v-if="userInfo.type === 'employee' "
                 class="tb-small tb-center"
               >
                 {{ $t("SubmitDateText") }}
@@ -107,7 +107,7 @@
                 }}</span>
               </td>
               <td
-                v-if="userInfo.type === 'employee' && !isReported"
+                v-if="userInfo.type === 'employee'"
                 class="tb-small"
               >
                 <span> {{ seeker.createdAt }}</span>

@@ -78,8 +78,8 @@
                 {{ $t("CompanyNameText") }}
               </th>
 
-              <!-- <th class="tb-medium">{{ $t("EmailText") }}</th> -->
               <th class="tb-small">{{ $t("ApplicationText") }}</th>
+              <th class="tb-ss">{{ $t("PendingText") }}</th>
               <th class="tb-small">{{ $t("StatusText") }}</th>
               <th class="tb-small tb-center">{{ $t("PostDateText") }}</th>
               <th v-if="!isReported" class="tb-small tb-center">
@@ -104,12 +104,13 @@
                 <span> {{ job.companyName }}</span>
               </td>
 
-              <!-- <td class="tb-medium">
-              <span>{{ job.email }}</span>
-            </td> -->
+              
               <td class="tb-small tb-center">
                 <span>{{ job.totalJobApp }}</span>
               </td>
+              <td class="tb-ss tb-center">
+              <span>{{ job.totalJobAppPending }}</span>
+            </td>
               <td class="tb-small">
                 <span style="text-transform: uppercase">{{ job.status }}</span>
               </td>

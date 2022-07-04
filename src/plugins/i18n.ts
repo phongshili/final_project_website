@@ -159,7 +159,7 @@ const messages = {
         FormSentOTPText: "Sent OTP",
         TelHintText: "Please Enter Your Phone Number",
         SuccessText: 'Success',
-        isEmpty:'No Result',
+        isEmpty: 'No Result',
         //end form text
 
         // report text 
@@ -183,9 +183,11 @@ const messages = {
         Vilasack: 'Mr.VILASACK CHAOVICHIT',
         ANOUSACK: "Mr.ANOUSACK KHODTAVONG",
 
-        TeamText: "MEET OUR TEAM"
+        TeamText: "MEET OUR TEAM",
 
-
+        // 404
+        notFound: "There's nothing here!",
+        sorry: "Sorry, the page you were looking for is not found.",
 
     },
     la: {
@@ -343,7 +345,7 @@ const messages = {
         FormSentOTPText: "ສົ່ງລະຫັດ OTP",
         TelHintText: "ກະລູນາປ້ອນເບີໂທ",
         SuccessText: 'ສຳເລັດ',
-        isEmpty:'ບໍ່ພົບຂໍ້ມູນ',
+        isEmpty: 'ບໍ່ພົບຂໍ້ມູນ',
 
 
 
@@ -368,9 +370,11 @@ const messages = {
         PhongLi: 'ທ້າວ ພົງສີລິ ອະລິຍະວົງ',
         Vilasack: 'ທ້າວ ວິລະສັກ ຈາວວິຈິດ',
         ANOUSACK: "ທ້າວ ອານຸສັກ ໂຄດຕະວົງ",
-        TeamText: "ສະມາສິກທີມ"
+        TeamText: "ສະມາສິກທີມ",
 
-
+        // 404
+        notFound: "ບໍ່ພົບຂໍ້ມູນ!",
+        sorry: "ຂໍອະໄພ, ບໍ່ພົບຂໍ້ມູນທີ່ທ່ານຄົ້ນຫາໃນໜ້ານີ້.",
 
     }
 }

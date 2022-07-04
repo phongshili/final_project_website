@@ -183,10 +183,6 @@
     <!-- end custom modal -->
 
       <div class="form-display">
-        <!-- <div class="chart-container">
-          <BarChart :chartData="monthly" />
-        </div> -->
-        <div class="spacer left"></div>
         <div class="payment-container">
           <div class="payment">
             <div class="box-title">{{ $t("PaymentReqText") }}</div>
@@ -238,11 +234,6 @@
 </template>
 <script>
 import { useI18n } from "vue-i18n";
-import { BarChart } from "vue-chart-3";
-
-import { Chart, registerables } from "chart.js";
-Chart.register(...registerables);
-Chart.defaults.font.family = "Noto Sans Lao";
 import { reactive, toRefs } from "vue";
 import axios from "axios";
 import store from "../../store";
@@ -252,7 +243,6 @@ import Swal from "sweetalert2";
 
 export default {
   components: {
-    BarChart,
     customModal,
   },
   async setup() {

@@ -432,8 +432,8 @@
           ></path>
         </g>
       </svg>
-      <h4>There's nothing here!</h4>
-      <p>Sorry, the page you were looking for is not found.</p>
+      <h4>{{$t('notFound')}}</h4>
+      <p>{{$t('sorry')}}</p>
 
       <button class="button homepagebtn" @click="$router.push({ path: '/' })">
         {{ $t("HomeText") }}
@@ -442,7 +442,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+
+setup(){
+
+}
+
+};
 </script>
 
 <style lang="scss" scoped>

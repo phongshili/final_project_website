@@ -137,17 +137,24 @@ export default {
       noti: [],
       userInfo: [],
     });
-
+    // change to use hook for better coding
     watch(
       () => reload.getIsReload,
       async () => {
         if (reload.getIsReload === true) {
           await fetchUserInfo();
+          if (
+      dataSet.userInfo.type === "employee" ||
+      dataSet.userInfo.type === "employer"
+    )
+      fetchNoti();
+    if (dataSet.userInfo.type === "admin") fetchNotiAdmin();
         }
       }
     );
     // change to hook to reload data when data has been update 
     const fetchNoti = async () => {
+
       const res = await axios.get(baseUrl + "emp-api/payment-noti-payment", {
         headers,
       });

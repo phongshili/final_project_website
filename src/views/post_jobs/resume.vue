@@ -216,6 +216,7 @@ import moment from "moment";
 import useGetUser from "../../hooks/useGetUser";
 import { useLoading } from "../../store/loading";
 import customModal from "@/components/customModal.vue";
+import { useReload } from "../../store/reload";
 
 
 export default {
@@ -229,6 +230,7 @@ export default {
     const router = useRouter();
     const userInfo = await useGetUser.getUserInfo();
     const loading = useLoading();
+    const reload = useReload();
 
     const headers = {
       "Content-Type": "application/json",
@@ -298,10 +300,13 @@ export default {
       setTimeout(() => {
         loading.setloading(false);
       }, 2000);
+      await reload.setReload(true);
+
       router.go(-1);
     };
     const rejectModalAction = async () => {
       dataSet.rejectModal = !dataSet.rejectModal;
+      
     };
 
     if (userInfo.type === "admin" && route.params.id) fetchResumeEmployer();
