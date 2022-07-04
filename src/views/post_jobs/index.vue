@@ -79,7 +79,7 @@
               </th>
 
               <th class="tb-small">{{ $t("ApplicationText") }}</th>
-              <th class="tb-ss">{{ $t("PendingText") }}</th>
+              <th v-if="userInfo.type === 'employee' " class="tb-ss">{{ $t("PendingText") }}</th>
               <th class="tb-small">{{ $t("StatusText") }}</th>
               <th class="tb-small tb-center">{{ $t("PostDateText") }}</th>
               <th v-if="!isReported" class="tb-small tb-center">
@@ -108,7 +108,7 @@
               <td class="tb-small tb-center">
                 <span>{{ job.totalJobApp }}</span>
               </td>
-              <td class="tb-ss tb-center">
+              <td class="tb-ss tb-center" v-if="userInfo.type === 'employee' ">
               <span>{{ job.totalJobAppPending }}</span>
             </td>
               <td class="tb-small">
