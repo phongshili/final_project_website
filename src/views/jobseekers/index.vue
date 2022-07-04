@@ -167,6 +167,11 @@ export default {
           value: "reject",
           name: t("RejectText"),
         },
+         {
+          id: 4,
+          value: "isVerify",
+          name: t("isVerifyText"),
+        },
       ],
             reportItems: [
         {

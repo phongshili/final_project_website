@@ -160,6 +160,8 @@ const messages = {
         TelHintText: "Please Enter Your Phone Number",
         SuccessText: 'Success',
         isEmpty: 'No Result',
+        isVerifyText:'Not Verify',
+
         //end form text
 
         // report text 
@@ -346,6 +348,7 @@ const messages = {
         TelHintText: "ກະລູນາປ້ອນເບີໂທ",
         SuccessText: 'ສຳເລັດ',
         isEmpty: 'ບໍ່ພົບຂໍ້ມູນ',
+        isVerifyText:'ບໍ່ຖຶກຢຶນຢັນ',
 
 
 
