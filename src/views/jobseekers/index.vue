@@ -44,6 +44,9 @@
         </div>
         <div class="reportTitle">
           {{ $t("ReportPostJobText") }}
+          <br>
+            {{$t('PositionText')}} : {{$route.params.position}}
+          
         </div>
         <div class="line"></div>
         <div class="reportBody">

@@ -114,7 +114,7 @@ const routes = [
   },
 
   {
-    path: '/jobseekers/:id?',
+    path: '/jobseekers/:id?/:position?',
     name: 'JobseekersIndex',
 
     component: JobseekersIndex,

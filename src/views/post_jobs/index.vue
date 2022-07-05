@@ -147,7 +147,7 @@
                     @click="
                       $router.push({
                         name: 'JobseekersIndex',
-                        params: { id: job._id },
+                        params: { id: job._id , position: job.positionName},
                       })
                     "
                   >
