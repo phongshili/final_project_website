@@ -5,42 +5,8 @@
     </div>
     <div class="box">
       <div class="content_body">
-      <div class="our-team">
-        <div class="picture">
-          <img
-            class="img-fluid"
-            src="../assets/vilasack.jpg"
-          />
-        </div>
-        <div class="team-content">
-          <h3 class="name">{{ $t("Vilasack") }}</h3>
-          <hr>
 
-          <h4 class="title">{{ $t("AppDev") }}</h4>
-          <h6 class="contact">
-            <i class="fa-solid fa-phone"></i>+856 2059899183
-          </h6>
-        </div>
-        <ul class="social">
-          <li>
-            <a
-            target="_blank"
-              href="https://www.facebook.com/ZBOT333"
-              class="fa fa-facebook"
-              aria-hidden="true"
-            ></a>
-          </li>
-          <li>
-            <a
-              href="mailto:mrvilasackchaovichit@gmail.com"
-              class="fa fa-envelope"
-              aria-hidden="true"
-            ></a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="our-team">
+        <div class="our-team">
         <div class="picture">
           <img
             class="img-fluid"
@@ -106,6 +72,42 @@
           </li>
         </ul>
       </div>
+      <div class="our-team">
+        <div class="picture">
+          <img
+            class="img-fluid"
+            src="../assets/vilasack.jpg"
+          />
+        </div>
+        <div class="team-content">
+          <h3 class="name">{{ $t("Vilasack") }}</h3>
+          <hr>
+
+          <h4 class="title">{{ $t("AppDev") }}</h4>
+          <h6 class="contact">
+            <i class="fa-solid fa-phone"></i>+856 2059899183
+          </h6>
+        </div>
+        <ul class="social">
+          <li>
+            <a
+            target="_blank"
+              href="https://www.facebook.com/ZBOT333"
+              class="fa fa-facebook"
+              aria-hidden="true"
+            ></a>
+          </li>
+          <li>
+            <a
+              href="mailto:mrvilasackchaovichit@gmail.com"
+              class="fa fa-envelope"
+              aria-hidden="true"
+            ></a>
+          </li>
+        </ul>
+      </div>
+
+      
     </div>
     </div>
   </div>
